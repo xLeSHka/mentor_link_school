@@ -13,5 +13,5 @@ FROM alpine
 WORKDIR /app
 
 COPY --from=builder /app/main .
-
+EXPOSE 80
 CMD ["sh", "-c", "./main"]

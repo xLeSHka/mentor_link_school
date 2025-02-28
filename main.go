@@ -1,11 +1,18 @@
 package main
 
-import "net/http"
+import (
+	"log"
+	"net/http"
+)
+
+type Config struct {
+	User
+}
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello World"))
 	})
 
-	http.ListenAndServe(":8080", nil)
+	log.Fatal(http.ListenAndServe("prod-team-14-mkg8u20m.final.prodcontest.ru:80", nil))
 }
