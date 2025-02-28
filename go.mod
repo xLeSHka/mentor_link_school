@@ -1,3 +1,3 @@
-module gitlab.prodcontest.ru/team-14/lotti
+module ping
 
-go 1.23.4
+go 1.24.0
