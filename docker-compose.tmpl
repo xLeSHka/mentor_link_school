@@ -4,7 +4,7 @@ services:
     image: $IMAGE_NAME
     container_name: backend
     expose:
-     - "80"
+     - "8080"
     networks:
      - backend-network
   nginx:
@@ -13,8 +13,8 @@ services:
     ports:
       - "443:443"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf.d/default.conf
-      - ./ssl:/etc/nginx/ssl
+      - /home/ubuntu/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /home/ubuntu/nginx/ssl:/etc/nginx/ssl
     depends_on:
       - backend
     networks:
