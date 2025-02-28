@@ -41,7 +41,8 @@
     - ssh $SSH_ADDRESS "docker stop $CI_PROJECT_NAME || true"
     - ssh $SSH_ADDRESS "docker rm $CI_PROJECT_NAME || true"
     - scp docker-compose.yml $SSH_ADDRESS:~/
-    - ssh $SSH_ADDRESS "docker compose up -d"
+    - ssh $SSH_ADDRESS "cd ~/;
+        docker compose up -d"
     - ssh $SSH_ADDRESS "$PRUNE_COMMAND"
 #
 #    script:
