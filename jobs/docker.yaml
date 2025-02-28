@@ -27,7 +27,7 @@
     DOCKER_DRIVER: overlay2
     PRUNE_COMMAND: "docker system prune -f -a"
     CONTAINER_NAME_SUFFIX: ""
-  before_script:
+#  before_script:
     # install envsubst
 #    - apk add gettext
   script:
