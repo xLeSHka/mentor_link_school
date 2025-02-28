@@ -10,5 +10,5 @@ func main() {
 		w.Write([]byte("Hello World"))
 	})
 
-	log.Fatal(http.ListenAndServeTLS("prod-team-14-mkg8u20m.final.prodcontest.ru:443", "./ssl/cert.pem", "./ssl/privkey.pem", nil))
+	log.Fatal(http.ListenAndServe("prod-team-14-mkg8u20m.final.prodcontest.ru:80", nil))
 }
