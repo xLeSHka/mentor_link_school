@@ -10,6 +10,7 @@
     - echo "$SSH_PRIVATE_KEY_BASE64" | base64 -d > ~/.ssh/id_rsa && chmod 400 ~/.ssh/id_rsa
     - ssh-agent sh -c "ssh-add ~/.ssh/id_rsa"
     - ssh-keyscan -H "$SSH_HOST"
+    - apk add gettext
 
 
 .docker_run:
@@ -27,11 +28,11 @@
     DOCKER_DRIVER: overlay2
     PRUNE_COMMAND: "docker system prune -f -a"
     CONTAINER_NAME_SUFFIX: ""
-  before_script:
-    # install envsubst
-    - AUTH_COMMAND="echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin";
-    - ssh $SSH_ADDRESS "$AUTH_COMMAND"
-    - apk add gettext
+#  before_script:
+#    # install envsubst
+#    - AUTH_COMMAND="echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin";
+#    - ssh $SSH_ADDRESS "$AUTH_COMMAND"
+#    - apk add gettext
   script:
     # create the new docker-compose.yml
     - envsubst < docker-compose.tmpl > docker-compose.yml
@@ -40,3 +41,23 @@
     - ssh $SSH_ADDRESS "docker rm $CI_PROJECT_NAME || true"
     - ssh $SSH_ADDRESS "docker compose up -d"
     - ssh $SSH_ADDRESS "$PRUNE_COMMAND"
+#
+#    script:
+#      # create the new docker-compose.yml
+#      - envsubst < docker-compose.tmpl > docker-compose.yml
+#      # start ssh-agent and import ssh private key
+#      - eval `ssh-agent`
+#      - ssh-add <(echo "$ENV_PRIVATE_KEY_BASE64")
+#      # add server to list of known hosts
+#      - mkdir -p ~/.ssh
+#      - chmod 700 ~/.ssh
+#      - touch ~/.ssh/known_hosts
+#      - chmod 600 ~/.ssh/known_hosts
+#      - echo $SSH_HOST_KEY >> ~/.ssh/known_hosts
+#      # upload docker-compose to the server
+#      - scp docker-compose.yml <project@server>:/home/project/
+#      # docker login and restart services
+#      - ssh <project@sserver> "cd /home/project;
+#        docker login -u $CI_REGISTRY_USER
+#        -p $CI_REGISTRY_PASSWORD $CI_REGISTRY;
+#        docker compose up -d"
