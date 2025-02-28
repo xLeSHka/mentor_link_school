@@ -1,10 +1,7 @@
 include:
-  - project: pipelines/pipelines
-    ref: master
-    file:
-      - "/jobs/build.yaml"
-      - "/jobs/docker.yaml"
-      - "/jobs/rules.yaml"
+  - "/jobs/build.yaml"
+  - "/jobs/docker.yaml"
+  - "/jobs/rules.yaml"
 
 .global-variables:
   variables:
