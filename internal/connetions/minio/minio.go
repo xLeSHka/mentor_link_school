@@ -3,8 +3,8 @@ package minio
 import (
 	"context"
 	"fmt"
-	"log"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/pkg/config"
+	"log"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"

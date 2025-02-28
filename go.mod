@@ -1,7 +1,6 @@
 module gitlab.prodcontest.ru/team-14/lotti
 
-go 1.24.0
-
+go 1.23.6
 require (
 	github.com/bachvtuan/mime2extension v0.0.0-20151228044205-df6416a55b25
 	github.com/gin-gonic/gin v1.10.0
