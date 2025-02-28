@@ -5,10 +5,6 @@ import (
 	"net/http"
 )
 
-type Config struct {
-	User
-}
-
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello World"))
