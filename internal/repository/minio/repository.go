@@ -1,0 +1,19 @@
+package repositoryMinio
+
+import (
+	"github.com/minio/minio-go/v7"
+	"prodapp/internal/pkg/config"
+	"prodapp/internal/repository"
+)
+
+type MinioRepository struct {
+	MC *minio.Client
+	BN string
+}
+
+func NewMinioRepository(mc *minio.Client, config config.Config) repository.MinioRepository {
+	return &MinioRepository{
+		mc,
+		config.BucketName,
+	}
+}

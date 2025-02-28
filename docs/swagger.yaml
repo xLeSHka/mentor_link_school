@@ -1,0 +1,176 @@
+definitions:
+  httpError.HTTPError:
+    properties:
+      message:
+        type: string
+    type: object
+  usersRoute.reqSigninDto:
+    properties:
+      email:
+        maxLength: 60
+        minLength: 8
+        type: string
+      password:
+        maxLength: 60
+        minLength: 8
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  usersRoute.reqSignupDto:
+    properties:
+      age:
+        maximum: 120
+        minimum: 1
+        type: integer
+      avatar_url:
+        maxLength: 350
+        type: string
+      country:
+        maxLength: 120
+        minLength: 1
+        type: string
+      email:
+        maxLength: 120
+        minLength: 8
+        type: string
+      name:
+        maxLength: 100
+        minLength: 1
+        type: string
+      password:
+        maxLength: 60
+        minLength: 8
+        type: string
+      surname:
+        maxLength: 120
+        minLength: 1
+        type: string
+    required:
+    - age
+    - country
+    - email
+    - name
+    - password
+    - surname
+    type: object
+  usersRoute.resGetProfile:
+    properties:
+      avatar_url:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      surname:
+        type: string
+    type: object
+  usersRoute.resSigninDto:
+    properties:
+      token:
+        type: string
+    type: object
+  usersRoute.resSignupDto:
+    properties:
+      token:
+        type: string
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /api/user/auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: Аунтефикация юзера. Возвращает токен, который в дальнейшем нужно
+        передавать в заголовке "Authorization" в формате "Bearer <токен>". Кусок "Bearer
+        " нужно добавлять самому. Это фиксированное слово, которое ставят перед токеном
+        зачем-то.
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/usersRoute.reqSigninDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usersRoute.resSigninDto'
+        "400":
+          description: Ошибка валидации
+          schema:
+            $ref: '#/definitions/httpError.HTTPError'
+        "401":
+          description: Неверный email или пароль
+          schema:
+            $ref: '#/definitions/httpError.HTTPError'
+      summary: Аунтефикация
+      tags:
+      - Users
+  /api/user/auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Регистрация юзера. Возвращает токен, который в дальнейшем нужно
+        передавать в заголовке "Authorization" в формате "Bearer <токен>". Кусок "Bearer
+        " нужно добавлять самому. Это фиксированное слово, которое ставят перед токеном
+        зачем-то.
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/usersRoute.reqSignupDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usersRoute.resSignupDto'
+        "400":
+          description: Ошибка валидации
+          schema:
+            $ref: '#/definitions/httpError.HTTPError'
+      summary: Регистрация
+      tags:
+      - Users
+  /api/user/me:
+    get:
+      consumes:
+      - application/json
+      description: Авторизация юзера
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usersRoute.resGetProfile'
+        "400":
+          description: Ошибка валидации
+          schema:
+            $ref: '#/definitions/httpError.HTTPError'
+      summary: Получить инфу о себе
+      tags:
+      - Users
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

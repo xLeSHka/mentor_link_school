@@ -1,0 +1,30 @@
+version: 3.9.0
+
+tasks:
+  devdocker:
+    desc: Run docker compose in detached mode
+    cmds:
+      - docker compose -f docker-compose.dev.yml up -d
+  down:
+    desc: Run docker compose in detached mode
+    cmds:
+      - docker compose -f docker-compose.dev.yml down -v
+  start:
+    desc: Run go server
+    cmds:
+      - go run cmd/main.go
+
+  tidy:
+    desc: Go mod tidy
+    cmds:
+      - go mod tidy
+
+  nodemon:
+    desc: Run nodemon
+    cmds:
+      - nodemon --exec "go run cmd/main.go" --ext go .
+
+  swag:
+    desc: Generate swagger docs
+    cmds:
+      - swag.exe init -g ./internal/transport/http/httpServer.go --outputTypes yaml
