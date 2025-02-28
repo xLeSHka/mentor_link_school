@@ -3,7 +3,7 @@ package repositoryUser
 import (
 	"context"
 	"github.com/google/uuid"
-	"prodapp/internal/models"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 
 	"gorm.io/gorm/clause"
 )

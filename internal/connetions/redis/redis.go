@@ -3,8 +3,8 @@ package redis
 import (
 	"context"
 	"github.com/redis/go-redis/v9"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/pkg/config"
 	"go.uber.org/fx"
-	"prodapp/internal/pkg/config"
 	"strconv"
 )
 

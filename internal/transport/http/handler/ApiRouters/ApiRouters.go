@@ -3,8 +3,8 @@ package ApiRouters
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
-	"prodapp/internal/transport/http/middleware"
-	"prodapp/internal/transport/http/pkg/jwt"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/middleware"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 )
 
 type ApiRouters struct {

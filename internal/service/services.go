@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"prodapp/internal/app/httpError"
-	"prodapp/internal/models"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 
 	"github.com/google/uuid"
 )

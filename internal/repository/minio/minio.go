@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/google/uuid"
 	"github.com/minio/minio-go/v7"
-	"prodapp/internal/models"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 	"time"
 )
 

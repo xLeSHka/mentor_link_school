@@ -1,7 +1,7 @@
 package repositoryUser
 
 import (
-	"prodapp/internal/repository"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/repository"
 
 	"gorm.io/gorm"
 )

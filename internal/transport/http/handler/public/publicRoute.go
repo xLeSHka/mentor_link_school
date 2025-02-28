@@ -1,7 +1,7 @@
 package publicRoute
 
 import (
-	"prodapp/internal/transport/http/handler/ApiRouters"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ApiRouters"
 )
 
 type Route struct {

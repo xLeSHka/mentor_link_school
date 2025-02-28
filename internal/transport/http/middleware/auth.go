@@ -3,9 +3,9 @@ package middlewares
 import (
 	"context"
 	"errors"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"net/http"
-	"prodapp/internal/app/httpError"
-	"prodapp/internal/transport/http/pkg/jwt"
 	"strconv"
 	"strings"
 	"time"

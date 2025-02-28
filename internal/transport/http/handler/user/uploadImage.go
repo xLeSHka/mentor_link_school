@@ -2,10 +2,10 @@ package usersRoute
 
 import (
 	"fmt"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 	"net/http"
 	"path/filepath"
-	"prodapp/internal/app/httpError"
-	"prodapp/internal/models"
 
 	"github.com/bachvtuan/mime2extension"
 	"github.com/gin-gonic/gin"

@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"github.com/hokaccha/go-prettyjson"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/app"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/connetions/db"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/pkg/config"
 	"go.uber.org/fx"
-	"prodapp/internal/app"
-	"prodapp/internal/connetions/db"
-	"prodapp/internal/pkg/config"
 )
 
 func main() {

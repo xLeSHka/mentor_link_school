@@ -1,8 +1,8 @@
 package usersRoute
 
 import (
+	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"net/http"
-	"prodapp/internal/app/httpError"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
