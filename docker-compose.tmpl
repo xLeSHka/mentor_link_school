@@ -13,7 +13,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - /home/ubuntu/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /home/ubuntu/nginx/nginx.conf:/etc/nginx/nginx.conf.d/default.conf
       - /home/ubuntu/nginx/ssl:/etc/nginx/ssl
     depends_on:
       - backend
