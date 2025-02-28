@@ -35,6 +35,5 @@
     - ssh $SSH_ADDRESS "docker rm $CI_PROJECT_NAME || true"
     - ssh $SSH_ADDRESS "
       docker compose run -d
-      --name=$CI_PROJECT_NAME $OPT_DOCKER
       $IMAGE_NAME"
     - ssh $SSH_ADDRESS "$PRUNE_COMMAND"
