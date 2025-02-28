@@ -27,14 +27,14 @@
     DOCKER_DRIVER: overlay2
     PRUNE_COMMAND: "docker system prune -f -a"
     CONTAINER_NAME_SUFFIX: ""
-#  before_script:
+  before_script:
     # install envsubst
-#    - apk add gettext
-  script:
-    # create the new docker-compose.yml
-#    - envsubst < docker-compose.tmpl > docker-compose.yml
     - AUTH_COMMAND="echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin";
     - ssh $SSH_ADDRESS "$AUTH_COMMAND"
+    - apk add gettext
+  script:
+    # create the new docker-compose.yml
+    - envsubst < docker-compose.tmpl > docker-compose.yml
     - ssh $SSH_ADDRESS "docker pull $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
     - ssh $SSH_ADDRESS "docker stop $CI_PROJECT_NAME || true"
     - ssh $SSH_ADDRESS "docker rm $CI_PROJECT_NAME || true"
