@@ -3,7 +3,7 @@ package http
 import (
 	"context"
 	"fmt"
-	"prodapp/internal/pkg/config"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/pkg/config"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/fx"

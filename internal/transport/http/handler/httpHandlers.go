@@ -1,11 +1,11 @@
 package httpHandlers
 
 import (
+	"gitlab.prodcontest.ru/team-14/lotti/internal/app/Validators"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ApiRouters"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/public"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/user"
 	"go.uber.org/fx"
-	"prodapp/internal/app/Validators"
-	"prodapp/internal/transport/http/handler/ApiRouters"
-	"prodapp/internal/transport/http/handler/public"
-	"prodapp/internal/transport/http/handler/user"
 )
 
 var HttpHandlers = fx.Module("httpHandlers",

@@ -1,7 +1,7 @@
 package app
 
 import (
-	userService "prodapp/internal/service/user"
+	userService "gitlab.prodcontest.ru/team-14/lotti/internal/service/user"
 
 	"go.uber.org/fx"
 )

@@ -1,8 +1,8 @@
 package app
 
 import (
-	"prodapp/internal/repository/minio"
-	"prodapp/internal/repository/user"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/repository/minio"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/repository/user"
 
 	"go.uber.org/fx"
 )

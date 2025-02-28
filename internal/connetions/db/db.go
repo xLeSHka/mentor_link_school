@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/pressly/goose/v3"
-	"prodapp/internal/pkg/config"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/pkg/config"
 
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"

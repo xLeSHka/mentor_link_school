@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"prodapp/internal/pkg/config"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/pkg/config"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
