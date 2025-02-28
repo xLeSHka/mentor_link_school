@@ -5,17 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/gitlab-ci.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jobs/build.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jobs/docker.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jobs/rules.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/private_key.pem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/cert.pem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/chain.pem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/fullchain.pem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/privkey.pem" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gitlab-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/gitlab-ci.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
