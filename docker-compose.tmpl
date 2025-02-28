@@ -5,10 +5,10 @@ services:
     container_name: backend
     expose:
      - "80"
-    network:
+    networks:
      - backend-network
   nginx:
-      image: nginx
+      image: nginx:latest
       container_name: nginx_container
       ports:
         - "443:443"
