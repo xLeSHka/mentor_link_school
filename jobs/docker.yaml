@@ -29,7 +29,7 @@
     CONTAINER_NAME_SUFFIX: ""
   before_script:
     # install envsubst and ssh-add
-    - apk add gettext openssh-client
+    - apk add gettext
   script:
     # create the new docker-compose.yml
     - envsubst < docker-compose.tmpl > docker-compose.yml
