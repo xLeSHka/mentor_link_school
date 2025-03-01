@@ -5,23 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/models/models.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/models/models.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/pkg/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/pkg/config/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/minio/minio.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/minio/minio.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/mentor/getRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/mentor/getRequests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/mentor/getStudents.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/mentor/getStudents.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/mentor/updateStatus.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/mentor/updateStatus.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/get.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/get.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/getMyMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/getMyMentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/mentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/mentor/mentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/users.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nginx.conf" beforeDir="false" afterPath="$PROJECT_DIR$/nginx.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/getRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/getRequests.go" afterDir="false" />
     </list>
     <list id="75b6ef32-c8b1-4f49-976d-e917425077e4" name="Changes by ainur" comment="">
-      <change beforePath="$PROJECT_DIR$/internal/repository/user/createRequest.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/createRequest.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/service/services.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/services.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/getMyhelps.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/getMyhelps.go" afterDir="false" />
     </list>
     <list id="4b39ec78-3c1d-4b61-813f-3fe7111e8a41" name="Changes by LIME" comment="" />
     <option name="SHOW_DIALOG" value="false" />

@@ -17,8 +17,8 @@ type MentorService interface {
 	GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)
 	UpdateRequest(ctx context.Context, request *models.HelpRequest) error
 	GetStudents(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error)
-	GetRequests(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)
 }
+
 type UserService interface {
 	Login(ctx context.Context, name string) (*models.User, string, error)
 	GetByID(ctx context.Context, id uuid.UUID) (person *models.User, err error)
