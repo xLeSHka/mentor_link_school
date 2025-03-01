@@ -14,14 +14,6 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-type GetGroupID struct {
-	ID string `uri:"groupId" binding:"required,uuid"`
-}
-type GetMentorID struct {
-	ID      string `uri:"mentorId" binding:"required,uuid"`
-	GroupID string `uri:"groupId" binding:"required,uuid"`
-}
-
 func Auth(rdb *redis.Client, jwt *jwt.JWT) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
