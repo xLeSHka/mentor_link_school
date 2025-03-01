@@ -19,14 +19,14 @@ func CreateApiRoutes(gin *gin.Engine, db *gorm.DB, rdb *redis.Client, jwt *jwt.J
 
 	publicRoute := gin.Group("")
 
-	groupRoute := publicRoute.Group("/:groupId")
-	groupRoute.Use(middlewares.Auth(db, rdb, jwt, "owner"))
+	groupRoute := publicRoute.Group("")
+	groupRoute.Use(middlewares.Auth(jwt))
 
-	mentorRoute := groupRoute.Group("/:mentorId")
-	mentorRoute.Use(middlewares.Auth(db, rdb, jwt, "mentor"))
+	mentorRoute := groupRoute.Group("")
+	mentorRoute.Use(middlewares.Auth(jwt))
 
-	userRoute := publicRoute.Group("/user")
-	userRoute.Use(middlewares.Auth(db, rdb, jwt, "user"))
+	userRoute := publicRoute.Group("")
+	userRoute.Use(middlewares.Auth(jwt))
 	return &ApiRouters{
 		Public:       publicRoute,
 		MentorRoute:  mentorRoute,

@@ -9,10 +9,10 @@ type reqUpdateRequest struct {
 	ID     uuid.UUID `json:"id" binding:"required"`
 	Status bool      `json:"status" binding:"required"`
 }
-type resGetProfile struct {
-	ID        uuid.UUID `json:"id" binding:"required"`
-	Name      string    `json:"name"`
+type respGetMyStudent struct {
+	StudentID uuid.UUID `json:"student_id" binding:"required"`
 	AvatarUrl *string   `json:"avatar_url,omitempty"`
+	Name      string    `json:"name" binding:"required"`
 }
 type respGetRequest struct {
 	ID        uuid.UUID `json:"id"`

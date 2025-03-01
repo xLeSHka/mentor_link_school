@@ -6,6 +6,6 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 )
 
-func (s *UsersService) GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error) {
-	return s.usersRepository.GetMyMentors(ctx, userID)
+func (s *UsersService) GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error) {
+	return s.usersRepository.GetMyRequests(ctx, userID)
 }

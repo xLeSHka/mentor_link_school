@@ -5,53 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/internal/repository/mentor/getRequests.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/repository/mentor/getStudents.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/repository/mentor/repository.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/repository/mentor/updateStatus.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/mentor/getStudents.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/mentor/updateStatus.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/user/createRequest.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/user/getMentors.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/swagger.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docs/swagger.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/models/models.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/models/models.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/repositories.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/repositories.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/user/getMyMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/getMyMentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/mentor/createMentorRequest.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/mentor/get.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/mentor/getRequests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/mentor/getMentorRequest.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/services.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/services.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/requests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/requests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/getMentors.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/getRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/mentor/getRequests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/requests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/mentor/requests.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/students.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/mentor/students.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/updateRequest.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/mentor/updateRequest.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/avaliableMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/avaliableMentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/requests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/requests.go" afterDir="false" />
     </list>
-    <list id="19229596-3ded-416b-91af-2702c9d6fae8" name="Changes by ainur" comment="">
-      <change afterPath="$PROJECT_DIR$/internal/repository/user/createRequest.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/repository/user/getMyRequests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/repositories.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/repositories.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/user/getMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/getMentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/services.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/services.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/createGroup.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/createGroup.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/getGroup.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/getGroup.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/groups.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/groups.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/mentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/mentor/mentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/avaliableMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/avaliableMentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/mentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/mentors.go" afterDir="false" />
+    <list id="502ba2da-cb20-417e-8d6e-11f9cf9237fb" name="Changes by ainur" comment="">
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/ApiRouters/ApiRouters.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/ApiRouters/ApiRouters.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/students.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/mentor/students.go" afterDir="false" />
     </list>
-    <list id="3a1a45d6-e206-4a3a-8728-f9228bce5349" name="Changes by LIME" comment="">
-      <change afterPath="$PROJECT_DIR$/internal/transport/http/handler/public/mocks.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/createMentorRequest.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/getMentorRequest.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/public/publicRoute.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/public/publicRoute.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/getRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/getRequests.go" afterDir="false" />
-    </list>
+    <list id="6225a679-2c6e-4cb0-baed-847b3f2583e2" name="Changes by LIME" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -69,26 +30,10 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/internal/service/services.go">
+    <file path="$PROJECT_DIR$/internal/transport/http/handler/mentor/students.go">
       <ranges>
-        <range start1="16" end1="20" start2="16" end2="19" changelist="19229596-3ded-416b-91af-2702c9d6fae8" />
-        <range start1="28" end1="28" start2="27" end2="28" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/internal/repository/repositories.go">
-      <ranges>
-        <range start1="15" end1="19" start2="15" end2="18" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-        <range start1="25" end1="25" start2="24" end2="27" changelist="19229596-3ded-416b-91af-2702c9d6fae8" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/internal/transport/http/handler/user/avaliableMentors.go">
-      <ranges>
-        <range start1="14" end1="16" start2="14" end2="16" changelist="19229596-3ded-416b-91af-2702c9d6fae8" />
-        <range start1="19" end1="20" start2="19" end2="20" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
+        <range start1="19" end1="20" start2="19" end2="20" changelist="502ba2da-cb20-417e-8d6e-11f9cf9237fb" />
         <range start1="24" end1="25" start2="24" end2="25" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-        <range start1="26" end1="28" start2="26" end2="28" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-        <range start1="33" end1="34" start2="33" end2="34" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-        <range start1="35" end1="36" start2="35" end2="36" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
       </ranges>
     </file>
   </component>

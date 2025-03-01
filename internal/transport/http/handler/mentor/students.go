@@ -17,12 +17,12 @@ import (
 func (h *Route) students(c *gin.Context) {
 	personId := uuid.MustParse(c.MustGet("personId").(string))
 
-	mentors, err := h.mentorService.get(c.Request.Context(), personId)
+	mentors, err := h.mentorService.GetStudents(c.Request.Context(), personId)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	resp := make([]*respGetMyMentor, 0, len(mentors))
+	resp := make([]*respGetMyStudent, 0, len(mentors))
 	for _, m := range mentors {
 		if m.Mentor.AvatarURL != nil {
 			avatarURL, err := h.minioRepository.GetImage(*m.Mentor.AvatarURL)

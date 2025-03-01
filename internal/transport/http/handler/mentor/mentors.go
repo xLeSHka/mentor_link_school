@@ -35,6 +35,9 @@ func MentorsRoute(opts FxOpts) *Route {
 		minioRepository: opts.MinioRepository,
 	}
 
+	opts.ApiRouter.MentorRoute.GET("/api/mentors/students", router.students)
+	opts.ApiRouter.MentorRoute.GET("/api/mentors/students", router.students)
+
 	//opts.ApiRouter.GroupPrivate.GET("/mentors", router.getMentors)
 	//opts.ApiRouter.GroupPrivate.POST("/getMentor", router.getMentorRequest)
 	//opts.ApiRouter.GroupPrivate.POST("/createMentor", router.createMentorRequest)
