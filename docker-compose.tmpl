@@ -46,6 +46,9 @@ services:
   minio:
       container_name: minio_container
       image: minio/minio:latest
+      env_file:
+        - .env
+      command: server /data --console-address ":9001"
       environment:
         MINIO_HOST: ${MINIO_HOST}
         MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
@@ -56,6 +59,7 @@ services:
         - minio_data:/data
       expose:
         - 9000
+        - 9001
       healthcheck:
         test: [ "CMD", "curl", "-f", "http://${MINIO_HOST}:${MINIO_PORT}/minio/health/live" ]
         interval: 5s
