@@ -6,21 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/app/repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/getRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/getRequests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/getStudents.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/getStudents.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/httpHandlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/httpHandlers.go" afterDir="false" />
     </list>
-    <list id="502ba2da-cb20-417e-8d6e-11f9cf9237fb" name="Changes by ainur" comment="">
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/users.go" afterDir="false" />
-    </list>
+    <list id="502ba2da-cb20-417e-8d6e-11f9cf9237fb" name="Changes by ainur" comment="" />
     <list id="6225a679-2c6e-4cb0-baed-847b3f2583e2" name="Changes by LIME" comment="">
-      <change beforePath="$PROJECT_DIR$/internal/app/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/app/repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/app/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/app/service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/ApiRouters/ApiRouters.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/ApiRouters/ApiRouters.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/mentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/mentor/mentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/users.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/docker.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/docker.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,20 +26,6 @@
   <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.0.windows-amd64" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/internal/transport/http/handler/user/users.go">
-      <ranges>
-        <range start1="34" end1="36" start2="34" end2="38" changelist="502ba2da-cb20-417e-8d6e-11f9cf9237fb" />
-        <range start1="37" end1="37" start2="39" end2="40" changelist="6225a679-2c6e-4cb0-baed-847b3f2583e2" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/internal/app/repository.go">
-      <ranges>
-        <range start1="3" end1="3" start2="3" end2="4" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-        <range start1="11" end1="11" start2="12" end2="13" changelist="6225a679-2c6e-4cb0-baed-847b3f2583e2" />
-      </ranges>
-    </file>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
