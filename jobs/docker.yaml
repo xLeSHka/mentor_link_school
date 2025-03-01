@@ -43,7 +43,7 @@
     - scp docker-compose.yml $SSH_ADDRESS:~/
     - ssh $SSH_ADDRESS "cd ~/;
         docker compose up -d"
-    - ssh $SSH_ADDRESS "$PRUNE_COMMAND"
+#    - ssh $SSH_ADDRESS "$PRUNE_COMMAND"
 #
 #    script:
 #      # create the new docker-compose.yml
