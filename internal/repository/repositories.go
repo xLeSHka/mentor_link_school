@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 
 	"github.com/google/uuid"
@@ -21,6 +22,7 @@ type MentorRepository interface {
 type UsersRepository interface {
 	Login(ctx context.Context, person *models.User) (*models.User, error)
 	GetByID(ctx context.Context, id uuid.UUID) (person *models.User, err error)
+	GetByName(ctx context.Context, name string) (person *models.User, err error)
 	EditUser(ctx context.Context, userID uuid.UUID, updates map[string]any) (*models.User, error)
 	GetMyMentors(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error)
 	GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.User, error)
