@@ -16,6 +16,6 @@ func PublicRoute(apiRouters *ApiRouters.ApiRouters) *Route {
 	}
 
 	apiRouters.Public.GET("/ping", router.ping)
-
+	apiRouters.Public.GET("/mock", router.mocks)
 	return router
 }
