@@ -14,7 +14,7 @@ type Config struct {
 	HttpPort             int    `envconfig:"HTTP_PORT" default:"8080"`
 	ServerAddress        string `envconfig:"SERVER_ADDRESS" default:"0.0.0.0:8080"`
 	ServerPort           int    `envconfig:"SERVER_PORT" default:"8080"`
-	PostgresURL          string `envconfig:"POSTGRES_CONN" default:"postgresql://username:password@192.168.1.103:5432/database"`
+	PostgresURL          string `envconfig:"POSTGRES_CONN" default:"postgresql://ZXbIlCBgDOdm8sXmU76uRV:OuTGNmpQC1T0B875o3KeuJ@192.168.1.103:5432/database"`
 	RedisHost            string `envconfig:"REDIS_HOST" default:"192.168.1.103"`
 	RedisPort            int32  `envconfig:"REDIS_PORT" default:"6379"`
 	RandomSecret         string `envconfig:"RANDOM_SECRET" default:"111"`
@@ -25,8 +25,8 @@ type Config struct {
 	TelegramStringAdmins string `envconfig:"TELEGRAM_BOT_ADMINS" default:""`
 	MinioHost            string `envconfig:"MINIO_HOST" default:"minio"`
 	MinioPort            int    `envconfig:"MINIO_PORT" default:"9000"`
-	MinioUser            string `envconfig:"MINIO_USER" default:"cooluser"`
-	MinioPassword        string `envconfig:"MINIO_PASSWORD" default:"minio123"`
+	MinioUser            string `envconfig:"MINIO_USER" default:"ZXbIlCBgDOdm8sXmU76uRV"`
+	MinioPassword        string `envconfig:"MINIO_PASSWORD" default:"OuTGNmpQC1T0B875o3KeuJ"`
 	BucketName           string `envconfig:"MINIO_BUCKET_NAME" default:"imagebucket"`
 	CryptoKey            string `envconfig:"CRYPTO_KEY" default:"12345678901234567890123456789012"`
 	IsModerationEnabled  bool   `envconfig:"IS_MODERATION_ENABLED" default:"false"`
