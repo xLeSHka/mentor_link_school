@@ -10,7 +10,7 @@ import (
 
 func (r *UsersRepository) GetMyRequests(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error) {
 	var resp []*models.HelpRequest
-	res := r.DB.Model(&models.HelpRequest{}).Where("user_id = ?", userID).
+	res := r.DB.Model(&models.HelpRequest{}).Where("user_id = ? AND status = 'pending'", userID).
 		Preload("Mentor", "users.id = help_requests.mentor_id").
 		Joins("JOIN users ON users.id = help_requests.mentor_id").
 		Find(&resp)
