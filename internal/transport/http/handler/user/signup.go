@@ -27,13 +27,13 @@ func (h *Route) signup(c *gin.Context) {
 	}
 
 	company := &models.User{
-		ID:        uuid.New(),
-		Name:      reqData.Name,
-		Surname:   reqData.Surname,
-		Email:     reqData.Email,
-		AvatarURL: reqData.AvatarUrl,
-		Password:  []byte(reqData.Password),
-		Age:       reqData.Age,
+		ID:         uuid.New(),
+		FirstName:  reqData.Name,
+		SecondName: reqData.Surname,
+		Email:      reqData.Email,
+		AvatarURL:  reqData.AvatarUrl,
+		Password:   []byte(reqData.Password),
+		Age:        reqData.Age,
 	}
 
 	token, err := h.usersService.Create(c.Request.Context(), company)

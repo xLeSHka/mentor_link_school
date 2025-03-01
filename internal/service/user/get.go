@@ -2,7 +2,7 @@ package userService
 
 import (
 	"context"
-	"prodapp/internal/models"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 
 	"github.com/google/uuid"
 )
