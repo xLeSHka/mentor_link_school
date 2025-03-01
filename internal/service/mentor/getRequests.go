@@ -11,7 +11,7 @@ import (
 )
 
 func (s *MentorService) GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error) {
-	helps, err := s.GetMyHelps(ctx, userID)
+	helps, err := s.usersRepository.GetMyRequests(ctx, userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, httpError.New(http.StatusNotFound, err.Error())
