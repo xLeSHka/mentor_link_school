@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
-    <list id="6d3b85ec-45d8-4156-834e-8e9772104daf" name="Changes by ainur" comment="" />
-    <list id="692c9415-a719-4b8c-a1d1-a931982e704c" name="Changes by LIME" comment="">
-      <change beforePath="$PROJECT_DIR$/docker-compose.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.tmpl" afterDir="false" />
-    </list>
+    <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
