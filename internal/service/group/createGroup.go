@@ -3,6 +3,7 @@ package groupService
 import (
 	"context"
 	"errors"
+	"github.com/google/uuid"
 	"net/http"
 
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
@@ -10,9 +11,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func (s *GroupsService) CreateGroup(ctx context.Context, group *models.Group) error {
+func (s *GroupsService) CreateGroup(ctx context.Context, group *models.Group, userID uuid.UUID) error {
 
-	err := s.groupRepository.Create(ctx, group)
+	err := s.groupRepository.Create(ctx, group, userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return httpError.New(http.StatusConflict, "Такой email уже зарегистрирован.")

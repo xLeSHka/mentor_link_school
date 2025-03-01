@@ -6,5 +6,5 @@ import (
 )
 
 func (s *UsersService) CreateRequest(ctx context.Context, request *models.HelpRequest) error {
-	return nil
+	return s.usersRepository.CreateRequest(ctx, request)
 }

@@ -8,7 +8,7 @@ import (
 )
 
 type GroupRepository interface {
-	Create(ctx context.Context, group *models.Group) error
+	Create(ctx context.Context, group *models.Group, userID uuid.UUID) error
 	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Group, error)
 	GetGroup(ctx context.Context, group *models.Group) (*models.Group, error)
 }
@@ -16,6 +16,7 @@ type MentorRepository interface {
 	GetMyHelpers(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)
 	UpdateRequest(ctx context.Context, request *models.HelpRequest) error
 	GetStudents(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error)
+	AcceptRequest(ctx context.Context, request *models.HelpRequest) error
 }
 type UsersRepository interface {
 	Login(ctx context.Context, person *models.User) (*models.User, error)

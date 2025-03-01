@@ -25,6 +25,7 @@ type respGetMyMentor struct {
 }
 type respGetMentor struct {
 	MentorID  uuid.UUID `json:"mentor_id" binding:"required"`
+	GroupID   uuid.UUID `json:"group_id" binding:"required"`
 	AvatarUrl *string   `json:"avatar_url,omitempty"`
 	Name      string    `json:"name" binding:"required"`
 	BIO       *string   `json:"bio,omitempty"`
@@ -49,11 +50,11 @@ type respUploadAvatarDto struct {
 	Url string `json:"url"`
 }
 
-func mapMyMentor(mentor *models.User) *respGetMyMentor {
+func mapMyMentor(mentor *models.Pair) *respGetMyMentor {
 	return &respGetMyMentor{
-		MentorID:  mentor.ID,
-		AvatarUrl: mentor.AvatarURL,
-		Name:      mentor.Name,
+		MentorID:  mentor.Mentor.ID,
+		AvatarUrl: mentor.Mentor.AvatarURL,
+		Name:      mentor.Mentor.Name,
 	}
 }
 func mapHelp(help *models.HelpRequest) *respGetHelp {
@@ -69,6 +70,7 @@ func mapHelp(help *models.HelpRequest) *respGetHelp {
 func mapMentor(mentor *models.User) *respGetMentor {
 	return &respGetMentor{
 		MentorID:  mentor.ID,
+		GroupID:   mentor.Role.GroupID,
 		AvatarUrl: mentor.AvatarURL,
 		Name:      mentor.Name,
 		BIO:       mentor.BIO,

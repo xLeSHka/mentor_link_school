@@ -14,6 +14,7 @@ type User struct {
 	AvatarURL *string
 	BIO       *string
 	Telegram  string `gorm:"not null"`
+	Role      *Role  `gorm:"foreignKey:user_id"`
 }
 
 func (_ *User) TableName() string {
@@ -67,6 +68,7 @@ func (_ *Role) BeforeCreate(tx *gorm.DB) (err error) {
 type Pair struct {
 	UserID   uuid.UUID `gorm:"type:uuid;not null"`
 	MentorID uuid.UUID `gorm:"type:uuid;not null"`
+	GroupID  uuid.UUID `gorm:"type:uuid;not null"`
 	Goal     string    `gorm:"not null"`
 	Mentor   *User     `gorm:"foreignKey:id"`
 	Student  *User     `gorm:"foreignKey:id"`

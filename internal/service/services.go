@@ -11,7 +11,7 @@ import (
 type GroupService interface {
 	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Group, error)
 	GetGroup(ctx context.Context, mentor *models.Group) (*models.Group, error)
-	CreateGroup(ctx context.Context, group *models.Group) error
+	CreateGroup(ctx context.Context, group *models.Group, userID uuid.UUID) error
 }
 type MentorService interface {
 	GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)

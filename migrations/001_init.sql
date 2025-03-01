@@ -36,6 +36,7 @@ CREATE TABLE help_requests (
 CREATE TABLE pairs (
     user_id UUID REFERENCES users(id),
     mentor_id UUID REFERENCES users(id),
+    group_id UUID REFERENCES users(id),
     goal VARCHAR NOT NULL,
     PRIMARY KEY (user_id, mentor_id)
 );

@@ -11,7 +11,5 @@ type MentorRepository struct {
 }
 
 func New(db *gorm.DB) repository.MentorRepository {
-	return &MentorRepository{
-		DB: db,
-	}
+	return &MentorRepository{DB: db}
 }

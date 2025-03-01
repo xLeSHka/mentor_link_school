@@ -21,7 +21,7 @@ func (h *Route) createGroup(c *gin.Context) {
 		Name: reqData.Name,
 	}
 
-	err := h.groupService.CreateGroup(c.Request.Context(), group)
+	err := h.groupService.CreateGroup(c.Request.Context(), group, uuid.New()) //TODO refactor
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
