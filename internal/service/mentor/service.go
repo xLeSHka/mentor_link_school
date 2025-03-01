@@ -12,7 +12,6 @@ import (
 
 	jwtlib "github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/redis/go-redis/v9"
 )
 
 type MentorService struct {
@@ -21,15 +20,15 @@ type MentorService struct {
 	//groupRepository  repository.GroupRepository
 	mentorRepository repository.MentorRepository
 	jwt              *jwt.JWT
-	rdb              *redis.Client
-	cryptoKey        []byte
+	//rdb              *redis.Client
+	cryptoKey []byte
 }
 
 type FxOpts struct {
 	fx.In
 	UsersRepository repository.UsersRepository
 	JWT             *jwt.JWT
-	RDB             *redis.Client
+	//RDB             *redis.Client
 	MinioRepository repository.MinioRepository
 	//GroupRepository  repository.GroupRepository
 	MentorRepository repository.MentorRepository
@@ -40,7 +39,7 @@ func New(opts FxOpts) service.MentorService {
 	return &MentorService{
 		usersRepository: opts.UsersRepository,
 		jwt:             opts.JWT,
-		rdb:             opts.RDB,
+		//rdb:             opts.RDB,
 		minioRepository: opts.MinioRepository,
 		//groupRepository:  opts.GroupRepository,
 		mentorRepository: opts.MentorRepository,

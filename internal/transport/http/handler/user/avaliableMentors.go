@@ -1,6 +1,7 @@
 package usersRoute
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
@@ -19,19 +20,20 @@ func (h *Route) availableMentors(c *gin.Context) {
 
 	mentors, err := h.usersService.GetMentors(c.Request.Context(), personId)
 	if err != nil {
+		fmt.Println(err)
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
 	resp := make([]*respGetMentor, 0, len(mentors))
 	for _, m := range mentors {
-		if m.AvatarURL != nil {
-			avatarURL, err := h.minioRepository.GetImage(*m.AvatarURL)
+		if m.Mentor.AvatarURL != nil {
+			avatarURL, err := h.minioRepository.GetImage(*m.Mentor.AvatarURL)
 			if err != nil {
 				err.(*httpError.HTTPError).SendError(c)
 				c.Abort()
 				return
 			}
-			m.AvatarURL = &avatarURL
+			m.Mentor.AvatarURL = &avatarURL
 		}
 		resp = append(resp, mapMentor(m))
 	}

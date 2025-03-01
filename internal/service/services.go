@@ -26,5 +26,5 @@ type UserService interface {
 	GetMyMentors(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error)
 	GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)
 	CreateRequest(ctx context.Context, request *models.HelpRequest) error
-	GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.User, error)
+	GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.Role, error)
 }
