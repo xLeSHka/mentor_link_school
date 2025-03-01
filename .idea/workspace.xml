@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/getRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/getRequests.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
-    <list id="75b6ef32-c8b1-4f49-976d-e917425077e4" name="Changes by ainur" comment="">
-      <change beforePath="$PROJECT_DIR$/internal/service/services.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/services.go" afterDir="false" />
-    </list>
-    <list id="4b39ec78-3c1d-4b61-813f-3fe7111e8a41" name="Changes by LIME" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
