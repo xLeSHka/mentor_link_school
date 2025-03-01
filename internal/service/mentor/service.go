@@ -16,9 +16,9 @@ import (
 )
 
 type MentorService struct {
-	usersRepository  repository.UsersRepository
-	minioRepository  repository.MinioRepository
-	groupRepository  repository.GroupRepository
+	usersRepository repository.UsersRepository
+	minioRepository repository.MinioRepository
+	//groupRepository  repository.GroupRepository
 	mentorRepository repository.MentorRepository
 	jwt              *jwt.JWT
 	rdb              *redis.Client
@@ -27,22 +27,22 @@ type MentorService struct {
 
 type FxOpts struct {
 	fx.In
-	UsersRepository  repository.UsersRepository
-	JWT              *jwt.JWT
-	RDB              *redis.Client
-	MinioRepository  repository.MinioRepository
-	GroupRepository  repository.GroupRepository
+	UsersRepository repository.UsersRepository
+	JWT             *jwt.JWT
+	RDB             *redis.Client
+	MinioRepository repository.MinioRepository
+	//GroupRepository  repository.GroupRepository
 	MentorRepository repository.MentorRepository
 	Config           config.Config
 }
 
 func New(opts FxOpts) service.MentorService {
 	return &MentorService{
-		usersRepository:  opts.UsersRepository,
-		jwt:              opts.JWT,
-		rdb:              opts.RDB,
-		minioRepository:  opts.MinioRepository,
-		groupRepository:  opts.GroupRepository,
+		usersRepository: opts.UsersRepository,
+		jwt:             opts.JWT,
+		rdb:             opts.RDB,
+		minioRepository: opts.MinioRepository,
+		//groupRepository:  opts.GroupRepository,
 		mentorRepository: opts.MentorRepository,
 		cryptoKey:        []byte(opts.Config.CryptoKey),
 	}

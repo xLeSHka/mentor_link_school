@@ -11,5 +11,6 @@ import (
 var Repositories = fx.Provide(
 	repositoryUser.New,
 	repositoryMentor.New,
+
 	repositoryMinio.New,
 )

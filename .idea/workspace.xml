@@ -7,9 +7,8 @@
     <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
-    <list id="502ba2da-cb20-417e-8d6e-11f9cf9237fb" name="Changes by ainur" comment="" />
-    <list id="6225a679-2c6e-4cb0-baed-847b3f2583e2" name="Changes by LIME" comment="">
-      <change beforePath="$PROJECT_DIR$/jobs/docker.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/docker.yaml" afterDir="false" />
+    <list id="d7c3d470-0326-4f93-a01c-a91624e94424" name="Changes by LIME" comment="">
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
