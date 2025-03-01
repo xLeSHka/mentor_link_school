@@ -25,8 +25,8 @@ type Config struct {
 	TelegramStringAdmins string `envconfig:"TELEGRAM_BOT_ADMINS" default:""`
 	MinioHost            string `envconfig:"MINIO_HOST" default:"minio"`
 	MinioPort            int    `envconfig:"MINIO_PORT" default:"9000"`
-	MinioUser            string `envconfig:"MINIO_USER" default:"ZXbIlCBgDOdm8sXmU76uRV"`
-	MinioPassword        string `envconfig:"MINIO_PASSWORD" default:"OuTGNmpQC1T0B875o3KeuJ"`
+	MinioUser            string `envconfig:"MINIO_ROOT_USER" default:"ZXbIlCBgDOdm8sXmU76uRV"`
+	MinioPassword        string `envconfig:"MINIO_ROOT_PASSWORD" default:"OuTGNmpQC1T0B875o3KeuJ"`
 	BucketName           string `envconfig:"MINIO_BUCKET_NAME" default:"imagebucket"`
 	CryptoKey            string `envconfig:"CRYPTO_KEY" default:"12345678901234567890123456789012"`
 	IsModerationEnabled  bool   `envconfig:"IS_MODERATION_ENABLED" default:"false"`

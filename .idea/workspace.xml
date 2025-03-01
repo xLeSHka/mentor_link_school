@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="" />
+    <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+    <list id="a8d05c49-91c6-4d43-bc34-8f55b13f1272" name="Changes by LIME" comment="">
+      <change beforePath="$PROJECT_DIR$/internal/pkg/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/pkg/config/config.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
