@@ -13,4 +13,5 @@ type UserService interface {
 	Login(ctx context.Context, email string, password string) (*models.User, string, error)
 	GetByID(ctx context.Context, id uuid.UUID) (person *models.User, err error)
 	UploadImage(ctx context.Context, file *models.File, personID uuid.UUID) (string, *httpError.HTTPError)
+	CreateGroup(ctx context.Context, group *models.Group) error
 }

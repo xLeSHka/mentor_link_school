@@ -7,6 +7,10 @@ import (
 	"github.com/google/uuid"
 )
 
+type GroupRepository interface {
+	Create(ctx context.Context, group *models.Group) error
+	GetAllGroups(ctx context.Context) ([]*models.Group, error)
+}
 type UsersRepository interface {
 	Create(ctx context.Context, person *models.User) (*models.User, error)
 	GetByID(ctx context.Context, id uuid.UUID) (person *models.User, err error)
