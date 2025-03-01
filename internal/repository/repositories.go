@@ -13,16 +13,18 @@ type GroupRepository interface {
 	GetGroup(ctx context.Context, group *models.Group) (*models.Group, error)
 }
 type MentorRepository interface {
-	GetMentorRequest(ctx context.Context, data *models.HelpRequest) error
-	CreateMentorRequest(ctx context.Context, data *models.CreateMentorRequest) error
-	GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.Mentor, error)
-	GetMentor(ctx context.Context, mentor *models.Mentor) (*models.Mentor, error)
+	GetMyHelpers(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)
+	UpdateRequest(ctx context.Context, request *models.HelpRequest) error
+	GetStudents(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error)
 }
 type UsersRepository interface {
 	Login(ctx context.Context, person *models.User) (*models.User, error)
 	GetByID(ctx context.Context, id uuid.UUID) (person *models.User, err error)
 	EditUser(ctx context.Context, userID uuid.UUID, updates map[string]any) (*models.User, error)
 	GetMyMentors(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error)
+	GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.User, error)
+	GetMyRequests(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)
+	CreateRequest(ctx context.Context, request *models.HelpRequest) error
 }
 
 type MinioRepository interface {

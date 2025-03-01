@@ -9,7 +9,7 @@ import (
 )
 
 func (h *Route) createGroup(c *gin.Context) {
-	personId := uuid.MustParse(c.MustGet("personId").(string))
+	//personId := uuid.MustParse(c.MustGet("personId").(string))
 	var reqData reqCreateGroupDto
 	if err := h.validator.ShouldBindJSON(c, &reqData); err != nil {
 		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
@@ -17,10 +17,8 @@ func (h *Route) createGroup(c *gin.Context) {
 	}
 
 	group := &models.Group{
-		ID:     uuid.New(),
-		UserID: personId,
-		Name:   reqData.Name,
-		Email:  reqData.Email,
+		ID:   uuid.New(),
+		Name: reqData.Name,
 	}
 
 	err := h.groupService.CreateGroup(c.Request.Context(), group)

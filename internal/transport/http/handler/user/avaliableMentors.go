@@ -12,28 +12,28 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /api/user/avaliableMentors [post]
-// @Success 200 {object} respGetMentor
+// @Router /api/user/avaliableMentors [get]
+// @Success 200 {object} []respGetMentor
 func (h *Route) availableMentors(c *gin.Context) {
 	personId := uuid.MustParse(c.MustGet("personId").(string))
 
-	mentors, err := h.usersService.GetMyMentors(c.Request.Context(), personId)
+	mentors, err := h.usersService.GetMentors(c.Request.Context(), personId)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	resp := make([]*respGetMyMentor, 0, len(mentors))
+	resp := make([]*respGetMentor, 0, len(mentors))
 	for _, m := range mentors {
-		if m.Mentor.AvatarURL != nil {
-			avatarURL, err := h.minioRepository.GetImage(*m.Mentor.AvatarURL)
+		if m.AvatarURL != nil {
+			avatarURL, err := h.minioRepository.GetImage(*m.AvatarURL)
 			if err != nil {
 				err.(*httpError.HTTPError).SendError(c)
 				c.Abort()
 				return
 			}
-			m.Mentor.AvatarURL = &avatarURL
+			m.AvatarURL = &avatarURL
 		}
-		resp = append(resp, mapMyMentor(m.Mentor))
+		resp = append(resp, mapMentor(m))
 	}
 
 	c.JSON(http.StatusOK, resp)

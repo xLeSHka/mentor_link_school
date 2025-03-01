@@ -9,7 +9,7 @@ import (
 )
 
 func (h *Route) getGroup(c *gin.Context) {
-	personId := uuid.MustParse(c.MustGet("personId").(string))
+	//personId := uuid.MustParse(c.MustGet("personId").(string))
 	var reqData GetGroupID
 	if err := h.validator.ShouldBindUri(c, &reqData); err != nil {
 		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
@@ -17,8 +17,8 @@ func (h *Route) getGroup(c *gin.Context) {
 	}
 	groupID := uuid.MustParse(reqData.ID)
 	group := &models.Group{
-		UserID: personId,
-		ID:     groupID,
+		//UserID: personId,
+		ID: groupID,
 	}
 
 	group, err := h.groupService.GetGroup(c.Request.Context(), group)

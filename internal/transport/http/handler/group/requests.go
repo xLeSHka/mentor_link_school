@@ -21,9 +21,9 @@ type respGetGroupDto struct {
 
 func mapGroup(group *models.Group) *respGetGroupDto {
 	return &respGetGroupDto{
-		Name:      group.Name,
-		ID:        group.ID.String(),
-		Email:     group.Email,
+		Name: group.Name,
+		ID:   group.ID.String(),
+		//Email:     group.Email,
 		AvatarUrl: group.AvatarURL,
 	}
 }

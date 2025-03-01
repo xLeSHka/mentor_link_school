@@ -60,7 +60,7 @@ func mapHelp(help *models.HelpRequest) *respGetHelp {
 		ID:         help.ID,
 		Goal:       help.Goal,
 		MentorName: help.Mentor.Name,
-		AvatarUrl:  help.Mentor.AvatarURL,
+		AvatarUrl:  help.Student.AvatarURL,
 	}
 }
 func mapMentor(mentor *models.User) *respGetMentor {

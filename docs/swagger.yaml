@@ -38,19 +38,6 @@ definitions:
       user_id:
         type: string
     type: object
-  models.User:
-    properties:
-      avatarURL:
-        type: string
-      bio:
-        type: string
-      id:
-        type: string
-      name:
-        type: string
-      telegram:
-        type: string
-    type: object
   usersRoute.Pair:
     properties:
       group_id:
@@ -148,38 +135,6 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
-  /api/group/{groupID}/requests:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/usersRoute.respGetHelp'
-            type: array
-      summary: Получить список моих запросов
-      tags:
-      - Users
-  /api/group/{groupId}/mentors:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/models.User'
-            type: array
-      summary: Получение списка менторов, которые доступны юзеру
-      tags:
-      - Mentors
   /api/group/requests:
     post:
       consumes:
@@ -281,7 +236,7 @@ paths:
       tags:
       - Users
   /api/user/avaliableMentors:
-    post:
+    get:
       consumes:
       - application/json
       produces:
@@ -290,12 +245,14 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/usersRoute.respGetMentor'
+            items:
+              $ref: '#/definitions/usersRoute.respGetMentor'
+            type: array
       summary: Получение доступных всех
       tags:
       - Users
   /api/user/mentors:
-    post:
+    get:
       consumes:
       - application/json
       produces:
@@ -327,6 +284,22 @@ paths:
           schema:
             $ref: '#/definitions/httpError.HTTPError'
       summary: Получить инфу о себе
+      tags:
+      - Users
+  /api/user/requests:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/usersRoute.respGetHelp'
+            type: array
+      summary: Получить список моих запросов
       tags:
       - Users
   /api/user/uploadAvatar:

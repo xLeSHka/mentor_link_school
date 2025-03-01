@@ -12,7 +12,7 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /api/user/mentors [post]
+// @Router /api/user/mentors [get]
 // @Success 200 {object} []respGetMyMentor
 func (h *Route) getMyMentors(c *gin.Context) {
 	personId := uuid.MustParse(c.MustGet("personId").(string))

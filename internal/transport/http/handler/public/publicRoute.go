@@ -2,10 +2,12 @@ package publicRoute
 
 import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ApiRouters"
+	"gorm.io/gorm"
 )
 
 type Route struct {
 	Routers *ApiRouters.ApiRouters
+	DB      *gorm.DB
 }
 
 func PublicRoute(apiRouters *ApiRouters.ApiRouters) *Route {

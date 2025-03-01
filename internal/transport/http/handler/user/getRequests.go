@@ -12,7 +12,7 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /api/group/{groupID}/requests [get]
+// @Router /api/user/requests [get]
 // @Success 200 {object} []respGetHelp
 func (h *Route) getRequests(c *gin.Context) {
 	personId := uuid.MustParse(c.MustGet("personId").(string))

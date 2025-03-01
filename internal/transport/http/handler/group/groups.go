@@ -33,7 +33,7 @@ func GroupsRoutes(opts FxOpts) *Route {
 	}
 
 	opts.ApiRouter.UserPrivate.POST("/createGroup", router.createGroup)
-	opts.ApiRouter.UserPrivate.GET("", router.getGroups)
+	//opts.ApiRouter.UserPrivate.GET("", router.getGroups)
 	opts.ApiRouter.GroupPrivate.GET("", router.getGroup)
 	return router
 }

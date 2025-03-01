@@ -39,10 +39,11 @@ type HelpRequest struct {
 	BIO      *string
 	Status   string `gorm:"not null"`
 	Mentor   *User  `gorm:"foreignKey:id"`
+	Student  *User  `gorm:"foreignKey:id"`
 }
 
 func (_ *HelpRequest) TableName() string {
-	return "get_mentor_requests"
+	return "help_requests"
 }
 func (_ *HelpRequest) BeforeCreate(tx *gorm.DB) (err error) {
 	tx.Statement.AddClause(clause.OnConflict{DoNothing: true})
@@ -68,6 +69,7 @@ type Pair struct {
 	MentorID uuid.UUID `gorm:"type:uuid;not null"`
 	Goal     string    `gorm:"not null"`
 	Mentor   *User     `gorm:"foreignKey:id"`
+	Student  *User     `gorm:"foreignKey:id"`
 }
 
 func (_ *Pair) TableName() string {
