@@ -16,7 +16,7 @@ import (
 // @Router /api/mentors/requests [post]
 // @Param body body reqUpdateRequest true "body"
 func (h *Route) updateRequest(c *gin.Context) {
-	personID := uuid.MustParse(c.MustGet("personID").(string))
+	personID := uuid.MustParse(c.MustGet("personId").(string))
 	var req reqUpdateRequest
 	if err := h.validator.ShouldBindJSON(c, &req); err != nil {
 		httpError.New(http.StatusBadRequest, err.Error())

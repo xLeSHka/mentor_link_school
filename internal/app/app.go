@@ -3,7 +3,6 @@ package app
 import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/connetions/db"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/connetions/minio"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/connetions/redis"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/integrations"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http"
 	httpHandlers "gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler"
@@ -17,7 +16,7 @@ var App = fx.Options(
 		db.New,
 		http.New,
 		jwt.New,
-		redis.New,
+		//redis.New,
 		minio.New,
 	),
 	integrations.Integrations,

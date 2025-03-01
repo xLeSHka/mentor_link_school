@@ -43,7 +43,7 @@ type Pair struct {
 	GroupId  uuid.UUID `json:"group_id"`
 }
 type reqCreateHelp struct {
-	Requests []Pair `binding:"required"`
+	Requests []Pair `json:"requests" binding:"required"`
 	Goal     string `json:"goal" binding:"required"`
 }
 type respUploadAvatarDto struct {

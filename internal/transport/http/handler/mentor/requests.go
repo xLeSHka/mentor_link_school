@@ -30,13 +30,17 @@ func mapMyStudent(user *models.User) *respGetMyStudent {
 		Name:      user.Name,
 	}
 }
-func mapRequest(req *models.HelpRequest) *respGetRequest {
-	return &respGetRequest{
-		ID:        req.ID,
-		UserID:    req.UserID,
-		AvatarURL: req.Student.AvatarURL,
-		Name:      req.Student.Name,
-		Goal:      req.Goal,
-		Status:    req.Status,
+func mapRequest(req *models.HelpRequest) (res *respGetRequest) {
+	res = &respGetRequest{
+		ID:     req.ID,
+		UserID: req.UserID,
+		Name:   req.Student.Name,
+		Goal:   req.Goal,
+		Status: req.Status,
 	}
+	if req.Student.AvatarURL != nil {
+		// TODO: minio blyat?
+		res.AvatarURL = req.Student.AvatarURL
+	}
+	return
 }

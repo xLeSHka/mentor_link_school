@@ -11,22 +11,21 @@ import (
 
 	jwtlib "github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/redis/go-redis/v9"
 )
 
 type UsersService struct {
 	usersRepository repository.UsersRepository
 	minioRepository repository.MinioRepository
 	jwt             *jwt.JWT
-	rdb             *redis.Client
-	cryptoKey       []byte
+	//rdb             *redis.Client
+	cryptoKey []byte
 }
 
 type FxOpts struct {
 	fx.In
 	UsersRepository repository.UsersRepository
 	JWT             *jwt.JWT
-	RDB             *redis.Client
+	//RDB             *redis.Client
 	MinioRepository repository.MinioRepository
 
 	Config config.Config
@@ -36,7 +35,7 @@ func New(opts FxOpts) service.UserService {
 	return &UsersService{
 		usersRepository: opts.UsersRepository,
 		jwt:             opts.JWT,
-		rdb:             opts.RDB,
+		//rdb:             opts.RDB,
 		minioRepository: opts.MinioRepository,
 
 		cryptoKey: []byte(opts.Config.CryptoKey),

@@ -17,6 +17,8 @@ func New(config config.Config) (*minio.Client, error) {
 		Creds:  credentials.NewStaticV4(config.MinioUser, config.MinioPassword, ""),
 		Secure: false,
 	})
+	return client, nil
+
 	if err != nil {
 		return nil, err
 	}
