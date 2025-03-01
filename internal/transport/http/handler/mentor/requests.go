@@ -20,6 +20,7 @@ type respGetRequest struct {
 	Name      string    `json:"name"`
 	AvatarURL *string   `json:"avatar_url,omitempty"`
 	Goal      string    `json:"goal"`
+	Status    string    `json:"status"`
 }
 
 func mapMyStudent(user *models.User) *respGetMyStudent {
@@ -36,5 +37,6 @@ func mapRequest(req *models.HelpRequest) *respGetRequest {
 		AvatarURL: req.Student.AvatarURL,
 		Name:      req.Student.Name,
 		Goal:      req.Goal,
+		Status:    req.Status,
 	}
 }

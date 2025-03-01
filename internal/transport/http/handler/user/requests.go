@@ -31,10 +31,11 @@ type respGetMentor struct {
 }
 type respGetHelp struct {
 	ID         uuid.UUID `json:"id"`
-	MentorID   string    `json:"mentor_id"`
+	MentorID   uuid.UUID `json:"mentor_id"`
 	MentorName string    `json:"mentor_name"`
 	AvatarUrl  *string   `json:"avatar_url,omitempty"`
 	Goal       string    `json:"goal"`
+	Status     string    `json:"status"`
 }
 type Pair struct {
 	MentorID uuid.UUID `json:"mentor_id"`
@@ -58,6 +59,8 @@ func mapMyMentor(mentor *models.User) *respGetMyMentor {
 func mapHelp(help *models.HelpRequest) *respGetHelp {
 	return &respGetHelp{
 		ID:         help.ID,
+		MentorID:   help.MentorID,
+		Status:     help.Status,
 		Goal:       help.Goal,
 		MentorName: help.Mentor.Name,
 		AvatarUrl:  help.Student.AvatarURL,
