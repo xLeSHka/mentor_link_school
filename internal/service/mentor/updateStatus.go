@@ -19,8 +19,3 @@ func (s *MentorService) UpdateRequest(ctx context.Context, request *models.HelpR
 	}
 	return nil
 }
-
-func (s *MentorService) AcceptRequest(ctx context.Context, request *models.HelpRequest) error {
-	err := s.mentorRepository.AcceptRequest(ctx, request) //TODO проверка на то, есть ли активная заявка для такого пользователя
-	return err
-}
