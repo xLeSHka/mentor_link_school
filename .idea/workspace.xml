@@ -6,9 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.tmpl" afterDir="false" />
     </list>
+    <list id="cc95d239-583f-4a55-a66e-dda178718ec1" name="Changes by ainur" comment="" />
     <list id="d7c3d470-0326-4f93-a01c-a91624e94424" name="Changes by LIME" comment="">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev.env" beforeDir="false" afterPath="$PROJECT_DIR$/dev.env" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
