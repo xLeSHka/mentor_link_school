@@ -3,6 +3,16 @@ package tests
 import (
 	"context"
 	"errors"
+	"log"
+	"net/http"
+	"net/http/httptest"
+	"os"
+	"os/signal"
+	"strconv"
+	"syscall"
+	"testing"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/minio/minio-go/v7"
 	"github.com/redis/go-redis/v9"
@@ -25,15 +35,6 @@ import (
 	jwt2 "gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"go.uber.org/fx"
 	"gorm.io/gorm"
-	"log"
-	"net/http"
-	"net/http/httptest"
-	"os"
-	"os/signal"
-	"strconv"
-	"syscall"
-	"testing"
-	"time"
 )
 
 func TestValidateApp(t *testing.T) {
@@ -101,7 +102,7 @@ func init() {
 		UsersRepository: UserRepository,
 		MinioRepository: MinioRepository,
 	})
-	routers = ApiRouters.CreateApiRoutes(http3, rdb, jwt)
+	routers = ApiRouters.CreateApiRoutes(http3, db, rdb, jwt)
 
 	publicRoute.PublicRoute(routers)
 	usersRoute.UsersRoute(usersRoute.FxOpts{
