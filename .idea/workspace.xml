@@ -6,30 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/connetions/db/db.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/connetions/db/db.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/models/models.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/models/models.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/user/getMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/getMentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/mentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/mentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/requests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/requests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/001_init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/001_init.sql" afterDir="false" />
     </list>
-    <list id="75b4f414-b5bc-4d2d-96a9-7b631f9c435a" name="Changes by ainur" comment="">
-      <change afterPath="$PROJECT_DIR$/internal/repository/mentor/getHelpers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/group/create.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/group/create.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/updateStatus.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/updateStatus.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/repositories.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/repositories.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/user/login.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/login.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/group/createGroup.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/group/createGroup.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/mentor/updateStatus.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/mentor/updateStatus.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/services.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/services.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/createRequest.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/createRequest.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/getMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/getMentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/createGroup.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/createGroup.go" afterDir="false" />
-    </list>
-    <list id="5616f49a-7ae4-4147-b258-d18510d8fa0f" name="Changes by LIME" comment="">
-      <change beforePath="$PROJECT_DIR$/internal/repository/user/getMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/getMentors.go" afterDir="false" />
-    </list>
+    <list id="75b4f414-b5bc-4d2d-96a9-7b631f9c435a" name="Changes by ainur" comment="" />
+    <list id="5616f49a-7ae4-4147-b258-d18510d8fa0f" name="Changes by LIME" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -45,14 +24,6 @@
   <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.0.windows-amd64" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/internal/repository/user/getMentors.go">
-      <ranges>
-        <range start1="8" end1="12" start2="8" end2="18" changelist="5616f49a-7ae4-4147-b258-d18510d8fa0f" />
-        <range start1="14" end1="15" start2="20" end2="38" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-      </ranges>
-    </file>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
