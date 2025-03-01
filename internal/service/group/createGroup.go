@@ -1,12 +1,13 @@
-package mentorService
+package groupService
 
 import (
 	"context"
 	"errors"
+	"net/http"
+
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 	"gorm.io/gorm"
-	"net/http"
 )
 
 func (s *GroupsService) CreateGroup(ctx context.Context, group *models.Group) error {

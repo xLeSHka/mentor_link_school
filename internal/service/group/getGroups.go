@@ -1,13 +1,14 @@
-package mentorService
+package groupService
 
 import (
 	"context"
 	"errors"
+	"net/http"
+
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 	"gorm.io/gorm"
-	"net/http"
 )
 
 func (r *GroupsService) GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Group, error) {
