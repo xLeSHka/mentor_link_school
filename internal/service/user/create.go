@@ -15,7 +15,7 @@ func (s *UsersService) Create(ctx context.Context, user *models.User) (string, e
 	hashPassword, _ := helpers.Encrypt(user.Password, s.cryptoKey)
 	user.Password = hashPassword
 
-	_, err := s.usersRepository.Create(ctx, user)
+	_, err := s.usersRepository.Login(ctx, user)
 	if err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
 			return "", httpError.New(http.StatusConflict, "Такой email уже зарегистрирован.")

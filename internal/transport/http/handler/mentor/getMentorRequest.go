@@ -22,7 +22,7 @@ func (h *Route) getMentorRequest(c *gin.Context) {
 		return
 	}
 	groupID := uuid.MustParse(reqData.ID)
-	req := &models.GetMentorRequest{
+	req := &models.HelpRequest{
 		UserID:  personId,
 		GroupID: groupID,
 		Goal:    goal.Goal,

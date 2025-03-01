@@ -5,8 +5,8 @@ CREATE TABLE users (
     id UUID PRIMARY KEY,
     avatar_url VARCHAR DEFAULT NULL,
     name VARCHAR NOT NULL UNIQUE,
-    bio TEXT,
-    telegram VARCHAR
+    bio TEXT DEFAULT NULL,
+    telegram VARCHAR NOT NULL
 );
 
 CREATE TABLE groups (
@@ -23,12 +23,13 @@ CREATE TABLE roles (
 );
 
 CREATE TABLE help_requests (
-    user_id UUID PRIMARY KEY REFERENCES users(id),
-    pending_mentor_ids UUID[],
-    active_mentor_ids UUID[],
-    max_mentors_count INT NOT NULL,
+    id UUID,
+    user_id UUID  REFERENCES users(id),
+    mentor_id UUID REFERENCES users(id),
     goal VARCHAR NOT NULL,
-    status TEXT NOT NULL
+    bio TEXT DEFAULT NULL,
+    status VARCHAR NOT NULL,
+    PRIMARY KEY (id,user_id,mentor_id)
 );
 
 CREATE TABLE pairs (

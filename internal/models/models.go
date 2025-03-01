@@ -9,13 +9,11 @@ import (
 )
 
 type User struct {
-	ID         uuid.UUID `gorm:"type:uuid;primaryKey" `
-	FirstName  string    `gorm:"not null"`
-	SecondName string    `gorm:"not null"`
-	Email      string    `gorm:"not null"`
-	AvatarURL  *string
-	Password   []byte `gorm:"not null"`
-	BIO        *string
+	ID        uuid.UUID `gorm:"type:uuid;primaryKey" `
+	Name      string    `gorm:"unique;not null"`
+	AvatarURL *string
+	BIO       *string
+	Telegram  string `gorm:"not null"`
 }
 
 func (_ *User) TableName() string {
@@ -24,42 +22,27 @@ func (_ *User) TableName() string {
 
 type Group struct {
 	ID        uuid.UUID `gorm:"type:uuid;primaryKey"`
-	UserID    uuid.UUID `gorm:"type:uuid;not null"`
-	Name      string    `gorm:"not null"`
-	Email     string    `gorm:"not null"`
 	AvatarURL *string
+	Name      string `gorm:"not null"`
 }
 
 func (_ *Group) TableName() string {
 	return "groups"
 }
 
-type GetMentorRequest struct {
-	UserID  uuid.UUID `gorm:"type:uuid;not null"`
-	GroupID uuid.UUID `gorm:"type:uuid;not null"`
-	Goal    string    `gorm:"not null"`
-	BIO     *string
+type HelpRequest struct {
+	ID       uuid.UUID `gorm:"type:uuid;primaryKey"`
+	UserID   uuid.UUID `gorm:"type:uuid;not null"`
+	MentorID uuid.UUID `gorm:"type:uuid;not null"`
+	Goal     string    `gorm:"not null"`
+	BIO      *string
+	Status   string `gorm:"not null"`
 }
 
-func (_ *GetMentorRequest) TableName() string {
+func (_ *HelpRequest) TableName() string {
 	return "get_mentor_requests"
 }
-func (_ *GetMentorRequest) BeforeCreate(tx *gorm.DB) (err error) {
-	tx.Statement.AddClause(clause.OnConflict{DoNothing: true})
-	return nil
-}
-
-type CreateMentorRequest struct {
-	UserID  uuid.UUID `gorm:"type:uuid;not null"`
-	GroupID uuid.UUID `gorm:"type:uuid;not null"`
-	Goal    string    `gorm:"not null"`
-	BIO     *string
-}
-
-func (_ *CreateMentorRequest) TableName() string {
-	return "create_mentor_requests"
-}
-func (_ *CreateMentorRequest) BeforeCreate(tx *gorm.DB) (err error) {
+func (_ *HelpRequest) BeforeCreate(tx *gorm.DB) (err error) {
 	tx.Statement.AddClause(clause.OnConflict{DoNothing: true})
 	return nil
 }
@@ -78,16 +61,16 @@ func (_ *Role) BeforeCreate(tx *gorm.DB) (err error) {
 	return nil
 }
 
-type Mentor struct {
+type Pair struct {
 	UserID   uuid.UUID `gorm:"type:uuid;not null"`
 	MentorID uuid.UUID `gorm:"type:uuid;not null"`
-	GroupID  uuid.UUID `gorm:"type:uuid;not null"`
+	Goal     string    `gorm:"not null"`
 }
 
-func (_ *Mentor) TableName() string {
+func (_ *Pair) TableName() string {
 	return "mentors"
 }
-func (_ *Mentor) BeforeCreate(tx *gorm.DB) (err error) {
+func (_ *Pair) BeforeCreate(tx *gorm.DB) (err error) {
 	tx.Statement.AddClause(clause.OnConflict{DoNothing: true})
 	return nil
 }

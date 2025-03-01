@@ -14,23 +14,23 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/user/auth/sign-in [post]
-// @Param body body reqSigninDto true "body"
-// @Success 200 {object} resSigninDto
+// @Param body body reqLoginDto true "body"
+// @Success 200 {object} respLoginDto
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Неверный email или пароль"
-func (h *Route) signin(c *gin.Context) {
-	var reqData reqSigninDto
+func (h *Route) login(c *gin.Context) {
+	var reqData reqLoginDto
 	if err := h.validator.ShouldBindJSON(c, &reqData); err != nil {
 		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
 		return
 	}
 
-	_, token, err := h.usersService.Login(c.Request.Context(), reqData.Email, reqData.Password)
+	_, token, err := h.usersService.Login(c.Request.Context(), reqData.Name)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	c.JSON(http.StatusOK, resSigninDto{
+	c.JSON(http.StatusOK, respLoginDto{
 		Token: token,
 	})
 }

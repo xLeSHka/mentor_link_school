@@ -7,9 +7,9 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-func (r *UsersRepository) Create(ctx context.Context, person *models.User) (*models.User, error) {
+func (r *UsersRepository) Login(ctx context.Context, person *models.User) (*models.User, error) {
 	tx := r.DB.Begin()
-	err := tx.Create(person).WithContext(ctx).Clauses(clause.Returning{}).Error
+	err := tx.FirstOrCreate(person).WithContext(ctx).Clauses(clause.Returning{}).Error
 	if err != nil {
 		tx.Rollback()
 		return nil, err

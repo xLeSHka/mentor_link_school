@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func (s *MentorService) GetMentorRequest(ctx context.Context, req *models.GetMentorRequest) error {
+func (s *MentorService) GetMentorRequest(ctx context.Context, req *models.HelpRequest) error {
 	user, err := s.usersRepository.GetByID(ctx, req.UserID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

@@ -32,8 +32,7 @@ func UsersRoute(opts FxOpts) *Route {
 		minioRepository: opts.MinioRepository,
 	}
 
-	opts.ApiRouter.Public.POST("/user/auth/sign-up", router.signup)
-	opts.ApiRouter.Public.POST("/user/auth/sign-in", router.signin)
+	opts.ApiRouter.Public.POST("/user/auth/login", router.login)
 
 	opts.ApiRouter.UserPrivate.GET("/profile", router.profile)
 	opts.ApiRouter.UserPrivate.POST("/uploadAvatar", router.uploadAvatar)

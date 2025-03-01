@@ -36,9 +36,8 @@ func (h *Route) profile(c *gin.Context) {
 		user.AvatarURL = &avatarURL
 	}
 	c.JSON(http.StatusOK, resGetProfile{
-		Name:      user.FirstName,
-		Surname:   user.SecondName,
-		Email:     user.Email,
+		Name:      user.Name,
 		AvatarUrl: user.AvatarURL,
+		BIO:       user.BIO,
 	})
 }
