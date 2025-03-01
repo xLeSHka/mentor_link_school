@@ -2,10 +2,8 @@ package ApiRouters
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/redis/go-redis/v9"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/middleware"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
-	"gorm.io/gorm"
 )
 
 type ApiRouters struct {
@@ -15,9 +13,9 @@ type ApiRouters struct {
 	GroupPrivate *gin.RouterGroup
 }
 
-func CreateApiRoutes(gin *gin.Engine, db *gorm.DB, rdb *redis.Client, jwt *jwt.JWT) *ApiRouters {
+func CreateApiRoutes(gin *gin.Engine, jwt *jwt.JWT) *ApiRouters {
 
-	publicRoute := gin.Group("")
+	publicRoute := gin.Group("/api")
 
 	groupRoute := publicRoute.Group("")
 	groupRoute.Use(middlewares.Auth(jwt))

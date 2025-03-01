@@ -93,8 +93,8 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	UserRepository = repositoryUser.NewUsersRepository(db)
-	MinioRepository = repository2.NewMinioRepository(minioClient, config)
+	UserRepository = repositoryUser.New(db)
+	MinioRepository = repository2.New(minioClient, config)
 
 	UserService = userService.New(userService.FxOpts{
 		JWT:             jwt,

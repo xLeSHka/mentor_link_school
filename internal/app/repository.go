@@ -1,6 +1,7 @@
 package app
 
 import (
+	repositoryMentor "gitlab.prodcontest.ru/team-14/lotti/internal/repository/mentor"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/repository/minio"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/repository/user"
 
@@ -8,6 +9,7 @@ import (
 )
 
 var Repositories = fx.Provide(
-	repositoryUser.NewUsersRepository,
-	repositoryMinio.NewMinioRepository,
+	repositoryUser.New,
+	repositoryMentor.New,
+	repositoryMinio.New,
 )

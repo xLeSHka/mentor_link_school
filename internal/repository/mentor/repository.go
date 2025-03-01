@@ -1,4 +1,4 @@
-package repositoryUser
+package repositoryMentor
 
 import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/repository"

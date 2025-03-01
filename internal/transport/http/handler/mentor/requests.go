@@ -22,6 +22,13 @@ type respGetRequest struct {
 	Goal      string    `json:"goal"`
 }
 
+func mapMyStudent(user *models.User) *respGetMyStudent {
+	return &respGetMyStudent{
+		StudentID: user.ID,
+		AvatarUrl: user.AvatarURL,
+		Name:      user.Name,
+	}
+}
 func mapRequest(req *models.HelpRequest) *respGetRequest {
 	return &respGetRequest{
 		ID:        req.ID,

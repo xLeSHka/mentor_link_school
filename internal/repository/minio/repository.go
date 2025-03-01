@@ -11,7 +11,7 @@ type MinioRepository struct {
 	BN string
 }
 
-func NewMinioRepository(mc *minio.Client, config config.Config) repository.MinioRepository {
+func New(mc *minio.Client, config config.Config) repository.MinioRepository {
 	return &MinioRepository{
 		mc,
 		config.BucketName,
