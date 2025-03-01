@@ -2,7 +2,7 @@
 -- SQL in section 'Up' is executed when this migration is applied
 CREATE TABLE IF NOT EXISTS groups (
     id UUID PRIMARY KEY,
-    name VARCHAR NOT NULL,
+    name VARCHAR NOT NULL UNIQUE,
     avatar_url VARCHAR DEFAULT NULL
 );
 CREATE TABLE IF NOT EXISTS users (

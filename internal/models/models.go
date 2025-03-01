@@ -23,8 +23,9 @@ func (_ *User) TableName() string {
 }
 
 type Group struct {
-	ID   uuid.UUID `gorm:"type:uuid;primaryKey" `
-	Name string    `gorm:"not null"`
+	ID        uuid.UUID `gorm:"type:uuid;primaryKey" `
+	Name      string    `gorm:"not null"`
+	AvatarURL *string
 }
 
 func (_ *Group) TableName() string {

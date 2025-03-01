@@ -26,7 +26,7 @@ func (h *Route) signup(c *gin.Context) {
 		return
 	}
 
-	company := &models.User{
+	user := &models.User{
 		ID:         uuid.New(),
 		FirstName:  reqData.FirstName,
 		SecondName: reqData.SecondName,
@@ -34,7 +34,7 @@ func (h *Route) signup(c *gin.Context) {
 		Password:   []byte(reqData.Password),
 	}
 
-	token, err := h.usersService.Create(c.Request.Context(), company)
+	token, err := h.usersService.Create(c.Request.Context(), user)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return

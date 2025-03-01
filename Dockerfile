@@ -25,6 +25,6 @@ WORKDIR /opt
 COPY migrations migrations
 
 COPY --from=builder /opt/bin/application ./
-
+COPY ./.env ./
 # Run the application.
 CMD ["./application"]
