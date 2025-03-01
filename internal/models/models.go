@@ -39,8 +39,8 @@ type HelpRequest struct {
 	Goal     string    `gorm:"not null"`
 	BIO      *string
 	Status   string `gorm:"not null"`
-	Mentor   *User  `gorm:"foreignKey:id"`
-	Student  *User  `gorm:"foreignKey:id"`
+	Mentor   *User  `gorm:"foreignKey:mentor_id"`
+	Student  *User  `gorm:"foreignKey:user_id"`
 }
 
 func (_ *HelpRequest) TableName() string {
