@@ -46,7 +46,6 @@ func New(opts FxOpts) service.UserService {
 
 func (s *UsersService) GenerateAccessToken(id uuid.UUID) (string, error) {
 	return s.jwt.CreateToken(jwtlib.MapClaims{
-		"type": "user",
-		"id":   id,
+		"id": id,
 	}, time.Now().Add(time.Hour*6))
 }
