@@ -11,7 +11,7 @@ import (
 func (h *Route) getMentors(c *gin.Context) {
 	personId := uuid.MustParse(c.MustGet("personId").(string))
 
-	mentors, err := h.mentorService.GetMentors(c.Request.Context(), personId)
+	_, err := h.mentorService.GetMentors(c.Request.Context(), personId)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return

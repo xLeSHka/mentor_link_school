@@ -38,6 +38,6 @@ func MentorsRoute(opts FxOpts) *Route {
 	opts.ApiRouter.GroupPrivate.GET("/mentors", router.getMentors)
 	opts.ApiRouter.GroupPrivate.POST("/getMentor", router.getMentorRequest)
 	opts.ApiRouter.GroupPrivate.POST("/createMenmtor", router.createMentorRequest)
-	opts.ApiRouter.MentorRoute.GET("/", router.getMentor)
+	//opts.ApiRouter.MentorRoute.GET("/", router.getMentor)
 	return router
 }
