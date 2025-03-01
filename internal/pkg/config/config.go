@@ -14,7 +14,7 @@ type Config struct {
 	HttpPort             int    `envconfig:"HTTP_PORT" default:"8080"`
 	ServerAddress        string `envconfig:"SERVER_ADDRESS" default:"0.0.0.0:8080"`
 	ServerPort           int    `envconfig:"SERVER_PORT" default:"8080"`
-	PostgresURL          string `envconfig:"POSTGRES_CONN" default:"postgresql://ZXbIlCBgDOdm8sXmU76uRV:OuTGNmpQC1T0B875o3KeuJ@192.168.1.103:5432/database"`
+	PostgresURL          string `envconfig:"POSTGRES_CONN" default:"postgresql://ZXbIlCBgDOdm8sXmU76uRV:password@192.168.1.103:5432/database"`
 	RedisHost            string `envconfig:"REDIS_HOST" default:"192.168.1.103"`
 	RedisPort            int32  `envconfig:"REDIS_PORT" default:"6379"`
 	RandomSecret         string `envconfig:"RANDOM_SECRET" default:"111"`

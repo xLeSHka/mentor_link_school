@@ -73,7 +73,7 @@ type Pair struct {
 }
 
 func (_ *Pair) TableName() string {
-	return "mentors"
+	return "pairs"
 }
 func (_ *Pair) BeforeCreate(tx *gorm.DB) (err error) {
 	tx.Statement.AddClause(clause.OnConflict{DoNothing: true})

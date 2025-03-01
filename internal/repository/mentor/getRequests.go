@@ -14,3 +14,5 @@ func (r *MentorRepository) GetMyHelpers(ctx context.Context, userID uuid.UUID) (
 		Find(&request).Error
 	return request, err
 }
+
+func 
