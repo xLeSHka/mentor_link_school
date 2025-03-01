@@ -13,7 +13,7 @@ services:
     networks:
       - backend-network
     volumes:
-      - ./.env:/app/.env
+      - /home/ubuntu/.env:/app/.env
   postgres:
     env_file:
       - .env
