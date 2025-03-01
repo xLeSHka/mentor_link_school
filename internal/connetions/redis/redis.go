@@ -14,6 +14,7 @@ func New(config config.Config, lc fx.Lifecycle) (*redis.Client, error) {
 		Addr: config.RedisHost + ":" + strconv.Itoa(int(config.RedisPort)),
 		DB:   0,
 	})
+	return rdb, nil
 
 	err := rdb.Ping(context.Background()).Err()
 
