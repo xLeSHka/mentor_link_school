@@ -9,6 +9,7 @@ import (
 func (r *UsersRepository) GetAvaliableMentors(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error) {
 	var resp []*models.Pair
 	err := r.DB.
+		WithContext(ctx).
 		Where("group_id in (select group_id from roles where user_id = ? AND role = 'student')", userID).
 		Preload("Mentor").
 		Table("users").Find(&resp).Error
@@ -17,23 +18,21 @@ func (r *UsersRepository) GetAvaliableMentors(ctx context.Context, userID uuid.U
 
 }
 
-func (r *UsersRepository) GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.User, error) {
-	var groups []string
-	tx := r.DB.Begin()
-	err := tx.Table("roles").Select("group_id").Where("user_id = ? AND role = 'student'", userID).Find(&groups).Error
+func (r *UsersRepository) GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.Role, error) {
+	groups := r.DB.Table("roles").Select("group_id").Where("user_id = ? AND role = 'student'", userID)
+	var role []*models.Role
+	err := r.DB.Model(&role).
+		WithContext(ctx).
+		Where("role = 'mentor' AND group_id in (?)", groups).
+		Preload("Mentor").
+		Find(&role).Error
+	//err := r.DB.Table("users").Select("*").
+	//	Preload("Role", "role = 'mentor' AND group_id IN (?)", groups).
+	//	Joins("CROSS JOIN roles").
+	//	Where("group_id IN (?) AND role = 'mentor' AND id = user_id", groups).
+	//	Find(&users).Error
 	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
-	var users []*models.User
-	err = tx.Table("users").Select("*").
-		Preload("Role", "role = 'mentor' AND group_id IN (?)", groups).
-		Joins("CROSS JOIN roles").
-		Where("group_id IN (?) AND role = 'mentor' AND id = user_id", groups).
-		Find(&users).Error
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-	return users, nil
+	return role, err
 }

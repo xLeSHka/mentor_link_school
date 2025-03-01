@@ -67,12 +67,12 @@ func mapHelp(help *models.HelpRequest) *respGetHelp {
 		AvatarUrl:  help.Student.AvatarURL,
 	}
 }
-func mapMentor(mentor *models.User) *respGetMentor {
+func mapMentor(mentor *models.Role) *respGetMentor {
 	return &respGetMentor{
-		MentorID:  mentor.ID,
-		GroupID:   mentor.Role.GroupID,
-		AvatarUrl: mentor.AvatarURL,
-		Name:      mentor.Name,
-		BIO:       mentor.BIO,
+		MentorID:  mentor.Mentor.ID,
+		GroupID:   mentor.GroupID,
+		AvatarUrl: mentor.Mentor.AvatarURL,
+		Name:      mentor.Mentor.Name,
+		BIO:       mentor.Mentor.BIO,
 	}
 }

@@ -25,7 +25,7 @@ type UsersRepository interface {
 	GetByName(ctx context.Context, name string) (person *models.User, err error)
 	EditUser(ctx context.Context, userID uuid.UUID, updates map[string]any) (*models.User, error)
 	GetMyMentors(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error)
-	GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.User, error)
+	GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.Role, error)
 	GetMyRequests(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)
 	CreateRequest(ctx context.Context, request *models.HelpRequest) error
 }

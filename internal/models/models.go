@@ -55,6 +55,7 @@ type Role struct {
 	UserID  uuid.UUID `gorm:"type:uuid;not null"`
 	GroupID uuid.UUID `gorm:"type:uuid;not null"`
 	Role    string    `gorm:"not null"`
+	Mentor  *User     `gorm:"foreignKey:user_id"`
 }
 
 func (_ *Role) TableName() string {

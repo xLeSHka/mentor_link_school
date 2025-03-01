@@ -8,11 +8,11 @@ import (
 	"gorm.io/gorm"
 )
 
-func (s *UsersService) GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.User, error) {
-	mentors, err := s.GetMentors(ctx, userID)
+func (s *UsersService) GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.Role, error) {
+	mentors, err := s.usersRepository.GetMentors(ctx, userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return []*models.User{}, nil
+			return []*models.Role{}, nil
 		}
 		return nil, err
 	}
