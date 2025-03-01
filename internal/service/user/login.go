@@ -3,10 +3,10 @@ package userService
 import (
 	"context"
 	"errors"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/app/helpers"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 	"net/http"
-	"prodapp/internal/app/helpers"
-	"prodapp/internal/app/httpError"
-	"prodapp/internal/models"
 	"time"
 
 	"gorm.io/gorm"

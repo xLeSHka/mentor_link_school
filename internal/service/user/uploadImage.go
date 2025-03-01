@@ -4,10 +4,10 @@ import (
 	"context"
 	"errors"
 	"github.com/google/uuid"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 	"gorm.io/gorm"
 	"net/http"
-	"prodapp/internal/app/httpError"
-	"prodapp/internal/models"
 )
 
 func (s *UsersService) UploadImage(ctx context.Context, file *models.File, personID uuid.UUID) (string, *httpError.HTTPError) {
