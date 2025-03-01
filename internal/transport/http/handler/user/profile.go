@@ -14,7 +14,7 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /api/user/me [get]
+// @Router /api/user/profile [get]
 // @Success 200 {object} resGetProfile
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 func (h *Route) profile(c *gin.Context) {
@@ -22,14 +22,14 @@ func (h *Route) profile(c *gin.Context) {
 
 	user, err := h.usersService.GetByID(c.Request.Context(), personId)
 	if err != nil {
-		httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
+		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
 
 	if user.AvatarURL != nil {
 		avatarURL, err := h.minioRepository.GetImage(*user.AvatarURL)
 		if err != nil {
-			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
+			err.(*httpError.HTTPError).SendError(c)
 			c.Abort()
 			return
 		}

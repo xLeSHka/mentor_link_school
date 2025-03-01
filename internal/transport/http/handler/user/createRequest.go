@@ -1,0 +1,47 @@
+package usersRoute
+
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
+	"net/http"
+)
+
+// @Summary Кинуть запрос ментору
+// @Schemes
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Router /api/group/requests [post]
+// @Param body body reqCreateHelp true "body"
+// @Success 200
+func (h *Route) createRequest(c *gin.Context) {
+	personId := uuid.MustParse(c.MustGet("personId").(string))
+	var reqData reqCreateHelp
+	if err := h.validator.ShouldBindJSON(c, &reqData); err != nil {
+		httpError.New(http.StatusBadRequest, err.Error())
+		return
+	}
+	user, err := h.usersService.GetByID(c.Request.Context(), personId)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		return
+	}
+	for _, r := range reqData.Requests {
+		request := &models.HelpRequest{
+			ID:       uuid.New(),
+			UserID:   personId,
+			MentorID: r.MentorID,
+			GroupID:  r.GroupId,
+			Goal:     reqData.Goal,
+			Status:   "pending",
+			BIO:      user.BIO,
+		}
+		err := h.usersService.CreateRequest(c.Request.Context(), request)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			return
+		}
+	}
+}

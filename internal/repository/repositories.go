@@ -22,6 +22,7 @@ type UsersRepository interface {
 	Login(ctx context.Context, person *models.User) (*models.User, error)
 	GetByID(ctx context.Context, id uuid.UUID) (person *models.User, err error)
 	EditUser(ctx context.Context, userID uuid.UUID, updates map[string]any) (*models.User, error)
+	GetMyMentors(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error)
 }
 
 type MinioRepository interface {

@@ -1,18 +1,20 @@
 package mentorsRoute
 
-import "gitlab.prodcontest.ru/team-14/lotti/internal/models"
+import "github.com/google/uuid"
 
-type GetGroupID struct {
-	ID string `uri:"groupId" binding:"required,uuid"`
+type reqUpdateRequest struct {
+	ID     uuid.UUID `json:"id" binding:"required"`
+	Status bool      `json:"status" binding:"required"`
 }
-type GetMentorID struct {
-	ID      string `uri:"mentorId" binding:"required,uuid"`
-	GroupID string `uri:"groupId" binding:"required,uuid"`
+type resGetProfile struct {
+	ID        uuid.UUID `json:"id" binding:"required"`
+	Name      string    `json:"name"`
+	AvatarUrl *string   `json:"avatar_url,omitempty"`
 }
-type GetMentorRequestDto struct {
-	Goal string `string:"goal" binding:"required"`
-}
-
-func mapMentor(mentor *models.Mentor) {
-
+type respGetRequest struct {
+	ID        uuid.UUID `json:"id"`
+	UserID    string    `json:"user_id"`
+	Name      string    `json:"name"`
+	AvatarURL *string   `json:"avatar_url,omitempty"`
+	Goal      string    `json:"goal"`
 }

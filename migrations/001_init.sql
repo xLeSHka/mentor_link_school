@@ -26,6 +26,7 @@ CREATE TABLE help_requests (
     id UUID,
     user_id UUID  REFERENCES users(id),
     mentor_id UUID REFERENCES users(id),
+    group_id UUID REFERENCES groups(id),
     goal VARCHAR NOT NULL,
     bio TEXT DEFAULT NULL,
     status VARCHAR NOT NULL,

@@ -7,6 +7,6 @@ import (
 
 func (r *GroupRepository) GetGroup(ctx context.Context, group *models.Group) (*models.Group, error) {
 	var resp models.Group
-	err := r.DB.Model(&models.Group{}).Where("id = ? AND user_id = ?", group.ID, group.UserID).First(&resp).Error
+	err := r.DB.Model(&models.Group{}).WithContext(ctx).Where("id = ? AND user_id = ?", group.ID, group.UserID).First(&resp).Error
 	return &resp, err
 }

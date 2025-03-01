@@ -34,9 +34,11 @@ type HelpRequest struct {
 	ID       uuid.UUID `gorm:"type:uuid;primaryKey"`
 	UserID   uuid.UUID `gorm:"type:uuid;not null"`
 	MentorID uuid.UUID `gorm:"type:uuid;not null"`
+	GroupID  uuid.UUID `gorm:"type:uuid;not null"`
 	Goal     string    `gorm:"not null"`
 	BIO      *string
 	Status   string `gorm:"not null"`
+	Mentor   *User  `gorm:"foreignKey:id"`
 }
 
 func (_ *HelpRequest) TableName() string {
@@ -65,6 +67,7 @@ type Pair struct {
 	UserID   uuid.UUID `gorm:"type:uuid;not null"`
 	MentorID uuid.UUID `gorm:"type:uuid;not null"`
 	Goal     string    `gorm:"not null"`
+	Mentor   *User     `gorm:"foreignKey:id"`
 }
 
 func (_ *Pair) TableName() string {

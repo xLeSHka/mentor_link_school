@@ -15,12 +15,15 @@ type GroupService interface {
 }
 type MentorService interface {
 	GetMentorRequest(ctx context.Context, req *models.HelpRequest) error
-	CreateMentorRequest(ctx context.Context, mentor *models.CreateMentorRequest) error
-	GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.Mentor, error)
-	GetMentor(ctx context.Context, mentor *models.Mentor) (*models.Mentor, error)
+	//CreateMentorRequest(ctx context.Context, mentor *models.CreateMentorRequest) error
+	GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.User, error)
+	GetMentor(ctx context.Context, mentor *models.User) (*models.User, error)
 }
 type UserService interface {
 	Login(ctx context.Context, name string) (*models.User, string, error)
 	GetByID(ctx context.Context, id uuid.UUID) (person *models.User, err error)
 	UploadImage(ctx context.Context, file *models.File, personID uuid.UUID) (string, *httpError.HTTPError)
+	GetMyMentors(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error)
+	GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)
+	CreateRequest(ctx context.Context, request *models.HelpRequest) error
 }

@@ -19,7 +19,6 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/user/uploadAvatar [post]
-// @Param body body reqUploadAvatarDto true "body"
 // @Success 200 {object} respUploadAvatarDto
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 func (h *Route) uploadAvatar(c *gin.Context) {

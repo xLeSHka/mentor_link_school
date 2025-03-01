@@ -10,7 +10,7 @@ import (
 
 func (h *Route) createMentorRequest(c *gin.Context) {
 	personId := uuid.MustParse(c.MustGet("personId").(string))
-	var goal GetMentorRequestDto
+	var goal reqMentorRequestCreateDto
 	if err := h.validator.ShouldBindJSON(c, &goal); err != nil {
 		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
 		c.Abort()

@@ -4,76 +4,135 @@ definitions:
       message:
         type: string
     type: object
-  usersRoute.reqSigninDto:
+  mentorsRoute.reqUpdateRequest:
     properties:
-      email:
-        maxLength: 60
-        minLength: 8
+      id:
         type: string
-      password:
-        maxLength: 60
-        minLength: 8
-        type: string
+      status:
+        type: boolean
     required:
-    - email
-    - password
+    - id
+    - status
     type: object
-  usersRoute.reqSignupDto:
+  mentorsRoute.resGetProfile:
     properties:
-      age:
-        maximum: 120
-        minimum: 1
-        type: integer
       avatar_url:
-        maxLength: 350
         type: string
-      country:
-        maxLength: 120
-        minLength: 1
-        type: string
-      email:
-        maxLength: 120
-        minLength: 8
+      id:
         type: string
       name:
-        maxLength: 100
-        minLength: 1
-        type: string
-      password:
-        maxLength: 60
-        minLength: 8
-        type: string
-      surname:
-        maxLength: 120
-        minLength: 1
         type: string
     required:
-    - age
-    - country
-    - email
+    - id
+    type: object
+  mentorsRoute.respGetRequest:
+    properties:
+      avatar_url:
+        type: string
+      goal:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.User:
+    properties:
+      avatarURL:
+        type: string
+      bio:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      telegram:
+        type: string
+    type: object
+  usersRoute.Pair:
+    properties:
+      group_id:
+        type: string
+      mentor_id:
+        type: string
+    type: object
+  usersRoute.reqCreateHelp:
+    properties:
+      goal:
+        type: string
+      requests:
+        items:
+          $ref: '#/definitions/usersRoute.Pair'
+        type: array
+    required:
+    - goal
+    - requests
+    type: object
+  usersRoute.reqLoginDto:
+    properties:
+      name:
+        type: string
+    required:
     - name
-    - password
-    - surname
     type: object
   usersRoute.resGetProfile:
     properties:
       avatar_url:
         type: string
-      email:
+      bio:
         type: string
       name:
         type: string
-      surname:
+    type: object
+  usersRoute.respGetHelp:
+    properties:
+      avatar_url:
+        type: string
+      goal:
+        type: string
+      id:
+        type: string
+      mentor_id:
+        type: string
+      mentor_name:
         type: string
     type: object
-  usersRoute.resSigninDto:
+  usersRoute.respGetMentor:
+    properties:
+      avatar_url:
+        type: string
+      bio:
+        type: string
+      mentor_id:
+        type: string
+      name:
+        type: string
+    required:
+    - mentor_id
+    - name
+    type: object
+  usersRoute.respGetMyMentor:
+    properties:
+      avatar_url:
+        type: string
+      mentor_id:
+        type: string
+      name:
+        type: string
+    required:
+    - mentor_id
+    - name
+    type: object
+  usersRoute.respLoginDto:
     properties:
       token:
         type: string
     type: object
-  usersRoute.resSignupDto:
+  usersRoute.respUploadAvatarDto:
     properties:
-      token:
+      url:
         type: string
     type: object
 externalDocs:
@@ -89,6 +148,105 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /api/group/{groupID}/requests:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/usersRoute.respGetHelp'
+            type: array
+      summary: Получить список моих запросов
+      tags:
+      - Users
+  /api/group/{groupId}/mentors:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+      summary: Получение списка менторов, которые доступны юзеру
+      tags:
+      - Mentors
+  /api/group/requests:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/usersRoute.reqCreateHelp'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Кинуть запрос ментору
+      tags:
+      - Users
+  /api/mentors/requests:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/mentorsRoute.respGetRequest'
+            type: array
+      summary: Получить входящие запросы
+      tags:
+      - Mentors
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/mentorsRoute.reqUpdateRequest'
+      produces:
+      - application/json
+      responses: {}
+      summary: Изменить состояние заявки
+      tags:
+      - Mentors
+  /api/mentors/students:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/mentorsRoute.resGetProfile'
+            type: array
+      summary: Получить моих учеников
+      tags:
+      - Mentors
   /api/user/auth/sign-in:
     post:
       consumes:
@@ -103,14 +261,14 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/usersRoute.reqSigninDto'
+          $ref: '#/definitions/usersRoute.reqLoginDto'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/usersRoute.resSigninDto'
+            $ref: '#/definitions/usersRoute.respLoginDto'
         "400":
           description: Ошибка валидации
           schema:
@@ -122,36 +280,37 @@ paths:
       summary: Аунтефикация
       tags:
       - Users
-  /api/user/auth/sign-up:
+  /api/user/avaliableMentors:
     post:
       consumes:
       - application/json
-      description: Регистрация юзера. Возвращает токен, который в дальнейшем нужно
-        передавать в заголовке "Authorization" в формате "Bearer <токен>". Кусок "Bearer
-        " нужно добавлять самому. Это фиксированное слово, которое ставят перед токеном
-        зачем-то.
-      parameters:
-      - description: body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/usersRoute.reqSignupDto'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/usersRoute.resSignupDto'
-        "400":
-          description: Ошибка валидации
-          schema:
-            $ref: '#/definitions/httpError.HTTPError'
-      summary: Регистрация
+            $ref: '#/definitions/usersRoute.respGetMentor'
+      summary: Получение доступных всех
       tags:
       - Users
-  /api/user/me:
+  /api/user/mentors:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/usersRoute.respGetMyMentor'
+            type: array
+      summary: Получение моих менторов
+      tags:
+      - Users
+  /api/user/profile:
     get:
       consumes:
       - application/json
@@ -168,6 +327,26 @@ paths:
           schema:
             $ref: '#/definitions/httpError.HTTPError'
       summary: Получить инфу о себе
+      tags:
+      - Users
+  /api/user/uploadAvatar:
+    post:
+      consumes:
+      - application/json
+      description: Загрузка аватарки. Возвращает ссылку на аватарку, которая действует
+        7 дней
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/usersRoute.respUploadAvatarDto'
+        "400":
+          description: Ошибка валидации
+          schema:
+            $ref: '#/definitions/httpError.HTTPError'
+      summary: загрузка аватарки
       tags:
       - Users
 securityDefinitions:
