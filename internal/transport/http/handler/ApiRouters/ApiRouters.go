@@ -5,27 +5,32 @@ import (
 	"github.com/redis/go-redis/v9"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/middleware"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
+	"gorm.io/gorm"
 )
 
 type ApiRouters struct {
-	Public         *gin.RouterGroup
-	CompanyPrivate *gin.RouterGroup
-	UserPrivate    *gin.RouterGroup
+	Public       *gin.RouterGroup
+	MentorRoute  *gin.RouterGroup
+	UserPrivate  *gin.RouterGroup
+	GroupPrivate *gin.RouterGroup
 }
 
-func CreateApiRoutes(gin *gin.Engine, rdb *redis.Client, jwt *jwt.JWT) *ApiRouters {
-	gin.MaxMultipartMemory = 1 << 20
-	publicRoute := gin.Group("/api")
+func CreateApiRoutes(gin *gin.Engine, db *gorm.DB, rdb *redis.Client, jwt *jwt.JWT) *ApiRouters {
 
-	companyRoute := publicRoute.Group("/business")
-	companyRoute.Use(middlewares.Auth(rdb, jwt, "company"))
+	publicRoute := gin.Group("")
+
+	groupRoute := publicRoute.Group("/:groupId")
+	groupRoute.Use(middlewares.Auth(db, rdb, jwt, "owner"))
+
+	mentorRoute := groupRoute.Group("/:mentorId")
+	mentorRoute.Use(middlewares.Auth(db, rdb, jwt, "mentor"))
 
 	userRoute := publicRoute.Group("/user")
-	userRoute.Use(middlewares.Auth(rdb, jwt, "user"))
-	publicRoute.Static("/uploads/", "./uploads/")
+	userRoute.Use(middlewares.Auth(db, rdb, jwt, "user"))
 	return &ApiRouters{
-		Public:         publicRoute,
-		CompanyPrivate: companyRoute,
-		UserPrivate:    userRoute,
+		Public:       publicRoute,
+		MentorRoute:  mentorRoute,
+		UserPrivate:  userRoute,
+		GroupPrivate: groupRoute,
 	}
 }

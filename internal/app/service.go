@@ -7,5 +7,5 @@ import (
 )
 
 var Services = fx.Provide(
-	userService.NewUsersService,
+	userService.New,
 )

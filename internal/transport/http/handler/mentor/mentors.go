@@ -1,4 +1,4 @@
-package usersRoute
+package mentorsRoute
 
 import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/Validators"
@@ -12,7 +12,8 @@ import (
 type Route struct {
 	routers         *ApiRouters.ApiRouters
 	validator       *Validators.Validator
-	usersService    service.UserService
+	mentorService   service.MentorService
+	userService     service.UserService
 	minioRepository repository.MinioRepository
 }
 
@@ -21,22 +22,22 @@ type FxOpts struct {
 	ApiRouter       *ApiRouters.ApiRouters
 	Validator       *Validators.Validator
 	UsersService    service.UserService
+	MentorService   service.MentorService
 	MinioRepository repository.MinioRepository
 }
 
-func UsersRoute(opts FxOpts) *Route {
+func MentorsRoute(opts FxOpts) *Route {
 	router := &Route{
 		routers:         opts.ApiRouter,
 		validator:       opts.Validator,
-		usersService:    opts.UsersService,
+		userService:     opts.UsersService,
+		mentorService:   opts.MentorService,
 		minioRepository: opts.MinioRepository,
 	}
 
-	opts.ApiRouter.Public.POST("/user/auth/sign-up", router.signup)
-	opts.ApiRouter.Public.POST("/user/auth/sign-in", router.signin)
-
-	opts.ApiRouter.UserPrivate.GET("/profile", router.profile)
-	opts.ApiRouter.UserPrivate.POST("/uploadAvatar", router.uploadAvatar)
-
+	opts.ApiRouter.GroupPrivate.GET("/mentors", router.getMentors)
+	opts.ApiRouter.GroupPrivate.POST("/getMentor", router.getMentorRequest)
+	opts.ApiRouter.GroupPrivate.POST("/createMenmtor", router.createMentorRequest)
+	opts.ApiRouter.MentorRoute.GET("/", router.getMentor)
 	return router
 }

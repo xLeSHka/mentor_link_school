@@ -1,4 +1,4 @@
-package userService
+package mentorService
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func (s *UsersService) CreateGroup(ctx context.Context, group *models.Group) error {
+func (s *GroupsService) CreateGroup(ctx context.Context, group *models.Group) error {
 
 	err := s.groupRepository.Create(ctx, group)
 	if err != nil {

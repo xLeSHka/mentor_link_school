@@ -1,4 +1,4 @@
-package usersRoute
+package groupsRoute
 
 import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/Validators"
@@ -12,7 +12,7 @@ import (
 type Route struct {
 	routers         *ApiRouters.ApiRouters
 	validator       *Validators.Validator
-	usersService    service.UserService
+	groupService    service.GroupService
 	minioRepository repository.MinioRepository
 }
 
@@ -20,23 +20,20 @@ type FxOpts struct {
 	fx.In
 	ApiRouter       *ApiRouters.ApiRouters
 	Validator       *Validators.Validator
-	UsersService    service.UserService
+	GroupService    service.GroupService
 	MinioRepository repository.MinioRepository
 }
 
-func UsersRoute(opts FxOpts) *Route {
+func GroupsRoutes(opts FxOpts) *Route {
 	router := &Route{
 		routers:         opts.ApiRouter,
 		validator:       opts.Validator,
-		usersService:    opts.UsersService,
+		groupService:    opts.GroupService,
 		minioRepository: opts.MinioRepository,
 	}
 
-	opts.ApiRouter.Public.POST("/user/auth/sign-up", router.signup)
-	opts.ApiRouter.Public.POST("/user/auth/sign-in", router.signin)
-
-	opts.ApiRouter.UserPrivate.GET("/profile", router.profile)
-	opts.ApiRouter.UserPrivate.POST("/uploadAvatar", router.uploadAvatar)
-
+	opts.ApiRouter.UserPrivate.POST("/createGroup", router.createGroup)
+	opts.ApiRouter.UserPrivate.GET("", router.getGroups)
+	opts.ApiRouter.GroupPrivate.GET("", router.getGroup)
 	return router
 }

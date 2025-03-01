@@ -6,6 +6,18 @@ import (
 )
 
 func (r *GroupRepository) Create(ctx context.Context, group *models.Group) error {
-	err := r.DB.Create(group).WithContext(ctx).Error
+	tx := r.DB.Begin()
+
+	err := tx.Create(group).WithContext(ctx).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	err = tx.Create(&models.Role{Role: "owner", GroupID: group.ID, UserID: group.UserID}).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
 	return err
 }

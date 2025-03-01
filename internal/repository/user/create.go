@@ -8,6 +8,12 @@ import (
 )
 
 func (r *UsersRepository) Create(ctx context.Context, person *models.User) (*models.User, error) {
-	err := r.DB.Create(person).WithContext(ctx).Clauses(clause.Returning{}).Error
+	tx := r.DB.Begin()
+	err := tx.Create(person).WithContext(ctx).Clauses(clause.Returning{}).Error
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	tx.Commit()
 	return person, err
 }

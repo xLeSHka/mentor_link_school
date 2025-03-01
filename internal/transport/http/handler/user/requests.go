@@ -28,6 +28,3 @@ type resSignupDto struct {
 type respUploadAvatarDto struct {
 	Url string `json:"url"`
 }
-type reqCreateGroupDto struct {
-	Name string `json:"name"`
-}

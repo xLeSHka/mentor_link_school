@@ -95,7 +95,7 @@ func init() {
 	UserRepository = repositoryUser.NewUsersRepository(db)
 	MinioRepository = repository2.NewMinioRepository(minioClient, config)
 
-	UserService = userService.NewUsersService(userService.FxOpts{
+	UserService = userService.New(userService.FxOpts{
 		JWT:             jwt,
 		RDB:             rdb,
 		UsersRepository: UserRepository,

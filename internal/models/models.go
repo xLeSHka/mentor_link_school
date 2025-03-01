@@ -23,8 +23,10 @@ func (_ *User) TableName() string {
 }
 
 type Group struct {
-	ID        uuid.UUID `gorm:"type:uuid;primaryKey" `
+	ID        uuid.UUID `gorm:"type:uuid;primaryKey"`
+	UserID    uuid.UUID `gorm:"type:uuid;not null"`
 	Name      string    `gorm:"not null"`
+	Email     string    `gorm:"not null"`
 	AvatarURL *string
 }
 
@@ -77,8 +79,9 @@ func (_ *Role) BeforeCreate(tx *gorm.DB) (err error) {
 }
 
 type Mentor struct {
-	UserID  uuid.UUID `gorm:"type:uuid;not null"`
-	GroupID uuid.UUID `gorm:"type:uuid;not null"`
+	UserID   uuid.UUID `gorm:"type:uuid;not null"`
+	MentorID uuid.UUID `gorm:"type:uuid;not null"`
+	GroupID  uuid.UUID `gorm:"type:uuid;not null"`
 }
 
 func (_ *Mentor) TableName() string {

@@ -9,7 +9,14 @@ import (
 
 type GroupRepository interface {
 	Create(ctx context.Context, group *models.Group) error
-	GetAllGroups(ctx context.Context) ([]*models.Group, error)
+	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Group, error)
+	GetGroup(ctx context.Context, group *models.Group) (*models.Group, error)
+}
+type MentorRepository interface {
+	GetMentorRequest(ctx context.Context, data *models.GetMentorRequest) error
+	CreateMentorRequest(ctx context.Context, data *models.CreateMentorRequest) error
+	GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.Mentor, error)
+	GetMentor(ctx context.Context, mentor *models.Mentor) (*models.Mentor, error)
 }
 type UsersRepository interface {
 	Create(ctx context.Context, person *models.User) (*models.User, error)

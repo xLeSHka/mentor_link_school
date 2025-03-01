@@ -1,4 +1,4 @@
-package usersRoute
+package groupsRoute
 
 import (
 	"github.com/gin-gonic/gin"
@@ -9,6 +9,7 @@ import (
 )
 
 func (h *Route) createGroup(c *gin.Context) {
+	personId := uuid.MustParse(c.MustGet("personId").(string))
 	var reqData reqCreateGroupDto
 	if err := h.validator.ShouldBindJSON(c, &reqData); err != nil {
 		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
@@ -16,14 +17,18 @@ func (h *Route) createGroup(c *gin.Context) {
 	}
 
 	group := &models.Group{
-		ID:   uuid.New(),
-		Name: reqData.Name,
+		ID:     uuid.New(),
+		UserID: personId,
+		Name:   reqData.Name,
+		Email:  reqData.Email,
 	}
 
-	err := h.usersService.CreateGroup(c.Request.Context(), group)
+	err := h.groupService.CreateGroup(c.Request.Context(), group)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	c.Writer.WriteHeader(http.StatusCreated)
+	c.JSON(http.StatusOK, gin.H{
+		"group_id": group.ID,
+	})
 }
