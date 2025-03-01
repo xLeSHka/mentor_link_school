@@ -7,13 +7,22 @@ import (
 )
 
 func (r *MentorRepository) UpdateRequest(ctx context.Context, request *models.HelpRequest) error {
-	pair := &models.Pair{
-		UserID:   request.UserID,
-		MentorID: request.MentorID,
-		Goal:     request.Goal,
+	var reqData models.HelpRequest
+	err := r.DB.Model(&models.HelpRequest{}).
+		WithContext(ctx).Where("id = ?", request.ID).
+		First(&reqData).Error
+	if err != nil {
+		return err
 	}
 
-	err := r.DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+	pair := &models.Pair{
+		GroupID:  reqData.GroupID,
+		UserID:   reqData.UserID,
+		MentorID: reqData.MentorID,
+		Goal:     reqData.Goal,
+	}
+
+	err = r.DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(pair).Error; err != nil {
 			return err
 		}
