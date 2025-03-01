@@ -15,12 +15,11 @@ type respGetMyStudent struct {
 	Name      string    `json:"name" binding:"required"`
 }
 type respGetRequest struct {
-	ID        uuid.UUID `json:"id"`
-	UserID    uuid.UUID `json:"user_id"`
-	Name      string    `json:"name"`
-	AvatarURL *string   `json:"avatar_url,omitempty"`
-	Goal      string    `json:"goal"`
-	Status    string    `json:"status"`
+	ID     uuid.UUID `json:"id"`
+	UserID uuid.UUID `json:"user_id"`
+	Name   string    `json:"name"`
+	Goal   string    `json:"goal"`
+	Status string    `json:"status"`
 }
 
 func mapMyStudent(user *models.User) *respGetMyStudent {
@@ -38,9 +37,6 @@ func mapRequest(req *models.HelpRequest) (res *respGetRequest) {
 		Goal:   req.Goal,
 		Status: req.Status,
 	}
-	if req.Student.AvatarURL != nil {
-		// TODO: minio blyat?
-		res.AvatarURL = req.Student.AvatarURL
-	}
+
 	return
 }
