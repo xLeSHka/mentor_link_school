@@ -6,12 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/getRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/getRequests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/getStudents.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/getStudents.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/user/getMyMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/getMyMentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/user/getMyRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/getMyRequests.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/group/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/group/service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/group/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/group/users.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/getgroups.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/getgroups.go" afterDir="false" />
     </list>
     <list id="75b4f414-b5bc-4d2d-96a9-7b631f9c435a" name="Changes by ainur" comment="" />

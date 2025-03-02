@@ -8,15 +8,22 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 )
 
-func (r *GroupsService) UpdateRole(ctx context.Context, ownerID, groupID, userID uuid.UUID, role string) error {
-	exists, err := r.groupRepository.CheckGroupExists(ctx, ownerID, groupID)
+func (s *GroupsService) UpdateRole(ctx context.Context, ownerID, groupID, userID uuid.UUID, role string) error {
+	exists, err := s.groupRepository.CheckGroupExists(ctx, ownerID, groupID)
 	if err != nil {
 		return httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	if !exists {
-		httpError.New(http.StatusNotFound, "group does not exist")
+		return httpError.New(http.StatusNotFound, "group does not exist")
 	}
-	err = r.groupRepository.UpdateRole(ctx, groupID, userID, role)
+	exist, err := s.userRepository.CheckExists(ctx, userID)
+	if err != nil {
+		return httpError.New(http.StatusInternalServerError, err.Error())
+	}
+	if !exist {
+		return httpError.New(http.StatusNotFound, "User Not Found")
+	}
+	err = s.groupRepository.UpdateRole(ctx, groupID, userID, role)
 	if err != nil {
 		return httpError.New(http.StatusInternalServerError, err.Error())
 	}

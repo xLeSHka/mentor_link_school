@@ -62,14 +62,7 @@ func (r *Route) Websocket(c *gin.Context) {
 		log.Print("upgrade:", err)
 		return
 	}
-	//groups, err := r.usersService.GetGroups(context.Background(), personID, "student")
-	//if err != nil {
-	//	err.(*httpError.HTTPError).SendError(c)
-	//	return
-	//}
-	//for _, g := range groups {
-	//	clients[g.ID] = append(clients[g.ID], ws)
-	//}
+
 	for {
 		time.Sleep(10 * time.Second)
 		err := ws.WriteMessage(websocket.TextMessage, []byte("hello world"))
@@ -80,29 +73,3 @@ func (r *Route) Websocket(c *gin.Context) {
 		}
 	}
 }
-
-//var clients = make(map[uuid.UUID][]*websocket.Conn)
-//var mentors = make(chan *models.Role)
-//
-//func (r *Route) echo() {
-//	for {
-//		m := <-mentors
-//		mentor, err := r.usersService.GetByID(context.Background(), m.UserID)
-//		if err != nil {
-//			log.Printf("Websocket error: %s", err)
-//			continue
-//		}
-//		m.User = mentor
-//		for i, client := range clients[m.GroupID] {
-//			err := client.WriteJSON(mapMentor(m))
-//			if err != nil {
-//				log.Printf("Websocket error: %s", err)
-//				client.Close()
-//				clients[m.GroupID] = clients[m.GroupID][i : i+1]
-//			}
-//		}
-//	}
-//}
-//func SendMentor(mentor *models.User) {
-//	mentors <- mentor
-//}
