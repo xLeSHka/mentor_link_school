@@ -24,7 +24,7 @@ func (h *Route) updateRequest(c *gin.Context) {
 		return
 	}
 	var req reqUpdateRequest
-	if err := h.validator.ShouldBindJSON(c, &req); err != nil {
+	if err = h.validator.ShouldBindJSON(c, &req); err != nil {
 		httpError.New(http.StatusBadRequest, err.Error())
 		return
 	}
@@ -39,7 +39,7 @@ func (h *Route) updateRequest(c *gin.Context) {
 		MentorID: personId,
 		Status:   status,
 	}
-	err := h.mentorService.UpdateRequest(c.Request.Context(), request)
+	err = h.mentorService.UpdateRequest(c.Request.Context(), request)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
