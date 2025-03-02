@@ -13,8 +13,8 @@ type GroupService interface {
 	Create(ctx context.Context, group *models.Group, userID uuid.UUID) error
 	UpdateRole(ctx context.Context, ownerID, groupID, userID uuid.UUID, role string) error
 	UpdateInviteCode(ctx context.Context, groupID, ownerID uuid.UUID) (string, error)
-	GetMembers(ctx context.Context, groupID uuid.UUID) ([]*models.Role, error)
-	GetStat(ctx context.Context, groupID uuid.UUID) (*models.GroupStat, error)
+	GetMembers(ctx context.Context, ownerID, groupID uuid.UUID) ([]*models.Role, error)
+	GetStat(ctx context.Context, ownerID, groupID uuid.UUID) (*models.GroupStat, error)
 }
 type MentorService interface {
 	GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)
