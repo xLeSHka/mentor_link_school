@@ -21,21 +21,21 @@ func (h *Route) getGroups(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	groups, err := h.usersService.GetGroups(c.Request.Context(), personId, req.Role)
+	groups, err := h.usersService.GetGroups(c.Request.Context(), personId)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
 	resp := make([]*respGetGroupDto, 0, len(groups))
 	for _, g := range groups {
-		if g.AvatarURL != nil {
-			avatarURL, err := h.minioRepository.GetImage(*g.AvatarURL)
+		if g.Group.AvatarURL != nil {
+			avatarURL, err := h.minioRepository.GetImage(*g.Group.AvatarURL)
 			if err != nil {
 				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
 				c.Abort()
 				return
 			}
-			g.AvatarURL = &avatarURL
+			g.Group.AvatarURL = &avatarURL
 		}
 		resp = append(resp, mapGroup(g, req.Role))
 	}

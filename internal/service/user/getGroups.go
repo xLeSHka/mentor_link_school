@@ -11,12 +11,12 @@ import (
 	"gorm.io/gorm"
 )
 
-func (r *UsersService) GetGroups(ctx context.Context, userID uuid.UUID, role string) ([]*models.Group, error) {
-	gr, err := r.usersRepository.GetGroups(ctx, userID, role)
+func (r *UsersService) GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Role, error) {
+	gr, err := r.usersRepository.GetGroups(ctx, userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 
-			return []*models.Group{}, nil
+			return []*models.Role{}, nil
 		}
 		return nil, httpError.New(http.StatusInternalServerError, err.Error())
 	}

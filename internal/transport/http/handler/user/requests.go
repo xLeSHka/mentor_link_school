@@ -16,9 +16,10 @@ type reqGetRole struct {
 	Role string `from:"role" binding:"required"`
 }
 type resGetProfile struct {
-	Name      string  `json:"name"`
-	AvatarUrl *string `json:"avatar_url,omitempty"`
-	BIO       *string `json:"bio,omitempty"`
+	Name      string             `json:"name"`
+	AvatarUrl *string            `json:"avatar_url,omitempty"`
+	BIO       *string            `json:"bio,omitempty"`
+	Groups    []*respGetGroupDto `json:"groups"`
 }
 
 type respGetMyMentor struct {
@@ -85,16 +86,18 @@ type respGetGroupDto struct {
 	ID         string  `json:"id"`
 	AvatarUrl  *string `json:"avatar_url,omitempty"`
 	InviteCode *string `json:"invite_code,omitempty"`
+	Role       string  `json:"role"`
 }
 
-func mapGroup(group *models.Group, role string) *respGetGroupDto {
+func mapGroup(group *models.Role, role string) *respGetGroupDto {
 	resp := &respGetGroupDto{
-		Name:      group.Name,
-		ID:        group.ID.String(),
-		AvatarUrl: group.AvatarURL,
+		Name:      group.Group.Name,
+		ID:        group.Group.ID.String(),
+		AvatarUrl: group.Group.AvatarURL,
+		Role:      role,
 	}
-	if role == "owner" {
-		resp.InviteCode = group.InviteCode
+	if role == "owner" && group.Group.InviteCode != nil {
+		resp.InviteCode = group.Group.InviteCode
 	}
 	return resp
 }
