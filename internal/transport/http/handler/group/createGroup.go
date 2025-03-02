@@ -18,7 +18,7 @@ import (
 // @Param body body reqCreateGroupDto true "body"
 // @Success 200 {object} map[string]interface{}
 // @Failure 400 {object} respCreateGroup
-// @Router /api/group [post]
+// @Router /api/group/create [post]
 func (h *Route) createGroup(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {

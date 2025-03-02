@@ -12,7 +12,7 @@ import (
 // @Tags Groups
 // @Accept json
 // @Produce json
-// @Router /api/groups/{groupID}/members/{memberID}/role [post]
+// @Router /api/groups/{groupID}/members/role [post]
 // @Success 200
 func (h *Route) updateRole(c *gin.Context) {
 	personID, err := jwt.Parse(c)
