@@ -1,10 +1,11 @@
 package usersRoute
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
-	"net/http"
 )
 
 func (h *Route) getGroups(c *gin.Context) {
@@ -14,13 +15,20 @@ func (h *Route) getGroups(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	var req reqGetRole
-	if err := h.validator.ShouldBindQuery(c, &req); err != nil {
-		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
+	// var req reqGetRole
+	// if err := h.validator.ShouldBindQuery(c, &req); err != nil {
+	// 	httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
+	// 	c.Abort()
+	// 	return
+	// }
+
+	role := c.Query("role")
+	if role == "" {
+		httpError.New(http.StatusBadRequest, "role not found").SendError(c)
 		c.Abort()
 		return
 	}
-	groups, err := h.usersService.GetGroups(c.Request.Context(), personId, req.Role)
+	groups, err := h.usersService.GetGroups(c.Request.Context(), personId, role)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
@@ -36,7 +44,7 @@ func (h *Route) getGroups(c *gin.Context) {
 			}
 			g.AvatarURL = &avatarURL
 		}
-		resp = append(resp, mapGroup(g, req.Role))
+		resp = append(resp, mapGroup(g, role))
 	}
 	c.JSON(http.StatusOK, resp)
 }
