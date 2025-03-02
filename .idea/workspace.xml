@@ -4,8 +4,17 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="" />
-    <list id="5616f49a-7ae4-4147-b258-d18510d8fa0f" name="Changes by LIME" comment="" />
+    <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/user/getAllGroups.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/getAllGroups.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/getMembers.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/getMembers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/update.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/update.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/updateRole.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/updateRole.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/getgroups.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/getgroups.go" afterDir="false" />
+    </list>
+    <list id="5616f49a-7ae4-4147-b258-d18510d8fa0f" name="Changes by LIME" comment="">
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/getgroups.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/getgroups.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,6 +30,16 @@
   <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.0.windows-amd64" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/internal/transport/http/handler/user/getgroups.go">
+      <ranges>
+        <range start1="4" end1="4" start2="4" end2="5" changelist="5616f49a-7ae4-4147-b258-d18510d8fa0f" />
+        <range start1="10" end1="10" start2="11" end2="18" changelist="5616f49a-7ae4-4147-b258-d18510d8fa0f" />
+        <range start1="18" end1="19" start2="26" end2="27" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
+        <range start1="40" end1="41" start2="48" end2="49" changelist="5616f49a-7ae4-4147-b258-d18510d8fa0f" />
+      </ranges>
+    </file>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5

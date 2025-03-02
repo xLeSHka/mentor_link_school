@@ -17,7 +17,7 @@ import (
 // @Success 200 {object} respUpdateCode
 // @Failure 400 {object} httpError.HTTPError
 // @Failure 401 {object} httpError.HTTPError
-// @Router /api/groups/{groupID}/admin/inviteCode [post]
+// @Router /api/groups/{groupID}/inviteCode [post]
 func (h *Route) updateInviteCode(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {

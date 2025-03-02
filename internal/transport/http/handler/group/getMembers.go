@@ -13,7 +13,7 @@ import (
 // @Tags Groups
 // @Accept json
 // @Produce json
-// @Router /api/groups/{groupID}/admin/members [post]
+// @Router /api/groups/{groupID}/members [post]
 // @Success 200 {object} []resGetMember
 func (h *Route) getMembers(c *gin.Context) {
 	personID, err := jwt.Parse(c)

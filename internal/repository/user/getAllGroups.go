@@ -13,10 +13,16 @@ import (
 // }
 
 func (r *UsersRepository) GetGroups(ctx context.Context, userID uuid.UUID, role string) ([]*models.Group, error) {
+	var groupIDs []string
+
+	err := r.DB.Table("roles").Select("group_id").Where("user_id = ? AND role = ?", userID, role).Find(&groupIDs).Error
+	if err != nil {
+		return nil, err
+	}
 	var groups []*models.Group
-	err := r.DB.WithContext(ctx).Table("roles").
-		Joins("JOIN groups ON groups.id = roles.group_id").
-		Select("groups.*").Where("user_id = ? AND role = ?", userID, role).
-		Find(&groups).Error
+	err = r.DB.Model(&models.Group{}).Where("id in (?)", groupIDs).Find(&groups).Error
+	if err != nil {
+		return nil, err
+	}
 	return groups, err
 }
