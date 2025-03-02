@@ -2,10 +2,11 @@ package groupService
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
-	"net/http"
 )
 
 func (s *GroupsService) GetStat(ctx context.Context, ownerID, groupID uuid.UUID) (*models.GroupStat, error) {

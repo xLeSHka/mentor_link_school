@@ -13,6 +13,7 @@ type Route struct {
 	routers         *ApiRouters.ApiRouters
 	validator       *Validators.Validator
 	groupService    service.GroupService
+	userService     service.UserService
 	minioRepository repository.MinioRepository
 }
 
@@ -21,6 +22,7 @@ type FxOpts struct {
 	ApiRouter       *ApiRouters.ApiRouters
 	Validator       *Validators.Validator
 	GroupService    service.GroupService
+	UserService     service.UserService
 	MinioRepository repository.MinioRepository
 }
 
@@ -29,6 +31,7 @@ func GroupsRoutes(opts FxOpts) *Route {
 		routers:         opts.ApiRouter,
 		validator:       opts.Validator,
 		groupService:    opts.GroupService,
+		userService:     opts.UserService,
 		minioRepository: opts.MinioRepository,
 	}
 

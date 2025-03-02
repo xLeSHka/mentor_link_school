@@ -3,8 +3,10 @@ package userService
 import (
 	"context"
 	"errors"
+	"net/http"
 
 	"github.com/google/uuid"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 	"gorm.io/gorm"
 )
@@ -13,7 +15,7 @@ func (s *UsersService) Invite(ctx context.Context, inviteCode string, userID uui
 	group, err := s.usersRepository.GetGroupByInviteCode(ctx, inviteCode)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return false, errors.New("invite code not found")
+			return false, httpError.New(http.StatusNotFound, "Group not found")
 		}
 		return false, err
 	}
@@ -24,7 +26,7 @@ func (s *UsersService) Invite(ctx context.Context, inviteCode string, userID uui
 	})
 	if err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
-			return false, errors.New("user already in group")
+			return false, httpError.New(http.StatusConflict, "User already invited")
 		}
 		return false, err
 	}
