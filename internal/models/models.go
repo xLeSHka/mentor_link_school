@@ -65,7 +65,6 @@ func (_ *HelpRequest) BeforeCreate(tx *gorm.DB) (err error) {
 type Role struct {
 	UserID  uuid.UUID `gorm:"type:uuid;not null"`
 	GroupID uuid.UUID `gorm:"type:uuid;not null"`
-	Name    string    `gorm:"not null"`
 	Role    string    `gorm:"not null"`
 	User    *User     `gorm:"foreignKey:user_id"`
 	Group   *Group    `gorm:"foreignKey:group_id"`
