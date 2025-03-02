@@ -19,7 +19,14 @@ func (r *Route) mocks(c *gin.Context) {
 		AvatarURL: nil,
 		Name:      "owner group 1",
 	}
-	student := &models.User{
+	student1 := &models.User{
+		ID:        uuid.New(),
+		Name:      "student 1",
+		AvatarURL: nil,
+		BIO:       nil,
+		Telegram:  "@student",
+	}
+	student2 := &models.User{
 		ID:        uuid.New(),
 		Name:      "student 1",
 		AvatarURL: nil,
@@ -46,26 +53,32 @@ func (r *Route) mocks(c *gin.Context) {
 	}
 	helpReq1 := &models.HelpRequest{
 		ID:       uuid.New(),
-		UserID:   student.ID,
+		UserID:   student2.ID,
 		MentorID: mentor1.ID,
 		GroupID:  group2.ID,
 		Goal:     "PROD Project",
-		BIO:      student.AvatarURL,
+		BIO:      student2.AvatarURL,
 		Status:   "pending",
 	}
 	helpReq2 := &models.HelpRequest{
 		ID:       uuid.New(),
-		UserID:   student.ID,
+		UserID:   student1.ID,
 		MentorID: mentor1.ID,
 		GroupID:  group1.ID,
 		Goal:     "PRODANO Project",
-		BIO:      student.AvatarURL,
+		BIO:      student1.AvatarURL,
 		Status:   "accepted",
 	}
 	r.DB.Create(group1)
-	r.DB.Create(student)
+	r.DB.Create(student1)
+	r.DB.Create(student2)
 	r.DB.Create(&models.Role{
-		UserID:  student.ID,
+		UserID:  student1.ID,
+		GroupID: group1.ID,
+		Role:    "student",
+	})
+	r.DB.Create(&models.Role{
+		UserID:  student2.ID,
 		GroupID: group1.ID,
 		Role:    "student",
 	})
@@ -76,7 +89,12 @@ func (r *Route) mocks(c *gin.Context) {
 		Role:    "mentor",
 	})
 	r.DB.Create(&models.Role{
-		UserID:  student.ID,
+		UserID:  student2.ID,
+		GroupID: group2.ID,
+		Role:    "student",
+	})
+	r.DB.Create(&models.Role{
+		UserID:  student1.ID,
 		GroupID: group2.ID,
 		Role:    "student",
 	})
@@ -88,7 +106,7 @@ func (r *Route) mocks(c *gin.Context) {
 	r.DB.Create(helpReq1)
 	r.DB.Create(helpReq2)
 	r.DB.Create(&models.Pair{
-		UserID:   student.ID,
+		UserID:   student1.ID,
 		MentorID: mentor1.ID,
 		GroupID:  group1.ID,
 		Goal:     "PRODANO Project",

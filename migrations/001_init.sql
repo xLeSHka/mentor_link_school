@@ -19,6 +19,7 @@ CREATE TABLE groups (
 CREATE TABLE roles (
     group_id UUID REFERENCES groups(id),
     user_id UUID REFERENCES users(id),
+    name varchar NOT NULL,
     role VARCHAR NOT NULL,
     PRIMARY KEY (group_id, user_id)
 );

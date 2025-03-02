@@ -30,7 +30,7 @@ func (r *GroupRepository) GetStat(ctx context.Context, groupID uuid.UUID) (*mode
 	if err != nil {
 		return nil, err
 	}
-	err = r.DB.Model(&models.HelpRequest{}).Where("group_id = ? AND status = 'rejected", groupID).Count(&stat.RejectedRequestCount).Error
+	err = r.DB.Model(&models.HelpRequest{}).Where("group_id = ? AND status = 'rejected'", groupID).Count(&stat.RejectedRequestCount).Error
 	if err != nil {
 		return nil, err
 	}
