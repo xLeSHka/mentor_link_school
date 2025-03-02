@@ -34,7 +34,6 @@ type UsersRepository interface {
 	CreateRequest(ctx context.Context, request *models.HelpRequest) error
 	CheckExists(ctx context.Context, userID uuid.UUID) (bool, error)
 	CheckIsStudent(ctx context.Context, userID, groupID uuid.UUID) (bool, error)
-	CheckGroupExists(ctx context.Context, groupID uuid.UUID) (bool, error)
 	GetGroupByInviteCode(ctx context.Context, inviteCode string) (*models.Group, error)
 	AddRole(ctx context.Context, role *models.Role) error
 	GetGroups(ctx context.Context, userID uuid.UUID, role string) ([]*models.Group, error)

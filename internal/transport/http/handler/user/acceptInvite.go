@@ -21,7 +21,7 @@ func (h *Route) acceptedInvite(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	ok, err := h.usersService.CheckInvite(c.Request.Context(), code, personID)
+	ok, err := h.usersService.Invite(c.Request.Context(), code, personID)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()

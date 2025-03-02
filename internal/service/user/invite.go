@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func (s *UsersService) CheckInvite(ctx context.Context, inviteCode string, userID uuid.UUID) (bool, error) {
+func (s *UsersService) Invite(ctx context.Context, inviteCode string, userID uuid.UUID) (bool, error) {
 	group, err := s.usersRepository.GetGroupByInviteCode(ctx, inviteCode)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
