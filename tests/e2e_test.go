@@ -123,7 +123,7 @@ func init() {
 	})
 	routers = ApiRouters.CreateApiRoutes(http3, jwt)
 
-	publicRoute.PublicRoute(routers)
+	publicRoute.PublicRoute(routers, db)
 	usersRoute.UsersRoute(usersRoute.FxOpts{
 		ApiRouter:       routers,
 		Validator:       validator,
