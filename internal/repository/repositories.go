@@ -37,5 +37,5 @@ type UsersRepository interface {
 type MinioRepository interface {
 	UploadImage(file *models.File) (string, error)
 	GetImage(image string) (string, error)
-	DeleteImage(personID uuid.UUID) error
+	DeleteImage(image string) error
 }

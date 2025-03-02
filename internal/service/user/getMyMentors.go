@@ -21,7 +21,7 @@ func (s *UsersService) GetMyMentors(ctx context.Context, userID uuid.UUID) ([]*m
 	mentors, err := s.usersRepository.GetMyMentors(ctx, userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, httpError.New(http.StatusNotFound, err.Error())
+			return []*models.Pair{}, nil
 		}
 		return nil, httpError.New(http.StatusInternalServerError, err.Error())
 	}

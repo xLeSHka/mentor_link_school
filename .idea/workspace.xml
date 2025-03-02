@@ -5,15 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/internal/repository/user/checkGroupExists.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/image/go.gif" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/image/go.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/checkIsMentor.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/checkIsMentor.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/getRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/getRequests.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/minio/minio.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/minio/minio.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/repository/repositories.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/repositories.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/createRequest.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/createRequest.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/getMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/getMentors.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/user/checkGroupExists.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/checkGroupExists.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/user/checkIsStudent.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/checkIsStudent.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/user/checkexists.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/checkexists.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/user/getMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/getMentors.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/mentor/getRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/mentor/getRequests.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/mentor/getStudents.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/mentor/getStudents.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/service/user/getMyMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/getMyMentors.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/service/user/getMyhelps.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/getMyhelps.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/uploadImage.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/uploadImage.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/tests/dev.env" beforeDir="false" afterPath="$PROJECT_DIR$/tests/dev.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/tests/e2e_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/tests/e2e_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/tests/migrations/001_init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/tests/migrations/001_init.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/requests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/mentor/requests.go" afterDir="false" />
     </list>
     <list id="75b4f414-b5bc-4d2d-96a9-7b631f9c435a" name="Changes by ainur" comment="" />
     <list id="5616f49a-7ae4-4147-b258-d18510d8fa0f" name="Changes by LIME" comment="" />
@@ -44,37 +55,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Projects/go/lotti/internal/tests&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultGoTemplateProperty": "Go File",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "git-widget-placeholder": "master",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "last_opened_file_path": "C:/Projects/go/lotti/internal/repository/mentor",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Projects\go\lotti\internal\repository\mentor" />
       <recent name="C:\Projects\go\lotti\internal\tests" />
       <recent name="C:\Projects\go\lotti\internal\transport\http\handler\public" />
-      <recent name="C:\Projects\go\lotti\internal\repository\mentor" />
       <recent name="C:\Projects\go\lotti\internal\service\user" />
       <recent name="C:\Projects\go\lotti\internal\service\mentor" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Projects\go\lotti\tests\image" />
+      <recent name="C:\Projects\go\lotti" />
       <recent name="C:\Projects\go\lotti\internal\transport\http\handler\group" />
       <recent name="C:\Projects\go\lotti\internal\service\group" />
       <recent name="C:\Projects\go\lotti\internal\transport\http\handler\user" />
-      <recent name="C:\Projects\go\lotti\internal\transport\http\handler\mentor" />
     </key>
   </component>
   <component name="SharedIndexes">

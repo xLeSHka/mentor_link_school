@@ -10,7 +10,7 @@ import (
 
 func (r *UsersRepository) CheckExists(ctx context.Context, id uuid.UUID) (bool, error) {
 	var user models.User
-	err := r.DB.WithContext(ctx).First(&user, &models.User{ID: id}).Error
+	err := r.DB.Model(&models.User{}).Where("id = ?", id).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, nil

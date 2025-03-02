@@ -2,7 +2,6 @@ package repositoryMinio
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"github.com/minio/minio-go/v7"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 	"strings"
@@ -33,8 +32,8 @@ func (r *MinioRepository) GetImage(image string) (string, error) {
 	newUrl := strings.Replace(url.String(), "http://minio:9000", "https://prod-team-14-mkg8u20m.final.prodcontest.ru", 1)
 	return newUrl, nil
 }
-func (r *MinioRepository) DeleteImage(personID uuid.UUID) error {
-	err := r.MC.RemoveObject(context.Background(), r.BN, personID.String(), minio.RemoveObjectOptions{})
+func (r *MinioRepository) DeleteImage(filename string) error {
+	err := r.MC.RemoveObject(context.Background(), r.BN, filename, minio.RemoveObjectOptions{})
 	if err != nil {
 		return err
 	}
