@@ -12,9 +12,9 @@ type respLoginDto struct {
 	Token string `json:"token"`
 }
 
-//	type reqGetRole struct {
-//		Role string `from:"role"`
-//	}
+type reqGetRole struct {
+	Role string `from:"role" binding:"required"`
+}
 type resGetProfile struct {
 	Name      string  `json:"name"`
 	AvatarUrl *string `json:"avatar_url,omitempty"`
