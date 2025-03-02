@@ -1,27 +1,23 @@
 package groupsRoute
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
-	"net/http"
 )
 
 func (h *Route) getGroup(c *gin.Context) {
-	//personId := uuid.MustParse(c.MustGet("personId").(string))
+	personId := uuid.MustParse(c.MustGet("personId").(string))
 	var reqData GetGroupID
 	if err := h.validator.ShouldBindUri(c, &reqData); err != nil {
 		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
 		return
 	}
 	groupID := uuid.MustParse(reqData.ID)
-	group := &models.Group{
-		//UserID: personId,
-		ID: groupID,
-	}
 
-	group, err := h.groupService.GetGroup(c.Request.Context(), group)
+	group, err := h.groupService.GetGroup(c.Request.Context(), personId, groupID)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return

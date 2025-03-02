@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 
@@ -10,7 +11,7 @@ import (
 
 type GroupService interface {
 	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Group, error)
-	GetGroup(ctx context.Context, mentor *models.Group) (*models.Group, error)
+	GetGroup(ctx context.Context, userID, groupID uuid.UUID) (*models.Group, error)
 	CreateGroup(ctx context.Context, group *models.Group, userID uuid.UUID) error
 }
 type MentorService interface {

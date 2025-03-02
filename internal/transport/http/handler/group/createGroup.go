@@ -1,15 +1,16 @@
 package groupsRoute
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
-	"net/http"
 )
 
 func (h *Route) createGroup(c *gin.Context) {
-	//personId := uuid.MustParse(c.MustGet("personId").(string))
+	personId := uuid.MustParse(c.MustGet("personId").(string))
 	var reqData reqCreateGroupDto
 	if err := h.validator.ShouldBindJSON(c, &reqData); err != nil {
 		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
@@ -21,7 +22,7 @@ func (h *Route) createGroup(c *gin.Context) {
 		Name: reqData.Name,
 	}
 
-	err := h.groupService.CreateGroup(c.Request.Context(), group, uuid.New()) //TODO refactor
+	err := h.groupService.CreateGroup(c.Request.Context(), group, personId)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return

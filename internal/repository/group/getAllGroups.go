@@ -2,12 +2,19 @@ package group
 
 import (
 	"context"
+
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 )
 
+// func (r *GroupRepository) GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Group, error) {
+// 	var groups []*models.Group
+// 	err := r.DB.Model(&models.Group{}).WithContext(ctx).Where("user_id = ?", userID).Find(&groups).Error
+// 	return groups, err
+// }
+
 func (r *GroupRepository) GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Group, error) {
 	var groups []*models.Group
-	err := r.DB.Model(&models.Group{}).WithContext(ctx).Where("user_id = ?", userID).Find(&groups).Error
+	err := r.DB.WithContext(ctx).Table("roles").Joins("JOIN groups ON groups.id = roles.group_id").Select("groups.*").Where("user_id = ? AND role = 'owner'", userID).Find(&groups).Error
 	return groups, err
 }

@@ -11,7 +11,7 @@ import (
 type GroupRepository interface {
 	Create(ctx context.Context, group *models.Group, userID uuid.UUID) error
 	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Group, error)
-	GetGroup(ctx context.Context, group *models.Group) (*models.Group, error)
+	GetGroup(ctx context.Context, userID, groupID uuid.UUID) (*models.Group, error)
 }
 type MentorRepository interface {
 	GetMyHelpers(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)
