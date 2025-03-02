@@ -14,7 +14,7 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /api/user/avaliableMentors [get]
+// @Router /api/user/availableMentors [get]
 // @Success 200 {object} []respGetMentor
 func (h *Route) availableMentors(c *gin.Context) {
 	personId, err := jwt.Parse(c)

@@ -435,7 +435,7 @@ func TestAvailableMentors(t *testing.T) {
 	db.Create(&roleStudent)
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			url := "/api/user/avaliableMentors"
+			url := "/api/user/availableMentors"
 			req, _ := http.NewRequest(http.MethodGet, url, nil) // bytes.NewBuffer(jsonData)
 			req.Header.Set("Authorization", "Bearer "+test.jwt)
 

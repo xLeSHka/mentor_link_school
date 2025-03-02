@@ -73,3 +73,7 @@ type reqUpdateRoleDto struct {
 	MemberID uuid.UUID `json:"member_id" binding:"required"`
 	Roles    string    `json:"roles" binding:"required"`
 }
+
+type respUpdateCode struct {
+	Code string `json:"code"`
+}

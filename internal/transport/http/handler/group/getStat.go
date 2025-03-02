@@ -9,7 +9,8 @@ import (
 )
 
 // @Summary Статистика группы
-// @Tags Group
+
+// @Tags Groups
 // @Accept  json
 // @Produce  json
 // @Param id path string true "Group ID"

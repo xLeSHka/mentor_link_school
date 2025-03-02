@@ -14,7 +14,7 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /api/group/requests [post]
+// @Router /api/user/requests [post]
 // @Param body body reqCreateHelp true "body"
 // @Success 200
 func (h *Route) createRequest(c *gin.Context) {

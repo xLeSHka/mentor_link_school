@@ -9,13 +9,11 @@ import (
 )
 
 // @Summary Обновить роль юзера
-// @Schemes
 // @Tags Groups
 // @Accept json
 // @Produce json
 // @Router /api/groups/{groupID}/admin/members/{memberID}/role [post]
-// @Success 200 {object} respGetGroupDto
-
+// @Success 200
 func (h *Route) updateRole(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {

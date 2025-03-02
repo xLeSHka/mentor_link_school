@@ -9,14 +9,15 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 )
 
-// @Summary Ивайт код
-// @Tags Group
+// @Summary Обновить код приглашения
+// @Tags Groups
 // @Accept  json
 // @Produce  json
 // @Param id path string true "Group ID"
-// @Success 200 {object} respStat
+// @Success 200 {object} respUpdateCode
+// @Failure 400 {object} httpError.HTTPError
 // @Failure 401 {object} httpError.HTTPError
-// @Router /groups/{GroupID}/stat [get]
+// @Router /api/groups/{groupID}/admin/inviteCode [post]
 func (h *Route) updateInviteCode(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {
@@ -43,7 +44,7 @@ func (h *Route) updateInviteCode(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
+	c.JSON(http.StatusOK, respUpdateCode{
+		Code: code,
 	})
 }
