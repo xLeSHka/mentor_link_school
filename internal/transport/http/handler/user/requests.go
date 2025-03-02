@@ -69,10 +69,10 @@ func mapHelp(help *models.HelpRequest) *respGetHelp {
 }
 func mapMentor(mentor *models.Role) *respGetMentor {
 	return &respGetMentor{
-		MentorID:  mentor.Mentor.ID,
+		MentorID:  mentor.User.ID,
 		GroupID:   mentor.GroupID,
-		AvatarUrl: mentor.Mentor.AvatarURL,
-		Name:      mentor.Mentor.Name,
-		BIO:       mentor.Mentor.BIO,
+		AvatarUrl: mentor.User.AvatarURL,
+		Name:      mentor.User.Name,
+		BIO:       mentor.User.BIO,
 	}
 }

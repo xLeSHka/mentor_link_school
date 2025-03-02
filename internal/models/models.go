@@ -9,6 +9,15 @@ import (
 	"github.com/google/uuid"
 )
 
+type GroupStat struct {
+	StudentsCount        int64
+	MentorsCount         int64
+	TotalCount           int64
+	HelpRequestCount     int64
+	AcceptedRequestCount int64
+	RejectedRequestCount int64
+	Conversion           float64
+}
 type User struct {
 	ID        uuid.UUID `gorm:"type:uuid;primaryKey" `
 	Name      string    `gorm:"unique;not null"`
@@ -57,7 +66,7 @@ type Role struct {
 	UserID  uuid.UUID `gorm:"type:uuid;not null"`
 	GroupID uuid.UUID `gorm:"type:uuid;not null"`
 	Role    string    `gorm:"not null"`
-	Mentor  *User     `gorm:"foreignKey:user_id"`
+	User    *User     `gorm:"foreignKey:user_id"`
 }
 
 func (_ *Role) TableName() string {

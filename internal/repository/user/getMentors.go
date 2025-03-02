@@ -11,7 +11,7 @@ import (
 //	err := r.DB.
 //		WithContext(ctx).
 //		Where("group_id in (select group_id from roles where user_id = ? AND role = 'student')", userID).
-//		Preload("Mentor").
+//		Preload("User").
 //		Table("users").Find(&resp).Error
 //
 //	return resp, err
@@ -24,7 +24,7 @@ func (r *UsersRepository) GetMentors(ctx context.Context, userID uuid.UUID) ([]*
 	err := r.DB.Model(&role).
 		WithContext(ctx).
 		Where("role = 'mentor' AND group_id in (?)", groups).
-		Preload("Mentor").
+		Preload("User").
 		Find(&role).Error
 	//err := r.DB.Table("users").Select("*").
 	//	Preload("Role", "role = 'mentor' AND group_id IN (?)", groups).

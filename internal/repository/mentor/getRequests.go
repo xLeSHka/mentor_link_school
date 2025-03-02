@@ -9,7 +9,7 @@ import (
 func (r *MentorRepository) GetMyHelpers(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error) {
 	var request []*models.HelpRequest
 	err := r.DB.Model(&models.HelpRequest{}).Where("mentor_id = ? AND status = 'pending'", userID).
-		Preload("Mentor").
+		Preload("User").
 		Preload("Student").
 		Find(&request).Error
 	return request, err

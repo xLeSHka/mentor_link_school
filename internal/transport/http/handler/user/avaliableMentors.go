@@ -27,14 +27,14 @@ func (h *Route) availableMentors(c *gin.Context) {
 	}
 	resp := make([]*respGetMentor, 0, len(mentors))
 	for _, m := range mentors {
-		if m.Mentor.AvatarURL != nil {
-			avatarURL, err := h.minioRepository.GetImage(*m.Mentor.AvatarURL)
+		if m.User.AvatarURL != nil {
+			avatarURL, err := h.minioRepository.GetImage(*m.User.AvatarURL)
 			if err != nil {
 				err.(*httpError.HTTPError).SendError(c)
 				c.Abort()
 				return
 			}
-			m.Mentor.AvatarURL = &avatarURL
+			m.User.AvatarURL = &avatarURL
 		}
 		resp = append(resp, mapMentor(m))
 	}

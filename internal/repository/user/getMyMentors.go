@@ -10,7 +10,7 @@ func (r *UsersRepository) GetMyMentors(ctx context.Context, id uuid.UUID) ([]*mo
 	var resp []*models.Pair
 	err := r.DB.Model(&models.Pair{}).Where("user_id = ?", id).
 		WithContext(ctx).
-		Preload("Mentor").
+		Preload("User").
 		Joins("JOIN users ON users.id = pairs.mentor_id").
 		Find(&resp).Error
 	return resp, err

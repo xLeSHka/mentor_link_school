@@ -1,4 +1,4 @@
-package groupService
+package userService
 
 import (
 	"context"
@@ -11,12 +11,12 @@ import (
 	"gorm.io/gorm"
 )
 
-func (r *GroupsService) GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Group, error) {
-	gr, err := r.groupRepository.GetGroups(ctx, userID)
+func (r *UsersService) GetGroups(ctx context.Context, userID uuid.UUID, role string) ([]*models.Group, error) {
+	gr, err := r.usersRepository.GetGroups(ctx, userID, role)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 
-			return nil, httpError.New(http.StatusNotFound, "groups not found")
+			return []*models.Group{}, nil
 		}
 		return nil, httpError.New(http.StatusInternalServerError, err.Error())
 	}

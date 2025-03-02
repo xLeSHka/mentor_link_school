@@ -1,8 +1,7 @@
-package group
+package repositoryUser
 
 import (
 	"context"
-
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 )
@@ -13,11 +12,11 @@ import (
 // 	return groups, err
 // }
 
-func (r *GroupRepository) GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Group, error) {
+func (r *UsersRepository) GetGroups(ctx context.Context, userID uuid.UUID, role string) ([]*models.Group, error) {
 	var groups []*models.Group
 	err := r.DB.WithContext(ctx).Table("roles").
 		Joins("JOIN groups ON groups.id = roles.group_id").
-		Select("groups.*").Where("user_id = ? AND role = 'owner'", userID).
+		Select("groups.*").Where("user_id = ? AND role = ?", userID, role).
 		Find(&groups).Error
 	return groups, err
 }

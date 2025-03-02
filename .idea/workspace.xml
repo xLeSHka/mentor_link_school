@@ -5,26 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/tests/image/go.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/image/go.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/repository/group/getMembers.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/checkIsMentor.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/checkIsMentor.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/models/models.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/models/models.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/group/getAllGroups.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/getAllGroups.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/group/getGroup.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/group/stat.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/group/stat.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/repository/mentor/getRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/getRequests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/minio/minio.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/minio/minio.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/getStudents.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/getStudents.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/repository/repositories.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/repositories.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/user/checkGroupExists.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/checkGroupExists.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/user/checkIsStudent.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/checkIsStudent.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/user/checkexists.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/checkexists.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/user/checkGroupExists.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/group/checkGroupExists.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/repository/user/getMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/getMentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/mentor/getRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/mentor/getRequests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/mentor/getStudents.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/mentor/getStudents.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/getMyMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/getMyMentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/getMyhelps.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/getMyhelps.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/tests/dev.env" beforeDir="false" afterPath="$PROJECT_DIR$/tests/dev.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/tests/e2e_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/tests/e2e_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/tests/migrations/001_init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/tests/migrations/001_init.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/requests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/mentor/requests.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/user/getMyMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/getMyMentors.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/user/getMyRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/getMyRequests.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/group/update.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/group/update.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/avaliableMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/avaliableMentors.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/requests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/requests.go" afterDir="false" />
     </list>
     <list id="75b4f414-b5bc-4d2d-96a9-7b631f9c435a" name="Changes by ainur" comment="" />
     <list id="5616f49a-7ae4-4147-b258-d18510d8fa0f" name="Changes by LIME" comment="" />
@@ -82,11 +78,11 @@
       <recent name="C:\Projects\go\lotti\internal\service\mentor" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Projects\go\lotti\internal\repository\group" />
+      <recent name="C:\Projects\go\lotti\internal\repository\user" />
       <recent name="C:\Projects\go\lotti\tests\image" />
       <recent name="C:\Projects\go\lotti" />
       <recent name="C:\Projects\go\lotti\internal\transport\http\handler\group" />
-      <recent name="C:\Projects\go\lotti\internal\service\group" />
-      <recent name="C:\Projects\go\lotti\internal\transport\http\handler\user" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -127,5 +123,16 @@
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/internal/repository/repositories.go</url>
+          <line>16</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
