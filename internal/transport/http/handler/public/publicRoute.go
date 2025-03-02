@@ -21,6 +21,9 @@ func PublicRoute(apiRouters *ApiRouters.ApiRouters, db *gorm.DB) *Route {
 
 	apiRouters.Public.GET("/ping", router.ping)
 	apiRouters.Public.GET("/mock", router.mocks)
-	apiRouters.Public.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	apiRouters.Public.StaticFile("/docsstatic/doc.json", "docs/swagger.json")
+	apiRouters.Public.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, func(config *ginSwagger.Config) {
+		config.URL = "/api/docsstatic/doc.json"
+	}))
 	return router
 }
