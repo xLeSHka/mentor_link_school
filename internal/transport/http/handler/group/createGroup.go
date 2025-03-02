@@ -9,6 +9,15 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 )
 
+// @Summary
+// @Schemes
+// @Tags Groups
+// @Accept json
+// @Produce json
+// @Param body body reqCreateGroupDto true "body"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} respCreateGroup
+// @Router /api/group [post]
 func (h *Route) createGroup(c *gin.Context) {
 	personId := uuid.MustParse(c.MustGet("personId").(string))
 	var reqData reqCreateGroupDto
@@ -27,7 +36,7 @@ func (h *Route) createGroup(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"group_id": group.ID,
+	c.JSON(http.StatusOK, respCreateGroup{
+		GroupID: group.ID,
 	})
 }
