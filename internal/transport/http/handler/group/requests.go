@@ -40,3 +40,8 @@ type resGetMember struct {
 	BIO       *string  `json:"bio,omitempty"`
 	Roles     []string `json:"roles"`
 }
+
+type reqUpdateRoleDto struct {
+	MemberID uuid.UUID `json:"member_id" binding:"required"`
+	Roles    string    `json:"roles" binding:"required"`
+}
