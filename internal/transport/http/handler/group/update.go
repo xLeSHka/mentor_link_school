@@ -30,7 +30,7 @@ func (h *Route) updateInviteCode(c *gin.Context) {
 		return
 	}
 
-	code, err := h.groupService.UpdateInviteCode(c.Request.Context(), personID, groupID)
+	code, err := h.groupService.UpdateInviteCode(c.Request.Context(), groupID, personID)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return

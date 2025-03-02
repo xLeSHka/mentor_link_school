@@ -14,7 +14,7 @@ type GroupService interface {
 	GetGroup(ctx context.Context, userID, groupID uuid.UUID) (*models.Group, error)
 	CreateGroup(ctx context.Context, group *models.Group, userID uuid.UUID) error
 	UpdateToMentor(ctx context.Context, owserID, groupID, userID uuid.UUID) error
-	UpdateInviteCode(ctx context.Context, ownerID, groupID uuid.UUID) (string, error)
+	UpdateInviteCode(ctx context.Context, groupID, ownerID uuid.UUID) (string, error)
 }
 type MentorService interface {
 	GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)
