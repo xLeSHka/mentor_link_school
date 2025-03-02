@@ -7,6 +7,7 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"log"
 	"net/http"
+	"time"
 )
 
 func (h *Route) getGroups(c *gin.Context) {
@@ -70,6 +71,7 @@ func (r *Route) Websocket(c *gin.Context) {
 	//	clients[g.ID] = append(clients[g.ID], ws)
 	//}
 	for {
+		time.Sleep(10 * time.Second)
 		err := ws.WriteMessage(websocket.TextMessage, []byte("hello world"))
 		if err != nil {
 			log.Println("write:", err)
