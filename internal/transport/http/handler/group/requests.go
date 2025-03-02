@@ -14,7 +14,35 @@ type GetGroupID struct {
 type reqCreateGroupDto struct {
 	Name string `json:"name" binding:"required,min=1,max=100"`
 }
+type reqUpdateRole struct {
+	Role string `json:"role" binding:"required"`
+	ID   string `json:"id" binding:"required,uuid"`
+}
+type respGetMember struct {
+	UserID    uuid.UUID `json:"user_id" binding:"required"`
+	AvatarUrl *string   `json:"avatar_url,omitempty"`
+	Name      string    `json:"name" binding:"required"`
+	Role      string    `uri:"role" binding:"required"`
+}
 
+func mapMember(role *models.Role) *respGetMember {
+	return &respGetMember{
+		UserID:    role.User.ID,
+		AvatarUrl: role.User.AvatarURL,
+		Name:      role.User.Name,
+		Role:      role.Role,
+	}
+}
+
+type respStat struct {
+	StudentsCount        int64   `json:"students_count"`
+	MentorsCount         int64   `json:"mentors_count"`
+	TotalCount           int64   `json:"total_count"`
+	HelpRequestCount     int64   `json:"help_request_count"`
+	AcceptedRequestCount int64   `json:"accepted_request_count"`
+	RejectedRequestCount int64   `json:"rejected_request_count"`
+	Conversion           float64 `json:"conversion"`
+}
 type respCreateGroup struct {
 	GroupID uuid.UUID `json:"group_id"`
 }

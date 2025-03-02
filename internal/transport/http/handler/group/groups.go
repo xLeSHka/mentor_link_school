@@ -35,7 +35,10 @@ func GroupsRoutes(opts FxOpts) *Route {
 		minioRepository: opts.MinioRepository,
 	}
 
-	opts.ApiRouter.UserPrivate.POST("/groups", router.createGroup)
-	opts.ApiRouter.UserPrivate.POST("/groups/:id/invite", router.updateInviteCode)
+	opts.ApiRouter.UserPrivate.POST("/groups/create", router.createGroup)
+	opts.ApiRouter.UserPrivate.POST("/groups/:id/inviteCode", router.updateInviteCode)
+	opts.ApiRouter.UserPrivate.GET("/groups/:id/members", router.getMembers)
+	opts.ApiRouter.UserPrivate.PATCH("/groups/:id/members/role", router.updateRole)
+	opts.ApiRouter.UserPrivate.GET("/groups/:id/stat", router.getStat)
 	return router
 }

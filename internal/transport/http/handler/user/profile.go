@@ -2,10 +2,10 @@ package usersRoute
 
 import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 // @Summary Получить инфу о себе
@@ -18,8 +18,12 @@ import (
 // @Success 200 {object} resGetProfile
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 func (h *Route) profile(c *gin.Context) {
-	personId := uuid.MustParse(c.MustGet("personId").(string))
-
+	personId, err := jwt.Parse(c)
+	if err != nil {
+		httpError.New(http.StatusUnauthorized, "Bad id").SendError(c)
+		c.Abort()
+		return
+	}
 	user, err := h.usersService.GetByID(c.Request.Context(), personId)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)

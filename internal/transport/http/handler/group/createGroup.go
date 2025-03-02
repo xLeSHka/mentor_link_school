@@ -1,6 +1,7 @@
 package groupsRoute
 
 import (
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,7 +20,12 @@ import (
 // @Failure 400 {object} respCreateGroup
 // @Router /api/group [post]
 func (h *Route) createGroup(c *gin.Context) {
-	personId := uuid.MustParse(c.MustGet("personId").(string))
+	personId, err := jwt.Parse(c)
+	if err != nil {
+		httpError.New(http.StatusUnauthorized, "Bad id")
+		c.Abort()
+		return
+	}
 	var reqData reqCreateGroupDto
 	if err := h.validator.ShouldBindJSON(c, &reqData); err != nil {
 		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
@@ -31,7 +37,7 @@ func (h *Route) createGroup(c *gin.Context) {
 		Name: reqData.Name,
 	}
 
-	err := h.groupService.Create(c.Request.Context(), group, personId)
+	err = h.groupService.Create(c.Request.Context(), group, personId)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return

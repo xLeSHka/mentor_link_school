@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"net/http"
 	"path/filepath"
 
 	"github.com/bachvtuan/mime2extension"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 // @Summary загрузка аватарки
@@ -22,7 +22,12 @@ import (
 // @Success 200 {object} respUploadAvatarDto
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 func (h *Route) uploadAvatar(c *gin.Context) {
-	personId := uuid.MustParse(c.MustGet("personId").(string))
+	personId, err := jwt.Parse(c)
+	if err != nil {
+		httpError.New(http.StatusUnauthorized, "Bad id").SendError(c)
+		c.Abort()
+		return
+	}
 	file, err := c.FormFile("image")
 	if err != nil {
 		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)

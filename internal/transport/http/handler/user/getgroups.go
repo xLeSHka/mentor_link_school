@@ -2,12 +2,9 @@ package usersRoute
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
-	"log"
 	"net/http"
-	"time"
 )
 
 func (h *Route) getGroups(c *gin.Context) {

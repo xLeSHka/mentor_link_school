@@ -1,10 +1,10 @@
 package mentorsRoute
 
 import (
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 )
 
@@ -16,7 +16,12 @@ import (
 // @Router /api/mentors/requests [get]
 // @Success 200 {object} []respGetRequest
 func (h *Route) getRequests(c *gin.Context) {
-	personId := uuid.MustParse(c.MustGet("personId").(string))
+	personId, err := jwt.Parse(c)
+	if err != nil {
+		httpError.New(http.StatusUnauthorized, "Bad id").SendError(c)
+		c.Abort()
+		return
+	}
 
 	mentors, err := h.mentorService.GetMyHelps(c.Request.Context(), personId)
 	if err != nil {
