@@ -11,10 +11,9 @@ import (
 
 type GroupService interface {
 	Create(ctx context.Context, group *models.Group, userID uuid.UUID) error
-	UpdateToMentor(ctx context.Context, groupID, userID uuid.UUID) error
-	UpdateInviteCode(ctx context.Context, groupID uuid.UUID, inviteCode string) error
+	UpdateRole(ctx context.Context, ownerID, groupID, userID uuid.UUID, role string) error
+	UpdateInviteCode(ctx context.Context, groupID, ownerID uuid.UUID) (string, error)
 	GetMembers(ctx context.Context, groupID uuid.UUID) ([]*models.Role, error)
-	CheckGroupExists(ctx context.Context, userID, groupID uuid.UUID) (bool, error)
 	GetStat(ctx context.Context, groupID uuid.UUID) (*models.GroupStat, error)
 }
 type MentorService interface {

@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func (s *GroupsService) CreateGroup(ctx context.Context, group *models.Group, userID uuid.UUID) error {
+func (s *GroupsService) Create(ctx context.Context, group *models.Group, userID uuid.UUID) error {
 
 	err := s.groupRepository.Create(ctx, group, userID)
 	if err != nil {

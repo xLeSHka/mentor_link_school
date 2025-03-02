@@ -10,7 +10,7 @@ import (
 
 type GroupRepository interface {
 	Create(ctx context.Context, group *models.Group, userID uuid.UUID) error
-	UpdateToMentor(ctx context.Context, groupID, userID uuid.UUID) error
+	UpdateRole(ctx context.Context, groupID, userID uuid.UUID, role string) error
 	UpdateInviteCode(ctx context.Context, groupID uuid.UUID, inviteCode string) error
 	GetMembers(ctx context.Context, groupID uuid.UUID) ([]*models.Role, error)
 	CheckGroupExists(ctx context.Context, userID, groupID uuid.UUID) (bool, error)
