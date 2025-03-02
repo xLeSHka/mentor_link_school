@@ -9,8 +9,11 @@ import (
 	jwtlib "github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/repository/group"
 	repositoryMentor "gitlab.prodcontest.ru/team-14/lotti/internal/repository/mentor"
+	groupService "gitlab.prodcontest.ru/team-14/lotti/internal/service/group"
 	mentorService "gitlab.prodcontest.ru/team-14/lotti/internal/service/mentor"
+	groupsRoute "gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/group"
 	mentorsRoute "gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/mentor"
 	"io"
 	"log"
@@ -56,9 +59,11 @@ var rdb *redis.Client
 var jwt *jwt2.JWT
 var UserRepository repository.UsersRepository
 var MinioRepository repository.MinioRepository
+var GroupRepository repository.GroupRepository
 var validator *Validators.Validator
 var UserService service.UserService
 var MentorRepository repository.MentorRepository
+var GroupService service.GroupService
 var MentorService service.MentorService
 var routers *ApiRouters.ApiRouters
 var profile1JWT string
@@ -103,7 +108,7 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	GroupRepository = group.New(db)
 	UserRepository = repositoryUser.New(db)
 	MinioRepository = repository2.New(minioClient, config)
 	MentorRepository = repositoryMentor.New(db)
@@ -121,6 +126,11 @@ func init() {
 		JWT:              jwt,
 		Config:           config,
 	})
+	GroupService = groupService.New(groupService.FxOpts{
+		MinioRepository: MinioRepository,
+		UserRepository:  UserRepository,
+		GroupRepository: GroupRepository,
+	})
 	routers = ApiRouters.CreateApiRoutes(http3, jwt)
 
 	publicRoute.PublicRoute(routers, db)
@@ -137,24 +147,31 @@ func init() {
 		UsersService:    UserService,
 		MentorService:   MentorService,
 	})
+	groupsRoute.GroupsRoutes(groupsRoute.FxOpts{
+		ApiRouter:       routers,
+		Validator:       validator,
+		MinioRepository: MinioRepository,
+		UserService:     UserService,
+		GroupService:    GroupService,
+	})
 }
 func setUp() (func(), chan os.Signal, error) {
 	var err error
 	profile1JWT, err = jwt.CreateToken(jwtlib.MapClaims{
 		"id": profile1.ID,
-	}, time.Now().Add(time.Hour*6))
+	}, time.Now().Add(time.Hour*24*7))
 	if err != nil {
 		log.Fatal(err)
 	}
 	unknownJWT, err = jwt.CreateToken(jwtlib.MapClaims{
 		"id": uuid.New(),
-	}, time.Now().Add(time.Hour*6))
+	}, time.Now().Add(time.Hour*24*7))
 	if err != nil {
 		log.Fatal(err)
 	}
 	profile2JWT, err = jwt.CreateToken(jwtlib.MapClaims{
 		"id": profile2.ID,
-	}, time.Now().Add(time.Hour*6))
+	}, time.Now().Add(time.Hour*24*7))
 	if err != nil {
 		log.Fatal(err)
 	}
