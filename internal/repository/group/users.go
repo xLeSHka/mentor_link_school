@@ -33,5 +33,6 @@ func (r *GroupRepository) UpdateRole(ctx context.Context, groupID, userID uuid.U
 		tx.Rollback()
 		return httpError.New(http.StatusBadRequest, "user not found")
 	}
+	tx.Commit()
 	return nil
 }

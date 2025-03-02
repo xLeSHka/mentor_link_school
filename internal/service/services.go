@@ -31,4 +31,5 @@ type UserService interface {
 	CreateRequest(ctx context.Context, request *models.HelpRequest) error
 	GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.Role, error)
 	Invite(ctx context.Context, inviteCode string, userID uuid.UUID) (bool, error)
+	GetGroups(ctx context.Context, userID uuid.UUID, role string) ([]*models.Group, error)
 }

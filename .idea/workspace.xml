@@ -5,10 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/getMembers.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/getStat.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/updateRole.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/group/getMembers.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/group/getMembers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/group/stat.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/group/stat.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/services.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/services.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/repository/group/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/group/users.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/getGroup.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/getgroups.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/getgroups.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/requests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/requests.go" afterDir="false" />
     </list>
     <list id="75b4f414-b5bc-4d2d-96a9-7b631f9c435a" name="Changes by ainur" comment="" />
     <list id="5616f49a-7ae4-4147-b258-d18510d8fa0f" name="Changes by LIME" comment="" />
@@ -66,11 +70,11 @@
       <recent name="C:\Projects\go\lotti\internal\service\mentor" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Projects\go\lotti\internal\transport\http\handler\user" />
       <recent name="C:\Projects\go\lotti\internal\service\user" />
       <recent name="C:\Projects\go\lotti\internal\repository\group" />
       <recent name="C:\Projects\go\lotti\internal\repository\user" />
       <recent name="C:\Projects\go\lotti\tests\image" />
-      <recent name="C:\Projects\go\lotti" />
     </key>
   </component>
   <component name="SharedIndexes">

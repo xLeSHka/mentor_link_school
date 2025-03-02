@@ -11,7 +11,9 @@ type reqLoginDto struct {
 type respLoginDto struct {
 	Token string `json:"token"`
 }
-
+type reqGetRole struct {
+	Role string `from:"role"`
+}
 type resGetProfile struct {
 	Name      string  `json:"name"`
 	AvatarUrl *string `json:"avatar_url,omitempty"`
@@ -75,4 +77,23 @@ func mapMentor(mentor *models.Role) *respGetMentor {
 		Name:      mentor.User.Name,
 		BIO:       mentor.User.BIO,
 	}
+}
+
+type respGetGroupDto struct {
+	Name       string  `json:"name"`
+	ID         string  `json:"id"`
+	AvatarUrl  *string `json:"avatar_url,omitempty"`
+	InviteCode *string `json:"invite_code,omitempty"`
+}
+
+func mapGroup(group *models.Group, role string) *respGetGroupDto {
+	resp := &respGetGroupDto{
+		Name:      group.Name,
+		ID:        group.ID.String(),
+		AvatarUrl: group.AvatarURL,
+	}
+	if role == "owner" {
+		resp.InviteCode = group.InviteCode
+	}
+	return resp
 }
