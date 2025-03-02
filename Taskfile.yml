@@ -27,4 +27,4 @@ tasks:
   swag:
     desc: Generate swagger docs
     cmds:
-      - swag.exe init -g ./internal/transport/http/httpServer.go --outputTypes yaml
+      - swag.exe init -g ./internal/transport/http/httpServer.go

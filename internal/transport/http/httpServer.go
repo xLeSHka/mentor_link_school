@@ -29,19 +29,19 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
-// @title           Swagger Example API
+// @title  			GetMentor API
 // @version         1.0
-// @description     This is a sample server celler server.
-// @termsOfService  http://swagger.io/terms/
+// @description     GetMentor API docs
 
 // @contact.name   API Support
 // @contact.url    http://www.swagger.io/support
-// @contact.email  support@swagger.io
 
-// @securityDefinitions.basic  BasicAuth
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 
-// @externalDocs.description  OpenAPI
-// @externalDocs.url          https://swagger.io/resources/open-api/
+// @host prod-team-14-mkg8u20m.final.prodcontest.ru
+// @BasePath /
 
 func New(config config.Config, lc fx.Lifecycle) *gin.Engine {
 	webServer := gin.Default()
