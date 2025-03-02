@@ -62,41 +62,41 @@ func (r *Route) mocks(c *gin.Context) {
 		BIO:      student.AvatarURL,
 		Status:   "accepted",
 	}
-	r.DB.FirstOrCreate(group1)
-	r.DB.FirstOrCreate(student)
-	r.DB.FirstOrCreate(&models.Role{
+	r.DB.Create(group1)
+	r.DB.Create(student)
+	r.DB.Create(&models.Role{
 		UserID:  student.ID,
 		GroupID: group1.ID,
 		Role:    "student",
 	})
-	r.DB.FirstOrCreate(mentor1)
-	r.DB.FirstOrCreate(&models.Role{
+	r.DB.Create(mentor1)
+	r.DB.Create(&models.Role{
 		UserID:  mentor1.ID,
 		GroupID: group1.ID,
 		Role:    "mentor",
 	})
-	r.DB.FirstOrCreate(&models.Role{
+	r.DB.Create(&models.Role{
 		UserID:  student.ID,
 		GroupID: group2.ID,
 		Role:    "student",
 	})
-	r.DB.FirstOrCreate(&models.Role{
+	r.DB.Create(&models.Role{
 		UserID:  mentor1.ID,
 		GroupID: group2.ID,
 		Role:    "mentor",
 	})
-	r.DB.FirstOrCreate(helpReq1)
-	r.DB.FirstOrCreate(helpReq2)
-	r.DB.FirstOrCreate(&models.Pair{
+	r.DB.Create(helpReq1)
+	r.DB.Create(helpReq2)
+	r.DB.Create(&models.Pair{
 		UserID:   student.ID,
 		MentorID: mentor1.ID,
 		GroupID:  group1.ID,
 		Goal:     "PRODANO Project",
 	})
 
-	r.DB.FirstOrCreate(owner)
-	r.DB.FirstOrCreate(ownerGroup)
-	r.DB.FirstOrCreate(&models.Role{
+	r.DB.Create(owner)
+	r.DB.Create(ownerGroup)
+	r.DB.Create(&models.Role{
 		UserID:  owner.ID,
 		GroupID: ownerGroup.ID,
 		Role:    "owner",
