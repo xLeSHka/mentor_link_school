@@ -41,6 +41,6 @@ func UsersRoute(opts FxOpts) *Route {
 	opts.ApiRouter.UserPrivate.GET("/user/requests", router.getRequests)
 	opts.ApiRouter.UserPrivate.POST("/user/uploadAvatar", router.uploadAvatar)
 	opts.ApiRouter.UserPrivate.POST("/user/invite", router.acceptedInvite)
-
+	opts.ApiRouter.UserPrivate.GET("/ws", router.Websocket)
 	return router
 }

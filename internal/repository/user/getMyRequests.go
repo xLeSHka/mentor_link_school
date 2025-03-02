@@ -12,7 +12,7 @@ func (r *UsersRepository) GetMyRequests(ctx context.Context, userID uuid.UUID) (
 	var resp []*models.HelpRequest
 	res := r.DB.Model(&models.HelpRequest{}).Where("user_id = ? AND status = 'pending'", userID).
 		WithContext(ctx).
-		Preload("User").
+		Preload("Mentor").
 		Preload("Student").
 		Find(&resp)
 	if res.Error != nil {
