@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"net/http"
 )
 
@@ -13,11 +14,16 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /api/group/requests [post]
+// @Router /api/user/requests [post]
 // @Param body body reqCreateHelp true "body"
 // @Success 200
 func (h *Route) createRequest(c *gin.Context) {
-	personId := uuid.MustParse(c.MustGet("personId").(string))
+	personId, err := jwt.Parse(c)
+	if err != nil {
+		httpError.New(http.StatusUnauthorized, "Bad id").SendError(c)
+		c.Abort()
+		return
+	}
 	var reqData reqCreateHelp
 	if err := h.validator.ShouldBindJSON(c, &reqData); err != nil {
 		httpError.New(http.StatusBadRequest, err.Error())

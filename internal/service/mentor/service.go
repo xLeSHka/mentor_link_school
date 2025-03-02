@@ -49,7 +49,6 @@ func New(opts FxOpts) service.MentorService {
 
 func (s *MentorService) GenerateAccessToken(id uuid.UUID) (string, error) {
 	return s.jwt.CreateToken(jwtlib.MapClaims{
-		"type": "user",
-		"id":   id,
-	}, time.Now().Add(time.Hour*6))
+		"id": id,
+	}, time.Now().Add(time.Hour*24*7))
 }

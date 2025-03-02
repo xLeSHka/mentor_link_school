@@ -1,5 +1,54 @@
 basePath: /
 definitions:
+  groupsRoute.reqCreateGroupDto:
+    properties:
+      name:
+        maxLength: 100
+        minLength: 1
+        type: string
+    required:
+    - name
+    type: object
+  groupsRoute.resGetMember:
+    properties:
+      avatar_url:
+        type: string
+      bio:
+        type: string
+      name:
+        type: string
+      roles:
+        items:
+          type: string
+        type: array
+    type: object
+  groupsRoute.respCreateGroup:
+    properties:
+      group_id:
+        type: string
+    type: object
+  groupsRoute.respStat:
+    properties:
+      accepted_request_count:
+        type: integer
+      conversion:
+        type: number
+      help_request_count:
+        type: integer
+      mentors_count:
+        type: integer
+      rejected_request_count:
+        type: integer
+      students_count:
+        type: integer
+      total_count:
+        type: integer
+    type: object
+  groupsRoute.respUpdateCode:
+    properties:
+      code:
+        type: string
+    type: object
   httpError.HTTPError:
     properties:
       message:
@@ -29,6 +78,8 @@ definitions:
     type: object
   mentorsRoute.respGetRequest:
     properties:
+      avatar_url:
+        type: string
       goal:
         type: string
       id:
@@ -138,7 +189,7 @@ info:
   title: GetMentor API
   version: "1.0"
 paths:
-  /api/group/requests:
+  /api/group:
     post:
       consumes:
       - application/json
@@ -148,15 +199,77 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/usersRoute.reqCreateHelp'
+          $ref: '#/definitions/groupsRoute.reqCreateGroupDto'
       produces:
       - application/json
       responses:
         "200":
           description: OK
-      summary: Кинуть запрос ментору
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/groupsRoute.respCreateGroup'
       tags:
-      - Users
+      - Groups
+  /api/groups/{groupID}/admin/inviteCode:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Group ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/groupsRoute.respUpdateCode'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httpError.HTTPError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpError.HTTPError'
+      summary: Обновить код приглашения
+      tags:
+      - Groups
+  /api/groups/{groupID}/admin/members:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/groupsRoute.resGetMember'
+            type: array
+      summary: Список участников группы
+      tags:
+      - Groups
+  /api/groups/{groupID}/admin/members/{memberID}/role:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Обновить роль юзера
+      tags:
+      - Groups
   /api/mentors/requests:
     get:
       consumes:
@@ -305,6 +418,24 @@ paths:
       summary: Получить список моих запросов
       tags:
       - Users
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/usersRoute.reqCreateHelp'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Кинуть запрос ментору
+      tags:
+      - Users
   /api/user/uploadAvatar:
     post:
       consumes:
@@ -325,6 +456,41 @@ paths:
       summary: загрузка аватарки
       tags:
       - Users
+  /groups/{GroupID}/stat:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Group ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/groupsRoute.respStat'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httpError.HTTPError'
+      tags:
+      - Groups
+  /groups/join/{code}:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Обновить роль юзера
+      tags:
+      - Groups
 securityDefinitions:
   ApiKeyAuth:
     in: header

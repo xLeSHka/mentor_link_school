@@ -20,6 +20,7 @@ type resGetProfile struct {
 	AvatarUrl *string            `json:"avatar_url,omitempty"`
 	BIO       *string            `json:"bio,omitempty"`
 	Groups    []*respGetGroupDto `json:"groups"`
+	Telegram  *string  `json:"telegram"`
 }
 
 type respGetMyMentor struct {
@@ -86,18 +87,16 @@ type respGetGroupDto struct {
 	ID         string  `json:"id"`
 	AvatarUrl  *string `json:"avatar_url,omitempty"`
 	InviteCode *string `json:"invite_code,omitempty"`
-	Role       string  `json:"role"`
 }
 
-func mapGroup(group *models.Role, role string) *respGetGroupDto {
+func mapGroup(group *models.Group, role string) *respGetGroupDto {
 	resp := &respGetGroupDto{
-		Name:      group.Group.Name,
-		ID:        group.Group.ID.String(),
-		AvatarUrl: group.Group.AvatarURL,
-		Role:      role,
+		Name:      group.Name,
+		ID:        group.ID.String(),
+		AvatarUrl: group.AvatarURL,
 	}
-	if role == "owner" && group.Group.InviteCode != nil {
-		resp.InviteCode = group.Group.InviteCode
+	if role == "owner" {
+		resp.InviteCode = group.InviteCode
 	}
 	return resp
 }

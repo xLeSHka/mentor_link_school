@@ -1,4 +1,4 @@
-package usersRoute
+package groupsRoute
 
 import (
 	"net/http"
@@ -8,6 +8,12 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 )
 
+// @Summary Обновить роль юзера
+// @Tags Groups
+// @Accept json
+// @Produce json
+// @Router /groups/join/{code} [post]
+// @Success 200
 func (h *Route) acceptedInvite(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {
@@ -15,7 +21,7 @@ func (h *Route) acceptedInvite(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	code := c.Query("code")
+	code := c.Param("code")
 	if code == "" {
 		httpError.New(http.StatusBadRequest, "Code not found").SendError(c)
 		c.Abort()

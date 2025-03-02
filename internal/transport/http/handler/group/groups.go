@@ -13,7 +13,7 @@ type Route struct {
 	routers         *ApiRouters.ApiRouters
 	validator       *Validators.Validator
 	groupService    service.GroupService
-	userService     service.UserService
+	usersService    service.UserService
 	minioRepository repository.MinioRepository
 }
 
@@ -22,7 +22,7 @@ type FxOpts struct {
 	ApiRouter       *ApiRouters.ApiRouters
 	Validator       *Validators.Validator
 	GroupService    service.GroupService
-	UserService     service.UserService
+	UsersService    service.UserService
 	MinioRepository repository.MinioRepository
 }
 
@@ -31,11 +31,15 @@ func GroupsRoutes(opts FxOpts) *Route {
 		routers:         opts.ApiRouter,
 		validator:       opts.Validator,
 		groupService:    opts.GroupService,
-		userService:     opts.UserService,
+		usersService:    opts.UsersService,
 		minioRepository: opts.MinioRepository,
 	}
 
-	opts.ApiRouter.UserPrivate.POST("/groups", router.createGroup)
-	opts.ApiRouter.UserPrivate.POST("/groups/:id/invite", router.updateInviteCode)
+	opts.ApiRouter.UserPrivate.POST("/groups/create", router.createGroup)
+	opts.ApiRouter.UserPrivate.POST("/groups/:id/inviteCode", router.updateInviteCode)
+	opts.ApiRouter.UserPrivate.GET("/groups/:id/members", router.getMembers)
+	opts.ApiRouter.UserPrivate.PATCH("/groups/:id/members/role", router.updateRole)
+	opts.ApiRouter.UserPrivate.GET("/groups/:id/stat", router.getStat)
+	opts.ApiRouter.UserPrivate.POST("/groups/join/:code", router.acceptedInvite)
 	return router
 }

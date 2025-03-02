@@ -8,6 +8,13 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 )
 
+// @Summary Получить список моих запросов
+// @Schemes
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Router /api/user/requests [get]
+// @Success 200 {object} []respGetHelp
 func (h *Route) getGroups(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {

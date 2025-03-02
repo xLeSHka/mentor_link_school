@@ -9,6 +9,15 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 )
 
+// @Summary Обновить код приглашения
+// @Tags Groups
+// @Accept  json
+// @Produce  json
+// @Param id path string true "Group ID"
+// @Success 200 {object} respUpdateCode
+// @Failure 400 {object} httpError.HTTPError
+// @Failure 401 {object} httpError.HTTPError
+// @Router /api/groups/{groupID}/inviteCode [post]
 func (h *Route) updateInviteCode(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {
@@ -18,14 +27,14 @@ func (h *Route) updateInviteCode(c *gin.Context) {
 	}
 	groupid := c.Param("id")
 	if groupid == "" {
-		httpError.New(http.StatusUnauthorized, "Header not found").SendError(c)
+		httpError.New(http.StatusBadRequest, "group not found").SendError(c)
 		c.Abort()
 		return
 	}
 
 	groupID, err := uuid.Parse(groupid)
 	if err != nil {
-		httpError.New(http.StatusUnauthorized, "Header not found").SendError(c)
+		httpError.New(http.StatusBadRequest, "group not found parse").SendError(c)
 		c.Abort()
 		return
 	}
@@ -35,7 +44,7 @@ func (h *Route) updateInviteCode(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
+	c.JSON(http.StatusOK, respUpdateCode{
+		Code: code,
 	})
 }
