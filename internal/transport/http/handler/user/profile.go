@@ -1,9 +1,10 @@
 package usersRoute
 
 import (
+	"net/http"
+
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -43,5 +44,6 @@ func (h *Route) profile(c *gin.Context) {
 		Name:      user.Name,
 		AvatarUrl: user.AvatarURL,
 		BIO:       user.BIO,
+		Telegram:  user.Telegram,
 	})
 }

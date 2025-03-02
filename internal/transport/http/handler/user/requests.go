@@ -19,6 +19,7 @@ type resGetProfile struct {
 	Name      string  `json:"name"`
 	AvatarUrl *string `json:"avatar_url,omitempty"`
 	BIO       *string `json:"bio,omitempty"`
+	Telegram  string  `json:"telegram"`
 }
 
 type respGetMyMentor struct {
