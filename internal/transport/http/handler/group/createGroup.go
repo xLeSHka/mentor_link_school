@@ -22,7 +22,7 @@ func (h *Route) createGroup(c *gin.Context) {
 		Name: reqData.Name,
 	}
 
-	err := h.groupService.CreateGroup(c.Request.Context(), group, personId)
+	err := h.groupService.Create(c.Request.Context(), group, personId)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
