@@ -9,12 +9,13 @@ type GetGroupID struct {
 	ID string `uri:"groupId" binding:"required,uuid"`
 }
 type reqCreateGroupDto struct {
-	Name string `json:"name"`
+	Name string `json:"name" binding:"required,min=1,max=100"`
 }
 type respGetGroupDto struct {
-	Name      string  `json:"name"`
-	ID        string  `json:"id"`
-	AvatarUrl *string `json:"avatar_url,omitempty"`
+	Name       string  `json:"name"`
+	ID         string  `json:"id"`
+	AvatarUrl  *string `json:"avatar_url,omitempty"`
+	InviteCode *string `json:"invite_code,omitempty"`
 }
 
 func mapGroup(group *models.Group) *respGetGroupDto {

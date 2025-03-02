@@ -1,9 +1,10 @@
 package models
 
 import (
+	"io"
+
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
-	"io"
 
 	"github.com/google/uuid"
 )
@@ -22,9 +23,10 @@ func (_ *User) TableName() string {
 }
 
 type Group struct {
-	ID        uuid.UUID `gorm:"type:uuid;primaryKey"`
-	AvatarURL *string
-	Name      string `gorm:"not null"`
+	ID         uuid.UUID `gorm:"type:uuid;primaryKey"`
+	AvatarURL  *string
+	Name       string `gorm:"not null"`
+	InviteCode *string
 }
 
 func (_ *Group) TableName() string {

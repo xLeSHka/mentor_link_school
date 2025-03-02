@@ -12,6 +12,8 @@ type GroupRepository interface {
 	Create(ctx context.Context, group *models.Group, userID uuid.UUID) error
 	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Group, error)
 	GetGroup(ctx context.Context, userID, groupID uuid.UUID) (*models.Group, error)
+	UpdateToMentor(ctx context.Context, groupID, userID uuid.UUID) error
+	UpdateInviteCode(ctx context.Context, groupID uuid.UUID, inviteCode string) error
 }
 type MentorRepository interface {
 	GetMyHelpers(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)
@@ -32,6 +34,8 @@ type UsersRepository interface {
 	CheckExists(ctx context.Context, userID uuid.UUID) (bool, error)
 	CheckIsStudent(ctx context.Context, userID, groupID uuid.UUID) (bool, error)
 	CheckGroupExists(ctx context.Context, groupID uuid.UUID) (bool, error)
+	GetGroupByInviteCode(ctx context.Context, inviteCode string) (*models.Group, error)
+	AddRole(ctx context.Context, role *models.Role) error
 }
 
 type MinioRepository interface {
