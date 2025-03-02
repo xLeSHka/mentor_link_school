@@ -12,7 +12,8 @@ CREATE TABLE users (
 CREATE TABLE groups (
     id UUID PRIMARY KEY,
     avatar_url VARCHAR DEFAULT NULL,
-    name VARCHAR NOT NULL
+    name VARCHAR NOT NULL,
+    invite_code VARCHAR
 );
 
 CREATE TABLE roles (

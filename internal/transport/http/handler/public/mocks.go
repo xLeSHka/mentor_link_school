@@ -7,6 +7,18 @@ import (
 )
 
 func (r *Route) mocks(c *gin.Context) {
+	owner := &models.User{
+		ID:        uuid.MustParse("18015fc-0398-453f-bc0a-31bcf02b3ec1"),
+		Name:      "owner 1",
+		AvatarURL: nil,
+		BIO:       nil,
+		Telegram:  "@owner",
+	}
+	ownerGroup := &models.Group{
+		ID:        uuid.MustParse("5ad3e7ac-38da-4b0b-9bde-aa5f2050ad35"),
+		AvatarURL: nil,
+		Name:      "owner group 1",
+	}
 	student := &models.User{
 		ID:        uuid.MustParse("17b015fc-0398-453f-bc0a-31bcf02b3ec1"),
 		Name:      "student 1",
@@ -15,7 +27,7 @@ func (r *Route) mocks(c *gin.Context) {
 		Telegram:  "@student",
 	}
 	group1 := &models.Group{
-		ID:        uuid.MustParse("5ad3e7ac-38da-4b0b-9bde-aa5f2050ad35"),
+		ID:        uuid.MustParse("17b015fc-0398-453f-bc0a-31bcf02b3ec2"),
 		AvatarURL: nil,
 		Name:      "group 1",
 	}
@@ -80,6 +92,14 @@ func (r *Route) mocks(c *gin.Context) {
 		MentorID: mentor1.ID,
 		GroupID:  group1.ID,
 		Goal:     "PRODANO Project",
+	})
+
+	r.DB.FirstOrCreate(owner)
+	r.DB.FirstOrCreate(ownerGroup)
+	r.DB.FirstOrCreate(&models.Role{
+		UserID:  owner.ID,
+		GroupID: ownerGroup.ID,
+		Role:    "owner",
 	})
 	c.JSON(200, gin.H{
 		"message": "PROOOOOOOOOOOOOOOOOD",
