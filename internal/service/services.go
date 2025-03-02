@@ -30,4 +30,5 @@ type UserService interface {
 	GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)
 	CreateRequest(ctx context.Context, request *models.HelpRequest) error
 	GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.Role, error)
+	CheckInvite(ctx context.Context, inviteCode string, userID uuid.UUID) (bool, error)
 }
