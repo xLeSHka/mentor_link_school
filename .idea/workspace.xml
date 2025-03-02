@@ -4,24 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/docs.go" beforeDir="false" afterPath="$PROJECT_DIR$/docs/docs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/swagger.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/swagger.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/swagger.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docs/swagger.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/acceptInvite.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/acceptInvite.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/createRequest.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/createRequest.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/users.go" afterDir="false" />
-    </list>
-    <list id="5616f49a-7ae4-4147-b258-d18510d8fa0f" name="Changes by LIME" comment="">
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/getStat.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/getStat.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/groups.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/groups.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/requests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/requests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/update.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/update.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/updateRole.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/updateRole.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/acceptInvite.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/acceptInvite.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/users.go" afterDir="false" />
-    </list>
+    <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="" />
+    <list id="5616f49a-7ae4-4147-b258-d18510d8fa0f" name="Changes by LIME" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,21 +21,6 @@
   <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.0.windows-amd64" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/internal/transport/http/handler/group/acceptInvite.go">
-      <ranges>
-        <range start1="0" end1="1" start2="0" end2="1" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-        <range start1="10" end1="10" start2="10" end2="16" changelist="5616f49a-7ae4-4147-b258-d18510d8fa0f" />
-        <range start1="17" end1="18" start2="23" end2="24" changelist="5616f49a-7ae4-4147-b258-d18510d8fa0f" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/internal/transport/http/handler/user/users.go">
-      <ranges>
-        <range start1="34" end1="35" start2="34" end2="35" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-        <range start1="42" end1="43" start2="42" end2="43" changelist="5616f49a-7ae4-4147-b258-d18510d8fa0f" />
-      </ranges>
-    </file>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5

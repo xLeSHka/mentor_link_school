@@ -15,13 +15,14 @@ func (h *Route) getGroups(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	var req reqGetRole
-	if err := h.validator.ShouldBindQuery(c, &req); err != nil {
+	role := c.Query("role")
+	if role == "" {
 		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
 		c.Abort()
 		return
 	}
-	groups, err := h.usersService.GetGroups(c.Request.Context(), personId, req.Role)
+
+	groups, err := h.usersService.GetGroups(c.Request.Context(), personId, role)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
