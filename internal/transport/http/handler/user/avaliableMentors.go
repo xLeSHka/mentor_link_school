@@ -2,10 +2,11 @@ package usersRoute
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
-	"net/http"
 )
 
 // @Summary Получение доступных всех

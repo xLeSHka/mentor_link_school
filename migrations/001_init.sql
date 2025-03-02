@@ -12,7 +12,8 @@ CREATE TABLE users (
 CREATE TABLE groups (
     id UUID PRIMARY KEY,
     avatar_url VARCHAR DEFAULT NULL,
-    name VARCHAR NOT NULL
+    name VARCHAR NOT NULL,
+    invite_code VARCHAR DEFAULT NULL
 );
 
 CREATE TABLE roles (
@@ -40,6 +41,9 @@ CREATE TABLE pairs (
     goal VARCHAR NOT NULL,
     PRIMARY KEY (user_id, mentor_id)
 );
+
+
+
 
 -- +goose Down
 -- SQL in section 'Down' is executed when this migration is rolled back
