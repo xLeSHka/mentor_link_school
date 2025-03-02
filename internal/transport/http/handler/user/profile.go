@@ -2,10 +2,13 @@ package usersRoute
 
 import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"net/http"
 
+	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
+
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 // @Summary Получить инфу о себе

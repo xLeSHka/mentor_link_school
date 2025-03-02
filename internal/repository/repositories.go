@@ -36,7 +36,7 @@ type UsersRepository interface {
 	CheckIsStudent(ctx context.Context, userID, groupID uuid.UUID) (bool, error)
 	GetGroupByInviteCode(ctx context.Context, inviteCode string) (*models.Group, error)
 	AddRole(ctx context.Context, role *models.Role) error
-	GetGroups(ctx context.Context, userID uuid.UUID, role string) ([]*models.Group, error)
+	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Role, error)
 }
 
 type MinioRepository interface {

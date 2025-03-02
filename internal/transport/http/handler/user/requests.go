@@ -16,9 +16,11 @@ type reqGetRole struct {
 	Role string `from:"role" binding:"required"`
 }
 type resGetProfile struct {
-	Name      string  `json:"name"`
-	AvatarUrl *string `json:"avatar_url,omitempty"`
-	BIO       *string `json:"bio,omitempty"`
+	Name      string             `json:"name"`
+	AvatarUrl *string            `json:"avatar_url,omitempty"`
+	BIO       *string            `json:"bio,omitempty"`
+	Groups    []*respGetGroupDto `json:"groups"`
+	Telegram  *string  `json:"telegram"`
 }
 
 type respGetMyMentor struct {

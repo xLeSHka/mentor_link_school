@@ -68,6 +68,7 @@ type Role struct {
 	Name    string    `gorm:"not null"`
 	Role    string    `gorm:"not null"`
 	User    *User     `gorm:"foreignKey:user_id"`
+	Group   *Group    `gorm:"foreignKey:group_id"`
 }
 
 func (_ *Role) TableName() string {
