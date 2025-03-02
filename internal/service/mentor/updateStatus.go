@@ -10,7 +10,14 @@ import (
 )
 
 func (s *MentorService) UpdateRequest(ctx context.Context, request *models.HelpRequest) error {
-	err := s.mentorRepository.UpdateRequest(ctx, request)
+	own, err := s.mentorRepository.CheckRequest(ctx, request.ID, request.MentorID)
+	if err != nil {
+		return httpError.New(http.StatusInternalServerError, err.Error())
+	}
+	if !own {
+		return httpError.New(http.StatusBadRequest, "Request not found")
+	}
+	err = s.mentorRepository.UpdateRequest(ctx, request)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return httpError.New(http.StatusNotFound, err.Error())

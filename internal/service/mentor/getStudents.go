@@ -11,6 +11,13 @@ import (
 )
 
 func (s *MentorService) GetStudents(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error) {
+	exist, err := s.usersRepository.CheckExists(ctx, userID)
+	if err != nil {
+		return nil, httpError.New(http.StatusInternalServerError, err.Error())
+	}
+	if !exist {
+		return nil, httpError.New(http.StatusNotFound, "User Not Found")
+	}
 	students, err := s.mentorRepository.GetStudents(ctx, userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

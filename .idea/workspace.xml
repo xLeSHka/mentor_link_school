@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/internal/repository/user/checkexists.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/repository/user/checkGroupExists.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/repository/repositories.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/repositories.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/user/createRequest.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/createRequest.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/user/getMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/getMentors.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/user/getMyMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/getMyMentors.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/user/getMyhelps.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/getMyhelps.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/user/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/user/uploadImage.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/uploadImage.go" afterDir="false" />
     </list>
     <list id="75b4f414-b5bc-4d2d-96a9-7b631f9c435a" name="Changes by ainur" comment="" />
     <list id="5616f49a-7ae4-4147-b258-d18510d8fa0f" name="Changes by LIME" comment="" />

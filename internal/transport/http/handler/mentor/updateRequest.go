@@ -29,9 +29,9 @@ func (h *Route) updateRequest(c *gin.Context) {
 		status = "reject"
 	}
 	request := &models.HelpRequest{
-		ID:     req.ID,
-		UserID: personID,
-		Status: status,
+		ID:       req.ID,
+		MentorID: personID,
+		Status:   status,
 	}
 	err := h.mentorService.UpdateRequest(c.Request.Context(), request)
 	if err != nil {

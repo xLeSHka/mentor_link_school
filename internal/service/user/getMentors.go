@@ -4,11 +4,20 @@ import (
 	"context"
 	"errors"
 	"github.com/google/uuid"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 	"gorm.io/gorm"
+	"net/http"
 )
 
 func (s *UsersService) GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.Role, error) {
+	exist, err := s.usersRepository.CheckExists(ctx, userID)
+	if err != nil {
+		return nil, httpError.New(http.StatusInternalServerError, err.Error())
+	}
+	if !exist {
+		return nil, httpError.New(http.StatusNotFound, "User Not Found")
+	}
 	mentors, err := s.usersRepository.GetMentors(ctx, userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

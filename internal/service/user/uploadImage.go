@@ -2,22 +2,21 @@ package userService
 
 import (
 	"context"
-	"errors"
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
-	"gorm.io/gorm"
 	"net/http"
 )
 
 func (s *UsersService) UploadImage(ctx context.Context, file *models.File, personID uuid.UUID) (string, *httpError.HTTPError) {
-	_, err := s.usersRepository.GetByID(ctx, personID)
+	exist, err := s.usersRepository.CheckExists(ctx, personID)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return "", httpError.New(http.StatusUnauthorized, "пользователь с таким id не найден")
-		}
 		return "", httpError.New(http.StatusInternalServerError, err.Error())
 	}
+	if !exist {
+		return "", httpError.New(http.StatusNotFound, "User Not Found")
+	}
+
 	url, err := s.minioRepository.UploadImage(file)
 	if err != nil {
 		return "", httpError.New(http.StatusInternalServerError, err.Error())

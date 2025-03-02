@@ -14,9 +14,10 @@ import (
 )
 
 type UsersService struct {
-	usersRepository repository.UsersRepository
-	minioRepository repository.MinioRepository
-	jwt             *jwt.JWT
+	usersRepository  repository.UsersRepository
+	minioRepository  repository.MinioRepository
+	mentorRepository repository.MentorRepository
+	jwt              *jwt.JWT
 	//rdb             *redis.Client
 	cryptoKey []byte
 }
@@ -26,7 +27,8 @@ type FxOpts struct {
 	UsersRepository repository.UsersRepository
 	JWT             *jwt.JWT
 	//RDB             *redis.Client
-	MinioRepository repository.MinioRepository
+	MentorRepository repository.MentorRepository
+	MinioRepository  repository.MinioRepository
 
 	Config config.Config
 }
@@ -36,9 +38,9 @@ func New(opts FxOpts) service.UserService {
 		usersRepository: opts.UsersRepository,
 		jwt:             opts.JWT,
 		//rdb:             opts.RDB,
-		minioRepository: opts.MinioRepository,
-
-		cryptoKey: []byte(opts.Config.CryptoKey),
+		minioRepository:  opts.MinioRepository,
+		mentorRepository: opts.MentorRepository,
+		cryptoKey:        []byte(opts.Config.CryptoKey),
 	}
 }
 

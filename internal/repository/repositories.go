@@ -18,6 +18,7 @@ type MentorRepository interface {
 	UpdateRequest(ctx context.Context, request *models.HelpRequest) error
 	GetStudents(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error)
 	CheckIsMentor(ctx context.Context, userID, groupID uuid.UUID) (bool, error)
+	CheckRequest(ctx context.Context, id, mentorID uuid.UUID) (bool, error)
 }
 type UsersRepository interface {
 	Login(ctx context.Context, person *models.User) (*models.User, error)
@@ -29,7 +30,8 @@ type UsersRepository interface {
 	GetMyRequests(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)
 	CreateRequest(ctx context.Context, request *models.HelpRequest) error
 	CheckExists(ctx context.Context, userID uuid.UUID) (bool, error)
-	CheckISStudent(ctx context.Context, userID, groupID uuid.UUID) (bool, error)
+	CheckIsStudent(ctx context.Context, userID, groupID uuid.UUID) (bool, error)
+	CheckGroupExists(ctx context.Context, groupID uuid.UUID) (bool, error)
 }
 
 type MinioRepository interface {
