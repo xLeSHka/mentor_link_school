@@ -8,44 +8,44 @@ import (
 
 func (r *Route) mocks(c *gin.Context) {
 	owner := &models.User{
-		ID:        uuid.MustParse("18015fc-0398-453f-bc0a-31bcf02b3ec1"),
+		ID:        uuid.New(),
 		Name:      "owner 1",
 		AvatarURL: nil,
 		BIO:       nil,
 		Telegram:  "@owner",
 	}
 	ownerGroup := &models.Group{
-		ID:        uuid.MustParse("5ad3e7ac-38da-4b0b-9bde-aa5f2050ad35"),
+		ID:        uuid.New(),
 		AvatarURL: nil,
 		Name:      "owner group 1",
 	}
 	student := &models.User{
-		ID:        uuid.MustParse("17b015fc-0398-453f-bc0a-31bcf02b3ec1"),
+		ID:        uuid.New(),
 		Name:      "student 1",
 		AvatarURL: nil,
 		BIO:       nil,
 		Telegram:  "@student",
 	}
 	group1 := &models.Group{
-		ID:        uuid.MustParse("17b015fc-0398-453f-bc0a-31bcf02b3ec2"),
+		ID:        uuid.New(),
 		AvatarURL: nil,
 		Name:      "group 1",
 	}
 	group2 := &models.Group{
-		ID:        uuid.MustParse("6ad3e7ac-38da-4b0b-9bde-aa5f2050ad35"),
+		ID:        uuid.New(),
 		AvatarURL: nil,
 		Name:      "group 2",
 	}
 	bio := "new bio"
 	mentor1 := &models.User{
-		ID:        uuid.MustParse("18015fc-0398-453f-bc0a-31bcf02b3ec1"),
+		ID:        uuid.New(),
 		Name:      "mentor 1",
 		AvatarURL: nil,
 		BIO:       &bio,
 		Telegram:  "@mentor",
 	}
 	helpReq1 := &models.HelpRequest{
-		ID:       uuid.MustParse("20015fc-4398-453f-bc0a-31bcf02b3ec1"),
+		ID:       uuid.New(),
 		UserID:   student.ID,
 		MentorID: mentor1.ID,
 		GroupID:  group2.ID,
@@ -54,7 +54,7 @@ func (r *Route) mocks(c *gin.Context) {
 		Status:   "pending",
 	}
 	helpReq2 := &models.HelpRequest{
-		ID:       uuid.MustParse("30015fc-4398-453f-bc0a-31bcf02b3ec1"),
+		ID:       uuid.New(),
 		UserID:   student.ID,
 		MentorID: mentor1.ID,
 		GroupID:  group1.ID,
