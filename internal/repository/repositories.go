@@ -23,6 +23,7 @@ type MentorRepository interface {
 	GetStudents(ctx context.Context, userID uuid.UUID) ([]*models.PairWithGIDs, error)
 	CheckIsMentor(ctx context.Context, userID, groupID uuid.UUID) (bool, error)
 	CheckRequest(ctx context.Context, id, mentorID uuid.UUID) (bool, error)
+	CreatePair(ctx context.Context, pair *models.Pair) error
 }
 type UsersRepository interface {
 	Login(ctx context.Context, person *models.User) (*models.User, error)
