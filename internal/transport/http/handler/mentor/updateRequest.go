@@ -32,7 +32,7 @@ func (h *Route) updateRequest(c *gin.Context) {
 	}
 	var req reqUpdateRequest
 	if err = h.validator.ShouldBindJSON(c, &req); err != nil {
-		httpError.New(http.StatusBadRequest, err.Error())
+		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
 		return
 	}
 	var status string
