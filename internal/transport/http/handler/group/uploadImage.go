@@ -117,7 +117,5 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 		InviteCode: group.InviteCode,
 	}
 	go ws.WriteMessage(mes)
-	c.JSON(http.StatusOK, gin.H{
-		"url": imageURL,
-	})
+	c.JSON(http.StatusOK, respUploadAvatarDto{Url: imageURL})
 }

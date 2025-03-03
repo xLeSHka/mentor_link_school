@@ -34,6 +34,10 @@ func mapMember(role *models.Role) *respGetMember {
 	}
 }
 
+type respUploadAvatarDto struct {
+	Url string `json:"url"`
+}
+
 type respStat struct {
 	StudentsCount        int64   `json:"students_count"`
 	MentorsCount         int64   `json:"mentors_count"`
