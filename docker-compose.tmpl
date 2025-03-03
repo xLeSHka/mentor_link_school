@@ -17,6 +17,7 @@ services:
   postgres:
     env_file:
       - .env
+    restart: unless-stopped
     image: postgres:latest
     container_name: postgres
     environment:
@@ -35,6 +36,7 @@ services:
       timeout: 5s
       retries: 5
   redis:
+    restart: unless-stopped
     env_file:
       - .env
     image: redis:latest
@@ -44,6 +46,7 @@ services:
     networks:
       - backend-network
   minio:
+      restart: unless-stopped
       container_name: minio_container
       image: minio/minio:latest
       env_file:
@@ -69,6 +72,7 @@ services:
       networks:
         - backend-network
   nginx:
+    restart: unless-stopped
     image: nginx:latest
     container_name: nginx_container
     ports:
