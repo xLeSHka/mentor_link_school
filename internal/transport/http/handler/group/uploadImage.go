@@ -20,6 +20,7 @@ import (
 // @Description Загрузка аватарки. Возвращает ссылку на аватарку, которая действует 7 дней
 // @Tags Groups
 // @Accept json
+// @Param image formData file true "Изображение для загрузки"
 // @Produce json
 // @Router /api/groups/{id}/uploadAvatar [post]
 // @Param id path string true "Group ID"
