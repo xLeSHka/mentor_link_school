@@ -15,7 +15,7 @@ func (s *MentorService) UpdateRequest(ctx context.Context, request *models.HelpR
 		return httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	if !own {
-		return httpError.New(http.StatusBadRequest, "Request not found")
+		return httpError.New(http.StatusForbidden, "Request not found")
 	}
 	err = s.mentorRepository.UpdateRequest(ctx, request)
 	if err != nil {

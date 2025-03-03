@@ -35,7 +35,7 @@ func (h *Route) availableMentors(c *gin.Context) {
 		if m.User.AvatarURL != nil {
 			avatarURL, err := h.minioRepository.GetImage(*m.User.AvatarURL)
 			if err != nil {
-				err.(*httpError.HTTPError).SendError(c)
+				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
 				c.Abort()
 				return
 			}

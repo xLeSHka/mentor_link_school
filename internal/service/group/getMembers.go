@@ -16,7 +16,7 @@ func (s *GroupsService) GetMembers(ctx context.Context, ownerID, groupId uuid.UU
 		return nil, httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	if !exist {
-		return nil, httpError.New(http.StatusNotFound, "Group not found")
+		return nil, httpError.New(http.StatusForbidden, "Specified Group not found")
 	}
 	members, err := s.groupRepository.GetMembers(ctx, groupId)
 	if err != nil {

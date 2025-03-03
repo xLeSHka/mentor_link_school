@@ -16,9 +16,10 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/user/profile [get]
-// @Success 200 {object} resGetProfile
-// @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
-func (h *Route) profile(c *gin.Context) {
+// @Success 200 {object} resGetInitData
+// @Failure 400 {object} httpError.HTTPError "Невалидный запрос"
+// @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
+func (h *Route) init(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {
 		httpError.New(http.StatusUnauthorized, "Bad id").SendError(c)
@@ -34,7 +35,7 @@ func (h *Route) profile(c *gin.Context) {
 	if user.AvatarURL != nil {
 		avatarURL, err := h.minioRepository.GetImage(*user.AvatarURL)
 		if err != nil {
-			err.(*httpError.HTTPError).SendError(c)
+			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
 			c.Abort()
 			return
 		}
@@ -51,7 +52,7 @@ func (h *Route) profile(c *gin.Context) {
 		if group.Group.AvatarURL != nil {
 			groupAvatarURL, err := h.minioRepository.GetImage(*group.Group.AvatarURL)
 			if err != nil {
-				err.(*httpError.HTTPError).SendError(c)
+				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
 				c.Abort()
 				return
 			}
@@ -59,7 +60,7 @@ func (h *Route) profile(c *gin.Context) {
 		}
 		resp = append(resp, mapGroup(group.Group, group.Role))
 	}
-	c.JSON(http.StatusOK, resGetProfile{
+	c.JSON(http.StatusOK, resGetInitData{
 		Name:      user.Name,
 		AvatarUrl: user.AvatarURL,
 		BIO:       user.BIO,

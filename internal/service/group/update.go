@@ -17,7 +17,7 @@ func (r *GroupsService) UpdateInviteCode(ctx context.Context, groupID uuid.UUID,
 		return "", httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	if !exists {
-		return "", httpError.New(http.StatusNotFound, "group does not exist")
+		return "", httpError.New(http.StatusForbidden, "group does not exist")
 	}
 	inviteCode, _ := generateInviteCode(10)
 

@@ -15,7 +15,7 @@ type respLoginDto struct {
 type reqGetRole struct {
 	Role string `from:"role" binding:"required"`
 }
-type resGetProfile struct {
+type resGetInitData struct {
 	Name      string             `json:"name"`
 	AvatarUrl *string            `json:"avatar_url,omitempty"`
 	BIO       *string            `json:"bio,omitempty"`
@@ -56,7 +56,21 @@ type reqCreateHelp struct {
 type respUploadAvatarDto struct {
 	Url string `json:"url"`
 }
+type respOtherProfile struct {
+	Telegram string  `json:"telegram"`
+	BIO      *string `json:"bio,omitempty"`
+}
+type reqEditUser struct {
+	Telegram *string `json:"telegram,omitempty"`
+	BIO      *string `json:"bio,omitempty"`
+}
 
+func mapOtherProfile(user *models.User) *respOtherProfile {
+	return &respOtherProfile{
+		Telegram: user.Telegram,
+		BIO:      user.BIO,
+	}
+}
 func mapMyMentor(mentor *models.PairWithGIDs) *respGetMyMentor {
 	return &respGetMyMentor{
 		MentorID:  mentor.Mentor.ID,

@@ -16,7 +16,7 @@ func (s *GroupsService) Create(ctx context.Context, group *models.Group, userID 
 	err := s.groupRepository.Create(ctx, group, userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
-			return httpError.New(http.StatusConflict, "Такой email уже зарегистрирован.")
+			return httpError.New(http.StatusConflict, "Такая организация уже зарегистрирована.")
 		}
 		return httpError.New(http.StatusInternalServerError, err.Error())
 	}

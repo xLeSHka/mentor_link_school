@@ -37,4 +37,5 @@ type UserService interface {
 	GetRequestByID(ctx context.Context, reqID uuid.UUID) (models.HelpRequest, error)
 	GetGroupByInviteCode(ctx context.Context, inviteCode string) (*models.Group, error)
 	GetGroupByID(ctx context.Context, ID uuid.UUID) (*models.Group, error)
+	Edit(ctx context.Context, userID uuid.UUID, updates map[string]any) error
 }

@@ -51,7 +51,8 @@ func (h *Route) createGroup(c *gin.Context) {
 	if user.AvatarURL != nil {
 		avatrUrl, err := h.minioRepository.GetImage(*user.AvatarURL)
 		if err != nil {
-			err.(*httpError.HTTPError).SendError(c)
+			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
+			c.Abort()
 			return
 		}
 		user.AvatarURL = &avatrUrl
@@ -64,7 +65,8 @@ func (h *Route) createGroup(c *gin.Context) {
 	if group.AvatarURL != nil {
 		avatrUrl, err := h.minioRepository.GetImage(*group.AvatarURL)
 		if err != nil {
-			err.(*httpError.HTTPError).SendError(c)
+			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
+			c.Abort()
 			return
 		}
 		group.AvatarURL = &avatrUrl

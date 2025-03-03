@@ -22,6 +22,7 @@ import (
 // @Router /api/user/uploadAvatar [post]
 // @Success 200 {object} respUploadAvatarDto
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
+// @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 func (h *Route) uploadAvatar(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {

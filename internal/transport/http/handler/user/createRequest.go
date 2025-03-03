@@ -58,7 +58,8 @@ func (h *Route) createRequest(c *gin.Context) {
 		if student.AvatarURL != nil {
 			avatarUrl, err := h.minioRepository.GetImage(*student.AvatarURL)
 			if err != nil {
-				err.(*httpError.HTTPError).SendError(c)
+				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
+				c.Abort()
 				return
 			}
 			student.AvatarURL = &avatarUrl
@@ -71,7 +72,8 @@ func (h *Route) createRequest(c *gin.Context) {
 		if mentor.AvatarURL != nil {
 			avatrUrl, err := h.minioRepository.GetImage(*mentor.AvatarURL)
 			if err != nil {
-				err.(*httpError.HTTPError).SendError(c)
+				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
+				c.Abort()
 				return
 			}
 			mentor.AvatarURL = &avatrUrl

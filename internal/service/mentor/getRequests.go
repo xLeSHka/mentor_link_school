@@ -16,7 +16,7 @@ func (s *MentorService) GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*mo
 		return nil, httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	if !exist {
-		return nil, httpError.New(http.StatusNotFound, "User Not Found")
+		return nil, httpError.New(http.StatusForbidden, "User Not Found")
 	}
 	helps, err := s.mentorRepository.GetMyHelpers(ctx, userID)
 	if err != nil {

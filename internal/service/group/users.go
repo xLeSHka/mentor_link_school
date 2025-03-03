@@ -14,7 +14,7 @@ func (s *GroupsService) UpdateRole(ctx context.Context, ownerID, groupID, userID
 		return httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	if !exists {
-		return httpError.New(http.StatusNotFound, "group does not exist")
+		return httpError.New(http.StatusForbidden, "specified group does not exist")
 	}
 	exist, err := s.userRepository.CheckExists(ctx, userID)
 	if err != nil {

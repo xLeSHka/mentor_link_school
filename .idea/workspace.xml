@@ -5,7 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/internal/service/user/edit.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/edit.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/profileOther.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/group/createGroup.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/group/createGroup.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/group/getMembers.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/group/getMembers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/group/stat.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/group/stat.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/group/update.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/group/update.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/group/uploadImage.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/group/uploadImage.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/group/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/group/users.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/mentor/getRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/mentor/getRequests.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/mentor/getStudents.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/mentor/getStudents.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/mentor/updateStatus.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/mentor/updateStatus.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/services.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/services.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/user/GetCommonGroups.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/GetCommonGroups.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/user/GetGroupByID.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/GetGroupByID.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/user/GetGroupByInviteCode.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/GetGroupByInviteCode.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/user/GetRequestByID.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/GetRequestByID.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/acceptInvite.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/acceptInvite.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/createGroup.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/createGroup.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/getMembers.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/getMembers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/update.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/update.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/updateRole.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/updateRole.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/uploadImage.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/uploadImage.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/students.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/mentor/students.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/updateRequest.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/mentor/updateRequest.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/avaliableMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/avaliableMentors.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/createRequest.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/createRequest.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/getRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/getRequests.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/getgroups.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/mentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/mentors.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/profile.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/init.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/requests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/requests.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/uploadImage.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/uploadImage.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/users.go" afterDir="false" />
     </list>
     <list id="5616f49a-7ae4-4147-b258-d18510d8fa0f" name="Changes by LIME" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -91,7 +125,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
         <entry key="aeae26b1-af47-4c36-8925-7922646f247e">

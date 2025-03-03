@@ -33,7 +33,7 @@ func (h *Route) students(c *gin.Context) {
 		if m.Student.AvatarURL != nil {
 			avatarURL, err := h.minioRepository.GetImage(*m.Student.AvatarURL)
 			if err != nil {
-				err.(*httpError.HTTPError).SendError(c)
+				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
 				c.Abort()
 				return
 			}

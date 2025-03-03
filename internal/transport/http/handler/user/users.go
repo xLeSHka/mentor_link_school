@@ -38,9 +38,9 @@ func UsersRoute(opts FxOpts) *Route {
 	opts.ApiRouter.UserPrivate.GET("/user/availableMentors", router.availableMentors)
 	opts.ApiRouter.UserPrivate.GET("/user/mentors", router.getMyMentors)
 
-	opts.ApiRouter.UserPrivate.GET("/user/profile", router.profile)
-	//opts.ApiRouter.UserPrivate.GET("/user/profile/:id", router.profileOther)
-	//opts.ApiRouter.UserPrivate.POST("/user/profile/redact")
+	opts.ApiRouter.UserPrivate.GET("/init", router.init)
+	opts.ApiRouter.UserPrivate.GET("/user/profile/:id", router.profileOther)
+	opts.ApiRouter.UserPrivate.POST("/user/profile/edit", router.edit)
 	opts.ApiRouter.UserPrivate.GET("/user/requests", router.getRequests)
 	opts.ApiRouter.UserPrivate.POST("/user/uploadAvatar", router.uploadAvatar)
 	//opts.ApiRouter.UserPrivate.POST("/user/invite", router.acceptedInvite)

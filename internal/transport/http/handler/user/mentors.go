@@ -14,6 +14,8 @@ import (
 // @Produce json
 // @Router /api/user/mentors [get]
 // @Success 200 {object} []respGetMyMentor
+// @Failure 400 {object} httpError.HTTPError "Невалидный запрос"
+// @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 func (h *Route) getMyMentors(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {
@@ -32,7 +34,7 @@ func (h *Route) getMyMentors(c *gin.Context) {
 		if m.Mentor.AvatarURL != nil {
 			avatarURL, err := h.minioRepository.GetImage(*m.Mentor.AvatarURL)
 			if err != nil {
-				err.(*httpError.HTTPError).SendError(c)
+				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
 				c.Abort()
 				return
 			}

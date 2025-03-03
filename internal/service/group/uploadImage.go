@@ -14,7 +14,7 @@ func (s *GroupsService) UploadImage(ctx context.Context, file *models.File, grou
 		return "", httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	if !exist {
-		return "", httpError.New(http.StatusNotFound, "User Not Found")
+		return "", httpError.New(http.StatusForbidden, "User Not Found")
 	}
 
 	url, err := s.minioRepository.UploadImage(file)
