@@ -80,7 +80,7 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	user, err := h.usersService.GetByID(c.Request.Context(), userID)
+	user, err := h.usersService.GetByID(c.Request.Context(), personId)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return

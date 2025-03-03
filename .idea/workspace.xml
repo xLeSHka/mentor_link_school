@@ -44,7 +44,7 @@
     "git-widget-placeholder": "master",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "C:/Projects/go/lotti/internal/transport/http/handler/group",
+    "last_opened_file_path": "C:/Projects/go/lotti/internal/repository/group",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
@@ -53,11 +53,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Projects\go\lotti\internal\repository\group" />
+      <recent name="C:\Projects\go\lotti\internal\service\group" />
       <recent name="C:\Projects\go\lotti\internal\transport\http\handler\group" />
       <recent name="C:\Projects\go\lotti\internal\repository\user" />
       <recent name="C:\Projects\go\lotti" />
-      <recent name="C:\Projects\go\lotti\internal\repository\mentor" />
-      <recent name="C:\Projects\go\lotti\internal\tests" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Projects\go\lotti\internal\transport\http\handler\websocket" />
