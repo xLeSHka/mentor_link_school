@@ -1,6 +1,7 @@
 version: '3.9'
 services:
   backend:
+    restart: always
     image: $IMAGE_NAME
     container_name: backend
     expose:
@@ -15,7 +16,7 @@ services:
   postgres:
     env_file:
       - .env
-    restart: unless-stopped
+    restart: always
     image: postgres:latest
     container_name: postgres
     environment:
