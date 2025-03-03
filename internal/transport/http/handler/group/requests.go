@@ -41,6 +41,10 @@ type respUploadAvatarDto struct {
 	Url string `json:"url"`
 }
 
+type respJoinGroup struct {
+	Status string `json:"status"`
+}
+
 type respStat struct {
 	StudentsCount        int64   `json:"students_count"`
 	MentorsCount         int64   `json:"mentors_count"`

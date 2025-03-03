@@ -3,10 +3,11 @@ package mentorService
 import (
 	"context"
 	"errors"
+	"net/http"
+
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 	"gorm.io/gorm"
-	"net/http"
 )
 
 func (s *MentorService) UpdateRequest(ctx context.Context, request *models.HelpRequest) error {
@@ -15,7 +16,7 @@ func (s *MentorService) UpdateRequest(ctx context.Context, request *models.HelpR
 		return httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	if !own {
-		return httpError.New(http.StatusForbidden, "Request not found")
+		return httpError.New(http.StatusNotFound, "Request not found")
 	}
 	err = s.mentorRepository.UpdateRequest(ctx, request)
 	if err != nil {

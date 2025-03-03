@@ -1,13 +1,14 @@
 package usersRoute
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
-	"net/http"
 )
 
 // @Summary Кинуть запрос ментору
@@ -16,11 +17,13 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/user/requests [post]
-// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <token>"
 // @Param body body reqCreateHelp true "body"
 // @Success 200
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
+// Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
+// Failure 409 {object} httpError.HTTPError "Запрос уже отправлен"
 func (h *Route) createRequest(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {

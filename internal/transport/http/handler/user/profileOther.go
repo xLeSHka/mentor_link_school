@@ -1,24 +1,26 @@
 package usersRoute
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
-	"net/http"
 )
 
-// @Summary получение чужого профиля
+// @Summary Получение чужого профиля
 // @Schemes
 // @Description
 // @Tags Users
 // @Accept json
 // @Produce json
 // @Router /api/user/profile/{id} [get]
-// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} respOtherProfile
 // @Failure 400 {object} httpError.HTTPError "Невалидный запрос"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
+// Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
 func (h *Route) profileOther(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {

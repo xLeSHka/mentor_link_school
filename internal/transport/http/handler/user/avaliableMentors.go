@@ -2,23 +2,25 @@ package usersRoute
 
 import (
 	"fmt"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"net/http"
+
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 
 	"github.com/gin-gonic/gin"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 )
 
-// @Summary Получение доступных всех
+// @Summary Получение доступных менторов
 // @Schemes
 // @Tags Users
 // @Accept json
 // @Produce json
 // @Router /api/user/availableMentors [get]
-// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} []respGetMentor
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
+// Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
 func (h *Route) availableMentors(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {

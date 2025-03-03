@@ -1,21 +1,22 @@
 package groupsRoute
 
 import (
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"net/http"
+
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 
 	"github.com/gin-gonic/gin"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 )
 
-// @Summary Обновить роль юзера
+// @Summary Присоединиться к группе по коду
 // @Tags Groups
 // @Accept json
 // @Produce json
 // @Router /groups/join/{code} [post]
-// @Security ApiKeyAuth
-// @Success 200
+// @Param Authorization header string true "Bearer <token>"
+// @Success 200 {object} respJoinGrou
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 func (h *Route) acceptedInvite(c *gin.Context) {

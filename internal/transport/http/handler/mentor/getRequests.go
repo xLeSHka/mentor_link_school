@@ -1,8 +1,9 @@
 package mentorsRoute
 
 import (
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"net/http"
+
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 
 	"github.com/gin-gonic/gin"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
@@ -14,10 +15,11 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/mentors/requests [get]
-// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} []respGetRequest
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
+// @Failure 404 {object} httpError.HTTPError "Нет такого запроса"
 func (h *Route) getRequests(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {
