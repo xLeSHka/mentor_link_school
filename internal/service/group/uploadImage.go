@@ -2,10 +2,12 @@ package groupService
 
 import (
 	"context"
+	"net/http"
+	"strings"
+
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
-	"net/http"
 )
 
 func (s *GroupsService) UploadImage(ctx context.Context, file *models.File, groupID, personID uuid.UUID) (string, *httpError.HTTPError) {
@@ -21,6 +23,7 @@ func (s *GroupsService) UploadImage(ctx context.Context, file *models.File, grou
 	if err != nil {
 		return "", httpError.New(http.StatusInternalServerError, err.Error())
 	}
+	url = strings.Split(url, "?X-Amz-Algorithm=AWS4-HMAC-SHA256")[0] + "?X-Amz-Algorithm=AWS4-HMAC-SHA256"
 	_, err = s.groupRepository.Edit(ctx, groupID, map[string]any{"avatar_url": file.Filename})
 	if err != nil {
 		return "", httpError.New(http.StatusInternalServerError, err.Error())
