@@ -8,20 +8,20 @@ import (
 	"net/http"
 )
 
-func (s *GroupsService) UploadImage(ctx context.Context, file *models.File, groupdID, personID uuid.UUID) (string, *httpError.HTTPError) {
-	exist, err := s.userRepository.CheckExists(ctx, personID)
+func (s *GroupsService) UploadImage(ctx context.Context, file *models.File, groupID, personID uuid.UUID) (string, *httpError.HTTPError) {
+	exists, err := s.groupRepository.CheckGroupExists(ctx, personID, groupID)
 	if err != nil {
 		return "", httpError.New(http.StatusInternalServerError, err.Error())
 	}
-	if !exist {
-		return "", httpError.New(http.StatusForbidden, "User Not Found")
+	if !exists {
+		return "", httpError.New(http.StatusForbidden, "group does not exist")
 	}
 
 	url, err := s.minioRepository.UploadImage(file)
 	if err != nil {
 		return "", httpError.New(http.StatusInternalServerError, err.Error())
 	}
-	_, err = s.groupRepository.Edit(ctx, groupdID, map[string]any{"avatar_url": file.Filename})
+	_, err = s.groupRepository.Edit(ctx, groupID, map[string]any{"avatar_url": file.Filename})
 	if err != nil {
 		return "", httpError.New(http.StatusInternalServerError, err.Error())
 	}

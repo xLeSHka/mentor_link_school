@@ -11,8 +11,8 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 )
 
-func (r *GroupsService) UpdateInviteCode(ctx context.Context, groupID uuid.UUID, ownerID uuid.UUID) (string, error) {
-	exists, err := r.groupRepository.CheckGroupExists(ctx, ownerID, groupID)
+func (s *GroupsService) UpdateInviteCode(ctx context.Context, groupID uuid.UUID, ownerID uuid.UUID) (string, error) {
+	exists, err := s.groupRepository.CheckGroupExists(ctx, ownerID, groupID)
 	if err != nil {
 		return "", httpError.New(http.StatusInternalServerError, err.Error())
 	}
@@ -21,7 +21,7 @@ func (r *GroupsService) UpdateInviteCode(ctx context.Context, groupID uuid.UUID,
 	}
 	inviteCode, _ := generateInviteCode(10)
 
-	err = r.groupRepository.UpdateInviteCode(ctx, groupID, inviteCode)
+	err = s.groupRepository.UpdateInviteCode(ctx, groupID, inviteCode)
 	if err != nil {
 		return "", httpError.New(http.StatusInternalServerError, err.Error())
 	}
