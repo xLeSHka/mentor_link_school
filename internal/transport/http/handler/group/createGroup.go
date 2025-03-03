@@ -19,7 +19,7 @@ import (
 // @Produce json
 // @Param Authorization header string true "Bearer <token>"
 // @Param body body reqCreateGroupDto true "body"
-// @Success 200 {object} map[string]interface{}
+// @Success 200 {object} respCreateGroup
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // @Router /api/groups/create [post]
