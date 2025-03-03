@@ -21,7 +21,7 @@ func (s *UsersService) GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*mod
 	requests, err := s.usersRepository.GetMyRequests(ctx, userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return []*models.HelpRequest{}, nil
+			return []*models.HelpRequestWithGIDs{}, nil
 		}
 		return nil, httpError.New(http.StatusInternalServerError, err.Error())
 	}

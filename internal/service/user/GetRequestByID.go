@@ -7,5 +7,5 @@ import (
 )
 
 func (r *UsersService) GetRequestByID(ctx context.Context, reqID uuid.UUID) (models.HelpRequest, error) {
-	return r.repo.GetRequestByID(ctx, reqID)
+	return r.usersRepository.GetRequestByID(ctx, reqID)
 }

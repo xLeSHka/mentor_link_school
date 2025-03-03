@@ -21,7 +21,7 @@ func (s *MentorService) GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*mo
 	helps, err := s.mentorRepository.GetMyHelpers(ctx, userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return []*models.HelpRequest{}, nil
+			return []*models.HelpRequestWithGIDs{}, nil
 		}
 		return nil, httpError.New(http.StatusInternalServerError, err.Error())
 	}

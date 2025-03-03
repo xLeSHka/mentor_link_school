@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="" />
+    <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/internal/repository/group/edit.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/group/edit.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/group/uploadImage.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/group/uploadImage.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/mentor/getRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/mentor/getRequests.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/mentor/getStudents.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/mentor/getStudents.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/service/user/GetRequestByID.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/GetRequestByID.go" afterDir="false" />
+    </list>
     <list id="5616f49a-7ae4-4147-b258-d18510d8fa0f" name="Changes by LIME" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

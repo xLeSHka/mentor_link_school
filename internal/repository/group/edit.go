@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-func (r *GroupRepository) EditUser(ctx context.Context, groupID uuid.UUID, updates map[string]any) (*models.Group, error) {
+func (r *GroupRepository) Edit(ctx context.Context, groupID uuid.UUID, updates map[string]any) (*models.Group, error) {
 	group := models.Group{}
 	err := r.DB.Model(&group).WithContext(ctx).Clauses(clause.Returning{}).Where("id = ?", groupID).Updates(updates).Error
 	return &group, err

@@ -21,7 +21,7 @@ func (s *GroupsService) UploadImage(ctx context.Context, file *models.File, grou
 	if err != nil {
 		return "", httpError.New(http.StatusInternalServerError, err.Error())
 	}
-	_, err = s.groupRepository.Edit(ctx, groupdID, map[string]any{"avatar_url": file.Filename})
+	err = s.groupRepository.Edit(ctx, groupdID, map[string]any{"avatar_url": file.Filename})
 	if err != nil {
 		return "", httpError.New(http.StatusInternalServerError, err.Error())
 	}
