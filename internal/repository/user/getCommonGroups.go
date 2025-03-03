@@ -2,19 +2,12 @@ package repositoryUser
 
 import (
 	"github.com/google/uuid"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 )
 
 func (r *UsersRepository) GetCommonGroups(userID, mentorID uuid.UUID) ([]uuid.UUID, error) {
-	var pairs []models.Pair
-	err := r.DB.Model(&models.Pair{}).
-		Where("user_id = ? AND mentor_id = ?", userID, mentorID).
-		Find(&pairs).Error
-
-	var ids []uuid.UUID
-	for _, pair := range pairs {
-		ids = append(ids, pair.GroupID)
-	}
-
-	return ids, err
+	var groupIDs []uuid.UUID
+	err := r.DB.Table("roles").Select("group_id").Where("user_id = ?", userID).Find(&groupIDs).Error
+	var intersection []uuid.UUID
+	err = r.DB.Table("roles").Select("group_id").Where("role = 'mentor' OR role = 'student-mentor' AND group_id IN (?)", groupIDs).Find(&intersection).Error
+	return intersection, err
 }

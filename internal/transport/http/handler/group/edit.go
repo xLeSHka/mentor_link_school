@@ -11,7 +11,7 @@ import (
 
 // @Summary Редактирование организации
 // @Schemes
-// @Tags Users
+// @Tags Groups
 // @Accept json
 // @Produce json
 // @Router /group/{id}/edit [put]

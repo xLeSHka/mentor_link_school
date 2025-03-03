@@ -9,12 +9,12 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 )
 
-// @Summary Список участников группы
+// @Summary Список участников организации
 // @Schemes
 // @Tags Groups
 // @Accept json
 // @Produce json
-// @Router /api/groups/{groupID}/members [post]
+// @Router /api/groups/{groupID}/members [get]
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} []resGetMember
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"

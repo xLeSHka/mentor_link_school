@@ -10,7 +10,7 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 )
 
-// @Summary Присоединиться к группе по коду
+// @Summary Присоединиться к организации по коду
 // @Tags Groups
 // @Accept json
 // @Produce json

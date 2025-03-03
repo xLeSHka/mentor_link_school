@@ -316,3 +316,8 @@ type respOtherProfile struct {
 	Telegram string  `json:"telegram"`
 	BIO      *string `json:"bio,omitempty"`
 }
+type reqEditUser struct {
+	Name     string `json:"name" binding:"required"`
+	Telegram string `json:"telegram,required"`
+	BIO      string `json:"bio,required"`
+}
