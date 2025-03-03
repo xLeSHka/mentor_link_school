@@ -2,15 +2,14 @@ package ws
 
 import (
 	"encoding/json"
-	"log"
-	"net/http"
-	"time"
-
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
+	"log"
+	"net/http"
+	"time"
 )
 
 var upgrader = websocket.Upgrader{
@@ -75,23 +74,24 @@ func WsHandler(c *gin.Context) {
 	log.Println("Client connected")
 	// register client
 	clients[personID] = ws
+	go func() {
+		ticker := time.NewTicker(30 * time.Second)
+		defer ticker.Stop()
+		for range ticker.C {
+			err := ws.WriteMessage(websocket.PingMessage, []byte("hello"))
+			if err != nil {
+				log.Println(err)
+				ws.Close()
+				delete(clients, personID)
+				return
+			}
+		}
+
+	}()
 }
 
 func Echo() {
-	go func() {
-		ticker := time.NewTicker(45 * time.Second)
-		for {
-			<-ticker.C
-			for id, client := range clients {
-				err := client.WriteMessage(websocket.PingMessage, []byte("hello"))
-				if err != nil {
-					log.Println(err)
-					client.Close()
-					delete(clients, id)
-				}
-			}
-		}
-	}()
+
 	for {
 		val := <-broadcast
 		jsonData, err := json.Marshal(val)

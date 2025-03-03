@@ -64,6 +64,7 @@ func (h *Route) init(c *gin.Context) {
 		Name:      user.Name,
 		AvatarUrl: user.AvatarURL,
 		BIO:       user.BIO,
+		Telegram:  &user.Telegram,
 		Groups:    resp,
 	})
 }
