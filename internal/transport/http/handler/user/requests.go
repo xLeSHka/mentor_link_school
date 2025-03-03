@@ -47,8 +47,8 @@ type respGetHelp struct {
 	AvatarUrl  *string   `json:"avatar_url,omitempty"`
 	Goal       string    `json:"goal"`
 	Status     string    `json:"status"`
-	Telegram   string    `json:"telegram"`
-	BIO        *string   `json:"bio,omitempty"`
+	Telegram   string    `json:"mentor_telegram"`
+	BIO        *string   `json:"mentor_bio,omitempty"`
 }
 type Pair struct {
 	MentorID uuid.UUID `json:"mentor_id"`

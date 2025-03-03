@@ -25,8 +25,8 @@ type respGetRequest struct {
 	Name      string    `json:"name"`
 	Goal      string    `json:"goal"`
 	Status    string    `json:"status"`
-	Telegram  string    `json:"telegram"`
-	BIO       *string   `json:"bio,omitempty"`
+	Telegram  string    `json:"student_telegram"`
+	BIO       *string   `json:"student_bio,omitempty"`
 }
 
 func mapMyStudent(user *models.PairWithGIDs) *respGetMyStudent {
