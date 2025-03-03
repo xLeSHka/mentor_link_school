@@ -5,6 +5,9 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 )
 
+type reqEditGroup struct {
+	Name
+}
 type reqGetMentorDto struct {
 	GroupEmail string `json:"group_email" binding:"required,min=8,max=120,email"`
 }

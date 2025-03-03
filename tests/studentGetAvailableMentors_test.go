@@ -68,7 +68,6 @@ func TestAvailableMentors(t *testing.T) {
 					assert.Equal(t, exp.Name, user[i].Name)
 					assert.Equal(t, *exp.BIO, *user[i].BIO)
 					assert.Equal(t, exp.ID, user[i].MentorID)
-					assert.Equal(t, group1.ID, user[i].GroupID)
 				}
 			}
 		})

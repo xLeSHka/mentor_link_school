@@ -21,7 +21,7 @@
 - Использует фреймворк gin для работы с HTTP и gorilla/mux для работы с Websocket для реалтайм обновления данных
 - Имеет документацию swagger для всех доступных методов
 - Управляет бизнес-логикой и доступом к данным
-  - Использует библиотеку GORM для работы с базой данных и S3 хранилищем
+- Использует библиотеку GORM для работы с базой данных и S3 хранилищем
 
 #### 3. СУБД PostgreSQL
 - Хранит все структурированные данные приложения
@@ -48,9 +48,9 @@
 Документация по взаимодействию с REST API сервера представлена в формате swagger и доступна по следующему адресу: [https://prod-team-14-mkg8u20m.final.prodcontest.ru/api/docs/index.html](https://prod-team-14-mkg8u20m.final.prodcontest.ru/api/docs/index.html)  
 Актуальность документации достигается благодаря автогенерации документации при запуске CI
 Тестовые данные:
-1. Студент: ``
-2. Ментор: ``
-3. Владелец: ``
+1. Студент: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM3NTQsImlhdCI6MTc0MTAwODk1NDA4NzczMiwiaWQiOiIwOGVkZTVhZi01NDk2LTRmMjktYmVlYS04ODMwYjlkZDU0NWYifQ.4fnXW5oRXu8wE2rAxN_K8ZXFNJ2UpKH3QyXW_aFl4No`
+2. Ментор: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM4NzEsImlhdCI6MTc0MTAwOTA3MTIyNjAxOSwiaWQiOiI5OWZiNDljNS0wMThjLTQ0MjgtYTdmMy02MGEzY2NjN2Y0MDcifQ.BxGoo1Yql6ffUccjeCHsrXVLuuYRDwTKxabo9iZFSQg`
+3. Владелец: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM5NjAsImlhdCI6MTc0MTAwOTE2MDY0Mjk3MCwiaWQiOiJiZjhmYTQ3NS0zMTVhLTRjYzAtYWVmNi1jN2ZiMTc1MjUzYjYifQ.1GAtbIgmKzIEiCmLLPYmsOOUE5v_KWDNR0PVQQ6UcU0`
 
 ## Структура проекта
 
@@ -128,22 +128,33 @@ lotti/
    - Создают запросы на помощь (HelpRequest)
    - Выступают наставниками или студентами в парах (Pair)
 
-2. **Группы (Group)**
+2. **Организации (Group)**
    - Содержат множество участников через таблицу Role
    - Имеют запросы на помощь
    - Создают уникальный код приглашения
 
 3. **Система ролей**
    - Реализована через таблицу Role
-   - Связывает пользователей с группами
+   - Связывает пользователей с организациями
    - Определяет права доступа
 
 4. **Запросы на помощь (HelpRequest)**
-   - Связывают студента, наставника и группу
+   - Связывают студента, наставника и организацию
    - Имеют статус и цель
    - Преобразуются в пары
 
 5. **Пары наставник-студент (Pair)**
    - Создаются из принятых запросов на помощь
-   - Привязаны к группе
+   - Привязаны к организации
    - Имеют определенную цель взаимодействия
+
+## Тесты
+Если у вас есть `Taskfile` вы можете ввести `task run_tests` в терминале.
+Иначе можно просто ввести последовательно 3 команды
+```bash
+    docker-compose -f docker-compose.test.yml up -d
+    go test  ./tests/... -timeout 120s -v -coverpkg=./internal/transport,./internal/service/...,./internal/repository/...,./internal/pkg/...,./internal/connections/...
+    docker-compose -f docker-compose.test.yml down -v
+```
+
+После прохождения тестов будет выведен процент покрытия кода тестами.
