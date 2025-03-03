@@ -1,7 +1,7 @@
 include:
-  - "/jobs/build.yaml"
-  - "/jobs/docker.yaml"
-  - "/jobs/rules.yaml"
+  - "/deploy/jobs/build.yaml"
+  - "/deploy/jobs/docker.yaml"
+  - "/deploy/jobs/rules.yaml"
 
 .global-variables:
   variables:
