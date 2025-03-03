@@ -16,7 +16,7 @@ import (
 // @Produce json
 // @Router /groups/join/{code} [post]
 // @Param Authorization header string true "Bearer <token>"
-// @Success 200 {object} respJoinGrou
+// @Success 200 {object} respJoinGroup
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 func (h *Route) acceptedInvite(c *gin.Context) {
