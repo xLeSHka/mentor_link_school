@@ -33,7 +33,7 @@ func (h *Route) createRequest(c *gin.Context) {
 	}
 	var reqData reqCreateHelp
 	if err := h.validator.ShouldBindJSON(c, &reqData); err != nil {
-		httpError.New(http.StatusBadRequest, err.Error())
+		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
 		return
 	}
 	user, err := h.usersService.GetByID(c.Request.Context(), personId)

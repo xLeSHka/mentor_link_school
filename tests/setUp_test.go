@@ -152,6 +152,9 @@ func setUp() (func(), chan os.Signal, error) {
 	profile2JWT, err = jwt.CreateToken(jwtlib.MapClaims{
 		"id": profile2.ID,
 	}, time.Now().Add(time.Hour*24*7))
+	profile3JWT, err = jwt.CreateToken(jwtlib.MapClaims{
+		"id": profile3.ID,
+	}, time.Now().Add(time.Hour*24*7))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -203,12 +206,19 @@ var profile1 models.User = models.User{
 	BIO:      &bio,
 	Telegram: "@profile1",
 }
+var profile3 models.User = models.User{
+	ID:       uuid.New(),
+	Name:     "Profile3",
+	BIO:      &bio,
+	Telegram: "@profile3",
+}
 var profile2 models.User = models.User{
 	ID:       uuid.New(),
 	Name:     "Profile2",
 	BIO:      &bio,
 	Telegram: "@profile2",
 }
+
 var group1 models.Group = models.Group{
 	ID:   uuid.New(),
 	Name: "Group1",
@@ -222,6 +232,12 @@ var roleMentor models.Role = models.Role{
 	UserID:  profile2.ID,
 	GroupID: group1.ID,
 	Role:    "mentor",
+}
+
+var roleOwner models.Role = models.Role{
+	UserID:  profile3.ID,
+	GroupID: group1.ID,
+	Role:    "owner",
 }
 var pending models.HelpRequest = models.HelpRequest{
 	ID:       uuid.New(),
@@ -255,6 +271,14 @@ var pair models.Pair = models.Pair{
 	GroupID:  group1.ID,
 	MentorID: profile2.ID,
 	Goal:     "Some goal",
+}
+var stats models.GroupStat = models.GroupStat{
+	StudentsCount:        1,
+	MentorsCount:         1,
+	HelpRequestCount:     1,
+	AcceptedRequestCount: 1,
+	RejectedRequestCount: 0,
+	Conversion:           100,
 }
 
 type resGetProfile struct {
@@ -320,4 +344,13 @@ type reqEditUser struct {
 	Name     string `json:"name" binding:"required"`
 	Telegram string `json:"telegram,required"`
 	BIO      string `json:"bio,required"`
+}
+
+type respStat struct {
+	StudentsCount        int64   `json:"students_count"`
+	MentorsCount         int64   `json:"mentors_count"`
+	HelpRequestCount     int64   `json:"help_request_count"`
+	AcceptedRequestCount int64   `json:"accepted_request_count"`
+	RejectedRequestCount int64   `json:"rejected_request_count"`
+	Conversion           float64 `json:"conversion"`
 }

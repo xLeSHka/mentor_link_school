@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestEditUser(t *testing.T) {
+func TestCreateGroup(t *testing.T) {
 	fn, quit, err := setUp()
 	assert.Nil(t, err)
 	defer func() {
@@ -19,37 +19,32 @@ func TestEditUser(t *testing.T) {
 		fn()
 	}()
 	type Test struct {
-		Req          reqEditUser
+		Name         Name
 		jwt          string
 		name         string
 		expectedCode int
 	}
-	var r = reqEditUser{
-		Name:     "New profile 1",
-		BIO:      "New bio",
-		Telegram: "new telegram",
-	}
 	tests := []Test{
 		{
-			Req:          r,
+			Name:         Name{"Group1"},
 			jwt:          profile1JWT,
-			name:         "get profile 1",
+			name:         "create user",
 			expectedCode: http.StatusOK,
 		},
 		{
-			jwt:          unknownJWT,
-			name:         "bad request",
-			expectedCode: http.StatusBadRequest,
+			Name:         Name{"Group2"},
+			jwt:          "1",
+			name:         "empty jwt",
+			expectedCode: http.StatusUnauthorized,
 		},
 	}
 	db.Create(&profile1)
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			jsonData, _ := json.Marshal(test.Req)
-			assert.Nil(t, err)
-			url := "/api/user/profile/edit"
-			req, _ := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(jsonData)) // bytes.NewBuffer(jsonData)
-			req.Header.Set("Authorization", "Bearer "+test.jwt)
+			jsonData, _ := json.Marshal(test.Name)
+			url := "/api/groups/create"
+			req, _ := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(jsonData))
+			req.Header.Set("Authorization", "Bearer "+test.jwt) // bytes.NewBuffer(jsonData)
 			req.Header.Set("Content-Type", "application/json")
 
 			w := httptest.NewRecorder()
@@ -60,12 +55,10 @@ func TestEditUser(t *testing.T) {
 			}()
 			assert.Equal(t, test.expectedCode, w.Code)
 			if test.expectedCode == http.StatusOK {
-				var resp models.User
-				err = db.Model(&models.User{}).Where("id = ?", profile1.ID).First(&resp).Error
+				var group models.Group
+				err := db.Model(&models.Group{}).First(&group, test.Name).Error
 				assert.Nil(t, err)
-				assert.Equal(t, r.Name, resp.Name)
-				assert.Equal(t, r.BIO, *resp.BIO)
-				assert.Equal(t, r.Telegram, resp.Telegram)
+				assert.Equal(t, test.Name.Name, group.Name)
 			}
 		})
 	}

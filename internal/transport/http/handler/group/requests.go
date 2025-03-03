@@ -48,7 +48,6 @@ type respJoinGroup struct {
 type respStat struct {
 	StudentsCount        int64   `json:"students_count"`
 	MentorsCount         int64   `json:"mentors_count"`
-	TotalCount           int64   `json:"total_count"`
 	HelpRequestCount     int64   `json:"help_request_count"`
 	AcceptedRequestCount int64   `json:"accepted_request_count"`
 	RejectedRequestCount int64   `json:"rejected_request_count"`

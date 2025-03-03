@@ -50,7 +50,6 @@ func (h *Route) getStat(c *gin.Context) {
 	c.JSON(http.StatusOK, &respStat{
 		StudentsCount:        stat.StudentsCount,
 		MentorsCount:         stat.MentorsCount,
-		TotalCount:           stat.TotalCount,
 		HelpRequestCount:     stat.HelpRequestCount,
 		AcceptedRequestCount: stat.AcceptedRequestCount,
 		RejectedRequestCount: stat.RejectedRequestCount,

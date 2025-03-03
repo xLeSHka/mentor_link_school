@@ -13,7 +13,6 @@ import (
 type GroupStat struct {
 	StudentsCount        int64
 	MentorsCount         int64
-	TotalCount           int64
 	HelpRequestCount     int64
 	AcceptedRequestCount int64
 	RejectedRequestCount int64
