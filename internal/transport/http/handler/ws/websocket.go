@@ -31,16 +31,20 @@ type User struct {
 	BIO      *string `json:"bio,omitempty"`
 }
 type Request struct {
-	ID          uuid.UUID   `json:"id"`
-	StudentID   uuid.UUID   `json:"student_id"`
-	MentorID    uuid.UUID   `json:"mentor_id"`
-	MentorName  string      `json:"mentor_name"`
-	StudentName string      `json:"student_name"`
-	MentorUrl   *string     `json:"mentor_url,omitempty"`
-	StudentUrl  *string     `json:"student_url,omitempty"`
-	GroupIDs    []uuid.UUID `json:"group_ids"`
-	Goal        string      `json:"goal"`
-	Status      string      `json:"status"`
+	ID              uuid.UUID   `json:"id"`
+	StudentID       uuid.UUID   `json:"student_id"`
+	MentorID        uuid.UUID   `json:"mentor_id"`
+	MentorName      string      `json:"mentor_name"`
+	StudentName     string      `json:"student_name"`
+	MentorUrl       *string     `json:"mentor_url,omitempty"`
+	StudentUrl      *string     `json:"student_url,omitempty"`
+	StudentBio      *string     `json:"student_bio,omitempty"`
+	MentorBio       *string     `json:"mentor_bio,omitempty"`
+	StudentTelegram string      `json:"student_telegram"`
+	MentorTelegram  string      `json:"mentor_telegram"`
+	GroupIDs        []uuid.UUID `json:"group_ids"`
+	Goal            string      `json:"goal"`
+	Status          string      `json:"status"`
 }
 type Message struct {
 	Type    string    `json:"type"`

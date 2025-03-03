@@ -72,12 +72,12 @@ func mapGroup(group *models.Group) *respGetGroupDto {
 	}
 }
 
-type resGetMember struct {
-	Name      string   `json:"name"`
-	AvatarUrl *string  `json:"avatar_url,omitempty"`
-	BIO       *string  `json:"bio,omitempty"`
-	Roles     []string `json:"roles"`
-}
+//type resGetMember struct {
+//	Name      string  `json:"name"`
+//	AvatarUrl *string `json:"avatar_url,omitempty"`
+//	BIO       *string `json:"bio,omitempty"`
+//	Role      string  `json:"role"`
+//}
 
 type reqUpdateRoleDto struct {
 	MemberID uuid.UUID `json:"member_id" binding:"required"`

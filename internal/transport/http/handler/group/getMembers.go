@@ -17,7 +17,7 @@ import (
 // @Param id path string true "Group ID"
 // @Router /api/groups/{id}/members [get]
 // @Param Authorization header string true "Bearer <token>"
-// @Success 200 {object} []resGetMember
+// @Success 200 {object} []respGetMember
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 403 {object} httpError.HTTPError "Ошибка доступа"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"

@@ -280,7 +280,16 @@ var stats models.GroupStat = models.GroupStat{
 	RejectedRequestCount: 0,
 	Conversion:           100,
 }
+var inviteCode = "uhfdcvOIdF"
+var group2 models.Group = models.Group{
+	ID:         uuid.New(),
+	Name:       "Group2",
+	InviteCode: &inviteCode,
+}
 
+type reqEditGroup struct {
+	Name string `json:"name" binding:"required"`
+}
 type resGetProfile struct {
 	Name      string  `json:"name"`
 	AvatarUrl *string `json:"avatar_url,omitempty"`
@@ -353,4 +362,14 @@ type respStat struct {
 	AcceptedRequestCount int64   `json:"accepted_request_count"`
 	RejectedRequestCount int64   `json:"rejected_request_count"`
 	Conversion           float64 `json:"conversion"`
+}
+type respGetMember struct {
+	UserID    uuid.UUID `json:"user_id" binding:"required"`
+	AvatarUrl *string   `json:"avatar_url,omitempty"`
+	Name      string    `json:"name" binding:"required"`
+	Role      string    `uri:"role" binding:"required"`
+}
+type reqUpdateRole struct {
+	Role string `json:"role" binding:"required"`
+	ID   string `json:"id" binding:"required,uuid"`
 }
