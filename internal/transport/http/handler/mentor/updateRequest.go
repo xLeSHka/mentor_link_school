@@ -19,6 +19,7 @@ import (
 // @Router /api/mentors/requests [post]
 // @Param Authorization header string true "Bearer <token>"
 // @Param body body reqUpdateRequest true "body"
+// @Success 200
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 func (h *Route) updateRequest(c *gin.Context) {

@@ -15,10 +15,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Summary загрузка аватарки
+// @Summary Загрузка аватарки
 // @Schemes
 // @Description Загрузка аватарки. Возвращает ссылку на аватарку, которая действует 7 дней
-// @Tags Users
+// @Tags Groups
 // @Accept json
 // @Produce json
 // @Router /api/groups/{id}/uploadAvatar [post]
