@@ -20,6 +20,7 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
+// @Param image formData file true "Изображение для загрузки"
 // @Router /api/user/uploadAvatar [post]
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} respUploadAvatarDto
