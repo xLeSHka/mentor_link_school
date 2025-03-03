@@ -46,7 +46,7 @@ func (h *Route) edit(c *gin.Context) {
 	}
 	toUpdate := make(map[string]any)
 	toUpdate["name"] = reqData.Name
-	err = h.usersService.Edit(c.Request.Context(), personID, groupID, toUpdate)
+	err = h.groupService.Edit(c.Request.Context(), personID, groupID, toUpdate)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
@@ -54,26 +54,45 @@ func (h *Route) edit(c *gin.Context) {
 	user, err := h.usersService.GetByID(c.Request.Context(), personID)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
-		c.Abort()
 		return
 	}
 	if user.AvatarURL != nil {
-		avatarURL, err := h.minioRepository.GetImage(*user.AvatarURL)
+		avatrUrl, err := h.minioRepository.GetImage(*user.AvatarURL)
 		if err != nil {
 			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
 			c.Abort()
 			return
 		}
-		user.AvatarURL = &avatarURL
+		user.AvatarURL = &avatrUrl
 	}
-	go ws.WriteMessage(&ws.Message{
-		Type:   "user",
+	group, err := h.usersService.GetGroupByID(c.Request.Context(), groupID)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		return
+	}
+	if group.AvatarURL != nil {
+		avatrUrl, err := h.minioRepository.GetImage(*group.AvatarURL)
+		if err != nil {
+			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
+			c.Abort()
+			return
+		}
+		group.AvatarURL = &avatrUrl
+	}
+	role := "owner"
+	mes := &ws.Message{
+		Type:   "role",
 		UserID: personID,
-		User: &ws.User{
-			UserUrl:  user.AvatarURL,
-			Telegram: user.Telegram,
-			BIO:      user.BIO,
+		Role: &ws.Role{
+			Role:     role,
+			GroupID:  groupID,
+			GroupUrl: group.AvatarURL,
+			Name:     group.Name,
 		},
-	})
+	}
+	if role == "owner" {
+		mes.Role.InviteCode = group.InviteCode
+	}
+	go ws.WriteMessage(mes)
 	c.Writer.WriteHeader(http.StatusOK)
 }
