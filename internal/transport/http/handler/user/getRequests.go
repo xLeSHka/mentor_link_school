@@ -1,10 +1,11 @@
 package usersRoute
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
-	"net/http"
 )
 
 // @Summary Получить список моих запросов
@@ -13,7 +14,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/user/requests [get]
-// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} []respGetHelp
 // @Failure 400 {object} httpError.HTTPError "Невалидный запрос"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"

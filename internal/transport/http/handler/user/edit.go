@@ -1,11 +1,12 @@
 package usersRoute
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
-	"net/http"
 )
 
 // @Summary Редактирование профиля
@@ -14,7 +15,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /user/profile/edit [get]
-// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <token>"
 // @Param body body reqEditUser true "body"
 // @Failure 400 {object} httpError.HTTPError
 // @Failure 401 {object} httpError.HTTPError

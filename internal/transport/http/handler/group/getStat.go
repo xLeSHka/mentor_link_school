@@ -1,11 +1,12 @@
 package groupsRoute
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
-	"net/http"
 )
 
 // @Summary Статистика группы
@@ -15,7 +16,7 @@ import (
 // @Produce  json
 // @Param id path string true "Group ID"
 // @Router /groups/{GroupID}/stat [get]
-// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} respStat
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"

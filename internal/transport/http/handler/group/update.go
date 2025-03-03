@@ -1,8 +1,9 @@
 package groupsRoute
 
 import (
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"net/http"
+
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -19,7 +20,7 @@ import (
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // @Router /api/groups/{groupID}/inviteCode [post]
-// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <token>"
 func (h *Route) updateInviteCode(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {

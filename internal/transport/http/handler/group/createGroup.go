@@ -1,9 +1,10 @@
 package groupsRoute
 
 import (
+	"net/http"
+
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -16,13 +17,12 @@ import (
 // @Tags Groups
 // @Accept json
 // @Produce json
-// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <token>"
 // @Param body body reqCreateGroupDto true "body"
 // @Success 200 {object} map[string]interface{}
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // @Router /api/groups/create [post]
-// @Security ApiKeyAuth
 func (h *Route) createGroup(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {

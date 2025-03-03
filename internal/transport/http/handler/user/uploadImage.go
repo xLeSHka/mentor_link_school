@@ -2,12 +2,13 @@ package usersRoute
 
 import (
 	"fmt"
+	"net/http"
+	"path/filepath"
+
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
-	"net/http"
-	"path/filepath"
 
 	"github.com/bachvtuan/mime2extension"
 	"github.com/gin-gonic/gin"
@@ -20,7 +21,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/user/uploadAvatar [post]
-// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} respUploadAvatarDto
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"

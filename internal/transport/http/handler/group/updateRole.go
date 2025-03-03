@@ -1,12 +1,13 @@
 package groupsRoute
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
-	"net/http"
 )
 
 // @Summary Обновить роль юзера
@@ -14,7 +15,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/groups/{groupID}/members/role [post]
-// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <token>"
 // @Success 200
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"

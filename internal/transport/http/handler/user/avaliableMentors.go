@@ -2,8 +2,9 @@ package usersRoute
 
 import (
 	"fmt"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"net/http"
+
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 
 	"github.com/gin-gonic/gin"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
@@ -15,7 +16,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/user/availableMentors [get]
-// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} []respGetMentor
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
