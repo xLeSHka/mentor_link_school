@@ -47,6 +47,8 @@ type respGetHelp struct {
 	AvatarUrl  *string   `json:"avatar_url,omitempty"`
 	Goal       string    `json:"goal"`
 	Status     string    `json:"status"`
+	Telegram   string    `json:"telegram"`
+	BIO        *string   `json:"bio,omitempty"`
 }
 type Pair struct {
 	MentorID uuid.UUID `json:"mentor_id"`
@@ -94,6 +96,8 @@ func mapHelp(help *models.HelpRequestWithGIDs) *respGetHelp {
 		Goal:       help.Goal,
 		MentorName: help.Mentor.Name,
 		AvatarUrl:  help.Student.AvatarURL,
+		Telegram:   help.Mentor.Telegram,
+		BIO:        help.Mentor.BIO,
 	}
 }
 func mapMentor(mentor *models.RoleWithGIDs) *respGetMentor {
