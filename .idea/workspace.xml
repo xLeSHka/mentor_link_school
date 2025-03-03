@@ -6,11 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/getStudents.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/getStudents.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/user/checkIsStudent.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/checkIsStudent.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/acceptInvite.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/acceptInvite.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/createGroup.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/createGroup.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/students.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/mentor/students.go" afterDir="false" />
     </list>
     <list id="5616f49a-7ae4-4147-b258-d18510d8fa0f" name="Changes by LIME" comment="" />
     <option name="SHOW_DIALOG" value="false" />
