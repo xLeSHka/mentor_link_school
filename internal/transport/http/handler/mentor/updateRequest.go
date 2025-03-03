@@ -36,7 +36,7 @@ func (h *Route) updateRequest(c *gin.Context) {
 		return
 	}
 	var status string
-	if req.Status {
+	if *req.Status {
 		status = "accepted"
 	} else {
 		status = "rejected"

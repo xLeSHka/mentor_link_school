@@ -7,7 +7,7 @@ import (
 
 type reqUpdateRequest struct {
 	ID     uuid.UUID `json:"id" binding:"required"`
-	Status bool      `json:"status" binding:"required"`
+	Status *bool     `json:"status" binding:"required"`
 }
 type respGetMyStudent struct {
 	StudentID uuid.UUID `json:"student_id" binding:"required"`
