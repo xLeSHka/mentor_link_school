@@ -2,13 +2,14 @@ package ws
 
 import (
 	"encoding/json"
+	"log"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
-	"log"
-	"net/http"
 )
 
 var upgrader = websocket.Upgrader{
@@ -70,7 +71,7 @@ func WsHandler(c *gin.Context) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	log.Println("Client connected")
 	// register client
 	clients[personID] = ws
 }
@@ -83,6 +84,7 @@ func Echo() {
 			log.Println(err)
 			continue
 		}
+		log.Println("Message: " + string(jsonData))
 		if val.Type == "request" {
 			client, ok := clients[*val.MentorID]
 			if ok {
