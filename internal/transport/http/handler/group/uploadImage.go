@@ -22,6 +22,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/groups/{id}/uploadAvatar [post]
+// @Param id path string true "Group ID"
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} respUploadAvatarDto
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"

@@ -21,7 +21,7 @@ import (
 // @Failure 403 {object} httpError.HTTPError "Ошибка доступа"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // @Failure 403 {object} httpError.HTTPError "Нет прав доступа"
-// @Router /api/groups/{groupID}/inviteCode [post]
+// @Router /api/groups/{id}/inviteCode [post]
 // @Param Authorization header string true "Bearer <token>"
 func (h *Route) updateInviteCode(c *gin.Context) {
 	personID, err := jwt.Parse(c)

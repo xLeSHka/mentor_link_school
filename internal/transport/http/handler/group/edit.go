@@ -1,12 +1,13 @@
 package groupsRoute
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
-	"net/http"
 )
 
 // @Summary Редактирование организации
@@ -15,7 +16,8 @@ import (
 // @Accept json
 // @Produce json
 // @Router /group/{id}/edit [put]
-// @Security ApiKeyAuth
+// @Param id path string true "Group ID"
+// @Param Authorization header string true "Bearer <token>"
 // @Param body body reqEditGroup true "body"
 // @Failure 400 {object} httpError.HTTPError
 // @Failure 401 {object} httpError.HTTPError
