@@ -1,8 +1,9 @@
 package usersRoute
 
 import (
-	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"net/http"
+
+	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 
@@ -16,7 +17,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/init [get]
-// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} resGetInitData
 // @Failure 400 {object} httpError.HTTPError "Невалидный запрос"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
