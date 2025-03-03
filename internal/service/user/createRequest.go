@@ -24,7 +24,7 @@ func (s *UsersService) CreateRequest(ctx context.Context, request *models.HelpRe
 	}
 	// if alredy exists
 	_, err = s.usersRepository.GetRequest(ctx, request.UserID, request.MentorID, request.GroupID)
-	if err != nil {
+	if err == nil {
 		return httpError.New(http.StatusBadRequest, "request already exists")
 	}
 	err = s.usersRepository.CreateRequest(ctx, request)
