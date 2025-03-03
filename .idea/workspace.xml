@@ -5,14 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/tests/getRequests_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/mentorGetMentors_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/mentorGetStudents_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/mentorUpdateRequest_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/studentGetMentors_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/userUploadImage_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/checkIsMentor.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/checkIsMentor.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/updateRequest.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/mentor/updateRequest.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/edit.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/edit.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/requests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/requests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/e2e_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/tests/e2e_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/availableMentors_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/tests/studentGetAvailableMentors_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/e2e_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/getRequests_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/tests/studentGetRequests_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/initData_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/tests/initData_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/mentorGetMentors_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/tests/mentorGetRequests_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/setUp.go" beforeDir="false" afterPath="$PROJECT_DIR$/tests/setUp_test.go" afterDir="false" />
     </list>
     <list id="5616f49a-7ae4-4147-b258-d18510d8fa0f" name="Changes by LIME" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,6 +36,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>

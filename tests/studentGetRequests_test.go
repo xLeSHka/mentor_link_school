@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestUserGetRequests(t *testing.T) {
+func TestStudentGetRequests(t *testing.T) {
 	fn, quit, err := setUp()
 	assert.Nil(t, err)
 	defer func() {

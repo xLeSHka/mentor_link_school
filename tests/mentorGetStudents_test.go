@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestInit(t *testing.T) {
+func TestMentorGetStudents(t *testing.T) {
 	fn, quit, err := setUp()
 	assert.Nil(t, err)
 	defer func() {
@@ -18,28 +18,41 @@ func TestInit(t *testing.T) {
 		fn()
 	}()
 	type Test struct {
-		Expected     models.User
+		Expected     []models.User
 		jwt          string
 		name         string
 		expectedCode int
 	}
 	tests := []Test{
 		{
-			Expected:     profile1,
-			jwt:          profile1JWT,
-			name:         "get profile 1",
+			Expected:     []models.User{profile1},
+			jwt:          profile2JWT,
+			name:         "succes mentor get students",
 			expectedCode: http.StatusOK,
 		},
 		{
 			jwt:          unknownJWT,
-			name:         "get unknown profile",
+			name:         "unknown user",
 			expectedCode: http.StatusNotFound,
+		},
+		{
+			Expected:     []models.User{},
+			jwt:          profile1JWT,
+			name:         "empty mentor students",
+			expectedCode: http.StatusOK,
 		},
 	}
 	db.Create(&profile1)
+	db.Create(&profile2)
+	db.Create(&group1)
+	db.Create(&roleMentor)
+	db.Create(&roleStudent)
+	db.Create(&accepted)
+	db.Create(&pair)
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			url := "/api/init"
+			url := "/api/mentors/students"
+			assert.Nil(t, err)
 			req, _ := http.NewRequest(http.MethodGet, url, nil) // bytes.NewBuffer(jsonData)
 			req.Header.Set("Authorization", "Bearer "+test.jwt)
 
@@ -51,11 +64,13 @@ func TestInit(t *testing.T) {
 			}()
 			assert.Equal(t, test.expectedCode, w.Code)
 			if test.expectedCode == http.StatusOK {
-				var user resGetProfile
-				err := json.Unmarshal(w.Body.Bytes(), &user)
+				var resp []respGetMyStudent
+				err = json.Unmarshal(w.Body.Bytes(), &resp)
 				assert.Nil(t, err)
-				assert.Equal(t, test.Expected.Name, user.Name)
-				assert.Equal(t, *test.Expected.BIO, *user.BIO)
+				for i, exp := range test.Expected {
+					assert.Equal(t, exp.ID, resp[i].StudentID)
+					assert.Equal(t, profile1.Name, resp[i].Name)
+				}
 			}
 		})
 	}

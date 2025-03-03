@@ -22,7 +22,9 @@ func (r *UsersRepository) GetMentors(ctx context.Context, userID uuid.UUID) ([]*
 	var role []*models.RoleWithGIDs
 	err := r.DB.WithContext(ctx).Table("roles").
 		Select("user_id,array_agg(group_id) as group_ids").
-		Where("role = 'mentor' OR role = 'student-mentor' AND group_id in (SELECT group_id FROM roles WHERE user_id = ? AND role = 'student' OR role = 'student-mentor')", userID).Group("user_id").
+		Where("role = 'mentor' OR role = 'student-mentor' AND group_id in (SELECT group_id FROM roles WHERE user_id = ? AND role = 'student' OR role = 'student-mentor')", userID).
+		Where("group_id in (SELECT group_id FROM roles WHERE user_id = ?)", userID).
+		Group("user_id").
 		Where("NOT EXISTS (SELECT 1 FROM pairs WHERE user_id = ? and mentor_id = roles.user_id)", userID).
 		Preload("User").
 		Find(&role).Error
