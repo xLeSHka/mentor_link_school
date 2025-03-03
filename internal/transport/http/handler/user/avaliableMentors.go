@@ -10,7 +10,7 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 )
 
-// @Summary Получение доступных всех
+// @Summary Получение доступных менторов
 // @Schemes
 // @Tags Users
 // @Accept json

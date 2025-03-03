@@ -9,7 +9,7 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 )
 
-// @Summary получение чужого профиля
+// @Summary Получение чужого профиля
 // @Schemes
 // @Description
 // @Tags Users

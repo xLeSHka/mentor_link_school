@@ -12,7 +12,7 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 )
 
-// @Summary
+// @Summary Создать группу
 // @Schemes
 // @Tags Groups
 // @Accept json

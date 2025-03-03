@@ -9,8 +9,7 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 )
 
-// @Summary Статистика группы
-
+// @Summary Получить статистику группы
 // @Tags Groups
 // @Accept  json
 // @Produce  json
