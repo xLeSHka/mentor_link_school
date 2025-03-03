@@ -2,6 +2,8 @@ package groupService
 
 import (
 	"context"
+	"errors"
+	"gorm.io/gorm"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -24,7 +26,11 @@ func (s *GroupsService) UpdateRole(ctx context.Context, ownerID, groupID, userID
 		return httpError.New(http.StatusNotFound, "User Not Found")
 	}
 	err = s.groupRepository.UpdateRole(ctx, groupID, userID, role)
+
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return httpError.New(http.StatusNotFound, "User Not Found")
+		}
 		return httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	return nil

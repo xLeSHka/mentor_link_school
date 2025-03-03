@@ -26,6 +26,7 @@ func (r *UsersRepository) GetMentors(ctx context.Context, userID uuid.UUID) ([]*
 		Where("group_id in (SELECT group_id FROM roles WHERE user_id = ?)", userID).
 		Group("user_id").
 		Where("NOT EXISTS (SELECT 1 FROM pairs WHERE user_id = ? and mentor_id = roles.user_id)", userID).
+		Where("NOT EXISTS (SELECT 1 FROM help_requests WHERE user_id = ? and mentor_id = roles.user_id AND status = 'pending' OR status = 'accepted')").
 		Preload("User").
 		Find(&role).Error
 	if err != nil {
