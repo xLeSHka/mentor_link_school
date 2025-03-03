@@ -14,6 +14,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /groups/join/{code} [post]
+// @Security ApiKeyAuth
 // @Success 200
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"

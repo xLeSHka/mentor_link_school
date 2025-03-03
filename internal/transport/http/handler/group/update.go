@@ -19,6 +19,7 @@ import (
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // @Router /api/groups/{groupID}/inviteCode [post]
+// @Security ApiKeyAuth
 func (h *Route) updateInviteCode(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {

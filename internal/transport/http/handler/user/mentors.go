@@ -13,6 +13,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/user/mentors [get]
+// @Security ApiKeyAuth
 // @Success 200 {object} []respGetMyMentor
 // @Failure 400 {object} httpError.HTTPError "Невалидный запрос"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"

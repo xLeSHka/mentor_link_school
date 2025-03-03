@@ -14,6 +14,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/mentors/requests [get]
+// @Security ApiKeyAuth
 // @Success 200 {object} []respGetRequest
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
