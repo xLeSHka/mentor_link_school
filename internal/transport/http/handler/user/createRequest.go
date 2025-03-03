@@ -98,5 +98,5 @@ func (h *Route) createRequest(c *gin.Context) {
 			Status:      &request.Status,
 		})
 	}
-
+	c.Writer.WriteHeader(http.StatusOK)
 }

@@ -4,53 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/uploadImage.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/transport/http/handler/ws/websocket.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/models/models.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/models/models.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/getRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/getRequests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/mentor/getStudents.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/mentor/getStudents.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/repositories.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/repositories.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/user/getMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/getMentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/user/getMyMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/getMyMentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/user/getMyRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/user/getMyRequests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/mentor/getRequests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/mentor/getRequests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/mentor/getStudents.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/mentor/getStudents.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/services.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/services.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/getMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/getMentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/getMyMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/getMyMentors.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/getMyhelps.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/getMyhelps.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/login.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/login.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/acceptInvite.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/acceptInvite.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/createGroup.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/createGroup.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/group/updateRole.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/group/updateRole.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/requests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/mentor/requests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/mentor/updateRequest.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/mentor/updateRequest.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/public/publicRoute.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/public/publicRoute.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/public/websocket.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/createRequest.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/createRequest.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/profile.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/profile.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/requests.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/requests.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/uploadImage.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/uploadImage.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/transport/http/handler/user/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/transport/http/handler/user/users.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/001_init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/001_init.sql" afterDir="false" />
-    </list>
-    <list id="5616f49a-7ae4-4147-b258-d18510d8fa0f" name="Changes by LIME" comment="">
-      <change afterPath="$PROJECT_DIR$/internal/repository/user/GetGroupByID.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/repository/user/getCommonGroups.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/repository/user/getRequest.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/repository/user/getRequestByID.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/user/GetCommonGroups.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/user/GetGroupByID.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/user/GetGroupByInviteCode.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/user/GetRequestByID.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/models/models.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/models/models.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/repositories.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/repositories.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/services.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/services.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/createRequest.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/createRequest.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/user/getMentors.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/user/getMentors.go" afterDir="false" />
-    </list>
+    <list default="true" id="8ae725a3-c096-4793-9dbc-69268dcbe315" name="Changes" comment="" />
+    <list id="5616f49a-7ae4-4147-b258-d18510d8fa0f" name="Changes by LIME" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -66,39 +21,6 @@
   <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.0.windows-amd64" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/internal/service/services.go">
-      <ranges>
-        <range start1="19" end1="20" start2="19" end2="20" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-        <range start1="21" end1="22" start2="21" end2="22" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-        <range start1="28" end1="30" start2="28" end2="30" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-        <range start1="31" end1="32" start2="31" end2="32" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-        <range start1="34" end1="34" start2="34" end2="38" changelist="5616f49a-7ae4-4147-b258-d18510d8fa0f" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/internal/service/user/getMentors.go">
-      <ranges>
-        <range start1="12" end1="13" start2="12" end2="13" changelist="5616f49a-7ae4-4147-b258-d18510d8fa0f" />
-        <range start1="23" end1="24" start2="23" end2="24" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/internal/models/models.go">
-      <ranges>
-        <range start1="3" end1="3" start2="3" end2="4" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-        <range start1="63" end1="63" start2="64" end2="90" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-        <range start1="88" end1="88" start2="115" end2="122" changelist="5616f49a-7ae4-4147-b258-d18510d8fa0f" />
-        <range start1="89" end1="89" start2="123" end2="124" changelist="5616f49a-7ae4-4147-b258-d18510d8fa0f" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/internal/repository/repositories.go">
-      <ranges>
-        <range start1="19" end1="20" start2="19" end2="20" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-        <range start1="21" end1="22" start2="21" end2="22" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-        <range start1="30" end1="33" start2="30" end2="33" changelist="8ae725a3-c096-4793-9dbc-69268dcbe315" />
-        <range start1="39" end1="39" start2="39" end2="43" changelist="5616f49a-7ae4-4147-b258-d18510d8fa0f" />
-      </ranges>
-    </file>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5

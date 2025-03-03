@@ -74,25 +74,49 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 		File:     temp,
 		Mimetype: mimetype,
 	}
-	imageURL, hErr := h.groupService.UploadImage(c.Request.Context(), f, groupID)
+	imageURL, hErr := h.groupService.UploadImage(c.Request.Context(), f, groupID, personId)
 	if hErr != nil {
 		hErr.SendError(c)
 		c.Abort()
 		return
 	}
-	user, err := h.usersService.GetByID(c.Request.Context(), personId)
+	user, err := h.usersService.GetByID(c.Request.Context(), userID)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
-		c.Abort()
 		return
 	}
-	go ws.WriteMessage(&ws.Message{
-		Type:     "group",
-		UserID:   &personId,
-		UserUrl:  &imageURL,
-		Telegram: &user.Telegram,
-		BIO:      user.BIO,
-	})
+	if user.AvatarURL != nil {
+		avatrUrl, err := h.minioRepository.GetImage(*user.AvatarURL)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			return
+		}
+		user.AvatarURL = &avatrUrl
+	}
+	group, err := h.usersService.GetGroupByID(c.Request.Context(), groupID)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		return
+	}
+	if group.AvatarURL != nil {
+		avatrUrl, err := h.minioRepository.GetImage(*group.AvatarURL)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			return
+		}
+		group.AvatarURL = &avatrUrl
+	}
+	role := "owner"
+	mes := &ws.Message{
+		Type:       "role",
+		Role:       &role,
+		GroupID:    &groupID,
+		UserID:     &personId,
+		GroupUrl:   group.AvatarURL,
+		Name:       &group.Name,
+		InviteCode: group.InviteCode,
+	}
+	go ws.WriteMessage(mes)
 	c.JSON(http.StatusOK, gin.H{
 		"url": imageURL,
 	})

@@ -15,6 +15,7 @@ type GroupService interface {
 	UpdateInviteCode(ctx context.Context, groupID, ownerID uuid.UUID) (string, error)
 	GetMembers(ctx context.Context, ownerID, groupID uuid.UUID) ([]*models.Role, error)
 	GetStat(ctx context.Context, ownerID, groupID uuid.UUID) (*models.GroupStat, error)
+	UploadImage(ctx context.Context, file *models.File, groupID, personID uuid.UUID) (string, *httpError.HTTPError)
 }
 type MentorService interface {
 	GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequestWithGIDs, error)

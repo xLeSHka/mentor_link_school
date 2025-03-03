@@ -70,6 +70,14 @@ func (h *Route) updateRole(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
+	if group.AvatarURL != nil {
+		avatrUrl, err := h.minioRepository.GetImage(*group.AvatarURL)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			return
+		}
+		group.AvatarURL = &avatrUrl
+	}
 	mes := &ws.Message{
 		Type:     "role",
 		Role:     &req.Role,
