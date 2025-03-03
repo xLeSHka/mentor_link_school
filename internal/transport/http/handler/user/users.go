@@ -40,7 +40,7 @@ func UsersRoute(opts FxOpts) *Route {
 
 	opts.ApiRouter.UserPrivate.GET("/init", router.init)
 	opts.ApiRouter.UserPrivate.GET("/user/profile/:id", router.profileOther)
-	opts.ApiRouter.UserPrivate.POST("/user/profile/edit", router.edit)
+	opts.ApiRouter.UserPrivate.PUT("/user/profile/edit", router.edit)
 	opts.ApiRouter.UserPrivate.GET("/user/requests", router.getRequests)
 	opts.ApiRouter.UserPrivate.POST("/user/uploadAvatar", router.uploadAvatar)
 	//opts.ApiRouter.UserPrivate.POST("/user/invite", router.acceptedInvite)

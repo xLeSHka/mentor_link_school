@@ -46,7 +46,7 @@ func (h *Route) edit(c *gin.Context) {
 	}
 	toUpdate := make(map[string]any)
 	toUpdate["name"] = reqData.Name
-	err = h.groupService.Edit(c.Request.Context(), personID, groupID, toUpdate)
+	group, err := h.groupService.Edit(c.Request.Context(), personID, groupID, toUpdate)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
@@ -65,11 +65,7 @@ func (h *Route) edit(c *gin.Context) {
 		}
 		user.AvatarURL = &avatrUrl
 	}
-	group, err := h.usersService.GetGroupByID(c.Request.Context(), groupID)
-	if err != nil {
-		err.(*httpError.HTTPError).SendError(c)
-		return
-	}
+
 	if group.AvatarURL != nil {
 		avatrUrl, err := h.minioRepository.GetImage(*group.AvatarURL)
 		if err != nil {
@@ -84,14 +80,12 @@ func (h *Route) edit(c *gin.Context) {
 		Type:   "role",
 		UserID: personID,
 		Role: &ws.Role{
-			Role:     role,
-			GroupID:  groupID,
-			GroupUrl: group.AvatarURL,
-			Name:     group.Name,
+			Role:       role,
+			GroupID:    groupID,
+			GroupUrl:   group.AvatarURL,
+			Name:       group.Name,
+			InviteCode: group.InviteCode,
 		},
-	}
-	if role == "owner" {
-		mes.Role.InviteCode = group.InviteCode
 	}
 	go ws.WriteMessage(mes)
 	c.Writer.WriteHeader(http.StatusOK)

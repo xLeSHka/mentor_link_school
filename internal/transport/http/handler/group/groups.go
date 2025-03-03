@@ -42,6 +42,6 @@ func GroupsRoutes(opts FxOpts) *Route {
 	opts.ApiRouter.UserPrivate.GET("/groups/:id/stat", router.getStat)
 	opts.ApiRouter.UserPrivate.POST("/groups/join/:code", router.acceptedInvite)
 	opts.ApiRouter.UserPrivate.POST("/groups/:id/uploadAvatar", router.uploadAvatar)
-
+	opts.ApiRouter.UserPrivate.PUT("/groups/:id/edit", router.edit)
 	return router
 }
