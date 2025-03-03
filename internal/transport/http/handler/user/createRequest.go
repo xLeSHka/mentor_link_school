@@ -18,6 +18,8 @@ import (
 // @Router /api/user/requests [post]
 // @Param body body reqCreateHelp true "body"
 // @Success 200
+// @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
+// @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 func (h *Route) createRequest(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {

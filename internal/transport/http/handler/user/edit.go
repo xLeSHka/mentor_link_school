@@ -8,6 +8,16 @@ import (
 	"net/http"
 )
 
+// @Summary Редактирование профиля
+// @Schemes
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Router /user/profile/edit [get]
+// @Param body body reqEditUser true "body"
+// @Failure 400 {object} httpError.HTTPError
+// @Failure 401 {object} httpError.HTTPError
+// @Success 200
 func (h *Route) edit(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {

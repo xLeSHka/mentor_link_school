@@ -14,9 +14,10 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param id path string true "Group ID"
-// @Success 200 {object} respStat
-// @Failure 401 {object} httpError.HTTPError
 // @Router /groups/{GroupID}/stat [get]
+// @Success 200 {object} respStat
+// @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
+// @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 func (h *Route) getStat(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {
