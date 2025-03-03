@@ -15,6 +15,8 @@ import (
 // @Produce json
 // @Router /api/mentors/students [get]
 // @Success 200 {object} []respGetMyStudent
+// @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
+// @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 func (h *Route) students(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {

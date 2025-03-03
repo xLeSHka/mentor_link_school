@@ -16,8 +16,8 @@ import (
 // @Produce  json
 // @Param id path string true "Group ID"
 // @Success 200 {object} respUpdateCode
-// @Failure 400 {object} httpError.HTTPError
-// @Failure 401 {object} httpError.HTTPError
+// @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
+// @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // @Router /api/groups/{groupID}/inviteCode [post]
 func (h *Route) updateInviteCode(c *gin.Context) {
 	personID, err := jwt.Parse(c)

@@ -17,6 +17,8 @@ import (
 // @Produce json
 // @Router /api/mentors/requests [post]
 // @Param body body reqUpdateRequest true "body"
+// @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
+// @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 func (h *Route) updateRequest(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {

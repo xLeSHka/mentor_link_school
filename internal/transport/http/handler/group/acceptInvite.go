@@ -15,6 +15,8 @@ import (
 // @Produce json
 // @Router /groups/join/{code} [post]
 // @Success 200
+// @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
+// @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 func (h *Route) acceptedInvite(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {

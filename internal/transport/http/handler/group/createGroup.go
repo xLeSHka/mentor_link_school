@@ -18,7 +18,8 @@ import (
 // @Produce json
 // @Param body body reqCreateGroupDto true "body"
 // @Success 200 {object} map[string]interface{}
-// @Failure 400 {object} respCreateGroup
+// @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
+// @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // @Router /api/groups/create [post]
 func (h *Route) createGroup(c *gin.Context) {
 	personId, err := jwt.Parse(c)
