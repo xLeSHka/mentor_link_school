@@ -46,5 +46,7 @@ func UsersRoute(opts FxOpts) *Route {
 	//opts.ApiRouter.UserPrivate.POST("/user/invite", router.acceptedInvite)
 
 	opts.ApiRouter.UserPrivate.GET("/ws", ws.WsHandler)
+	go ws.Echo()
+
 	return router
 }

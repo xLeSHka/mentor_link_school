@@ -75,7 +75,7 @@ func WsHandler(c *gin.Context) {
 	clients[personID] = ws
 }
 
-func echo() {
+func Echo() {
 	for {
 		val := <-broadcast
 		jsonData, err := json.Marshal(val)
