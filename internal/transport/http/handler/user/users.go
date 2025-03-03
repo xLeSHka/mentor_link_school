@@ -5,6 +5,7 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/repository"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/service"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ApiRouters"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 
 	"go.uber.org/fx"
 )
@@ -38,11 +39,12 @@ func UsersRoute(opts FxOpts) *Route {
 	opts.ApiRouter.UserPrivate.GET("/user/mentors", router.getMyMentors)
 
 	opts.ApiRouter.UserPrivate.GET("/user/profile", router.profile)
-	opts.ApiRouter.UserPrivate.GET("/user/profile/:id", router.profileOther)
+	//opts.ApiRouter.UserPrivate.GET("/user/profile/:id", router.profileOther)
+	//opts.ApiRouter.UserPrivate.POST("/user/profile/redact")
 	opts.ApiRouter.UserPrivate.GET("/user/requests", router.getRequests)
 	opts.ApiRouter.UserPrivate.POST("/user/uploadAvatar", router.uploadAvatar)
 	//opts.ApiRouter.UserPrivate.POST("/user/invite", router.acceptedInvite)
 
-	opts.ApiRouter.UserPrivate.GET("/user/groups", router.getGroups)
+	opts.ApiRouter.UserPrivate.GET("/ws", ws.WsHandler)
 	return router
 }

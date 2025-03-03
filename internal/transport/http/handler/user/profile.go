@@ -4,11 +4,9 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"net/http"
 
-	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 // @Summary Получить инфу о себе
@@ -42,9 +40,29 @@ func (h *Route) profile(c *gin.Context) {
 		}
 		user.AvatarURL = &avatarURL
 	}
+	groups, err := h.usersService.GetGroups(c.Request.Context(), personId)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		c.Abort()
+		return
+	}
+	resp := make([]*respGetGroupDto, 0, len(groups))
+	for _, group := range groups {
+		if group.Group.AvatarURL != nil {
+			groupAvatarURL, err := h.minioRepository.GetImage(*group.Group.AvatarURL)
+			if err != nil {
+				err.(*httpError.HTTPError).SendError(c)
+				c.Abort()
+				return
+			}
+			group.Group.AvatarURL = &groupAvatarURL
+		}
+		resp = append(resp, mapGroup(group.Group, group.Role))
+	}
 	c.JSON(http.StatusOK, resGetProfile{
 		Name:      user.Name,
 		AvatarUrl: user.AvatarURL,
 		BIO:       user.BIO,
+		Groups:    resp,
 	})
 }

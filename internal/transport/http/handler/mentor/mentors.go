@@ -38,5 +38,6 @@ func MentorsRoute(opts FxOpts) *Route {
 	opts.ApiRouter.MentorRoute.GET("/mentors/students", router.students)
 	opts.ApiRouter.MentorRoute.GET("/mentors/requests", router.getRequests)
 	opts.ApiRouter.MentorRoute.POST("/mentors/requests", router.updateRequest)
+
 	return router
 }

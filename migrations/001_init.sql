@@ -24,22 +24,21 @@ CREATE TABLE roles (
 );
 
 CREATE TABLE help_requests (
-    id UUID,
+    id UUID PRIMARY KEY ,
     user_id UUID  REFERENCES users(id),
     mentor_id UUID REFERENCES users(id),
     group_id UUID REFERENCES groups(id),
     goal VARCHAR NOT NULL,
     bio TEXT DEFAULT NULL,
-    status VARCHAR NOT NULL,
-    PRIMARY KEY (id,user_id,mentor_id)
+    status VARCHAR NOT NULL
+
 );
 
 CREATE TABLE pairs (
     user_id UUID REFERENCES users(id),
     mentor_id UUID REFERENCES users(id),
     group_id UUID REFERENCES groups(id),
-    goal VARCHAR NOT NULL,
-    PRIMARY KEY (user_id, mentor_id)
+    goal VARCHAR NOT NULL
 );
 
 

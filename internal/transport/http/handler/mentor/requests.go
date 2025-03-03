@@ -11,29 +11,33 @@ type reqUpdateRequest struct {
 }
 type respGetMyStudent struct {
 	StudentID uuid.UUID `json:"student_id" binding:"required"`
+	GroupIDs  []string  `json:"group_ids" binding:"required"`
 	AvatarUrl *string   `json:"avatar_url,omitempty"`
 	Name      string    `json:"name" binding:"required"`
 }
 type respGetRequest struct {
 	ID        uuid.UUID `json:"id"`
 	UserID    uuid.UUID `json:"user_id"`
+	GroupIDs  []string  `json:"group_ids"`
 	AvatarUrl *string   `json:"avatar_url,omitempty"`
 	Name      string    `json:"name"`
 	Goal      string    `json:"goal"`
 	Status    string    `json:"status"`
 }
 
-func mapMyStudent(user *models.User) *respGetMyStudent {
+func mapMyStudent(user *models.PairWithGIDs) *respGetMyStudent {
 	return &respGetMyStudent{
-		StudentID: user.ID,
-		AvatarUrl: user.AvatarURL,
-		Name:      user.Name,
+		StudentID: user.UserID,
+		GroupIDs:  user.GroupIDs,
+		AvatarUrl: user.Student.AvatarURL,
+		Name:      user.Student.Name,
 	}
 }
-func mapRequest(req *models.HelpRequest) (res *respGetRequest) {
+func mapRequest(req *models.HelpRequestWithGIDs) (res *respGetRequest) {
 	res = &respGetRequest{
 		ID:        req.ID,
 		UserID:    req.UserID,
+		GroupIDs:  req.GroupIDs,
 		Name:      req.Student.Name,
 		AvatarUrl: req.Student.AvatarURL,
 		Goal:      req.Goal,

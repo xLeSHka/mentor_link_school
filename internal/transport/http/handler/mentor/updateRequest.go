@@ -1,6 +1,7 @@
 package mentorsRoute
 
 import (
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"net/http"
 
@@ -44,5 +45,57 @@ func (h *Route) updateRequest(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
+	updatedReq, err := h.userService.GetRequestByID(c.Request.Context(), req.ID)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		return
+	}
+	student, err := h.userService.GetByID(c.Request.Context(), updatedReq.UserID)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		return
+	}
+	if student.AvatarURL != nil {
+		avatarUrl, err := h.minioRepository.GetImage(*student.AvatarURL)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			return
+		}
+		student.AvatarURL = &avatarUrl
+	}
+	mentor, err := h.userService.GetByID(c.Request.Context(), updatedReq.MentorID)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		return
+	}
+	if mentor.AvatarURL != nil {
+		avatrUrl, err := h.minioRepository.GetImage(*mentor.AvatarURL)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			return
+		}
+		mentor.AvatarURL = &avatrUrl
+	}
+	groupsIDs, err := h.userService.GetCommonGroups(updatedReq.UserID, updatedReq.MentorID)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		return
+
+	}
+	go ws.WriteMessage(&ws.Message{
+		Type:        "request",
+		ID:          &request.ID,
+		UserID:      &student.ID,
+		StudentID:   &student.ID,
+		MentorID:    &mentor.ID,
+		MentorName:  &mentor.Name,
+		StudentName: &student.Name,
+		MentorUrl:   mentor.AvatarURL,
+		StudentUrl:  student.AvatarURL,
+		GroupIDs:    &groupsIDs,
+		Goal:        &request.Goal,
+		BIO:         student.BIO,
+		Status:      &request.Status,
+	})
 	c.Writer.WriteHeader(http.StatusOK)
 }

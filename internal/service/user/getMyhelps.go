@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func (s *UsersService) GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error) {
+func (s *UsersService) GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequestWithGIDs, error) {
 	exist, err := s.usersRepository.CheckExists(ctx, userID)
 	if err != nil {
 		return nil, httpError.New(http.StatusInternalServerError, err.Error())

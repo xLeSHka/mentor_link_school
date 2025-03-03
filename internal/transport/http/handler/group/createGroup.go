@@ -1,6 +1,7 @@
 package groupsRoute
 
 import (
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"net/http"
 
@@ -42,6 +43,37 @@ func (h *Route) createGroup(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
+	user, err := h.usersService.GetByID(c.Request.Context(), personId)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		return
+	}
+	if user.AvatarURL != nil {
+		avatrUrl, err := h.minioRepository.GetImage(*user.AvatarURL)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			return
+		}
+		user.AvatarURL = &avatrUrl
+	}
+	group, err = h.usersService.GetGroupByID(c.Request.Context(), group.ID)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		return
+	}
+	role := "owner"
+	mes := &ws.Message{
+		Type:     "role",
+		Role:     &role,
+		GroupID:  &group.ID,
+		UserID:   &personId,
+		GroupUrl: group.AvatarURL,
+		Name:     &group.Name,
+	}
+	if role == "owner" {
+		mes.InviteCode = group.InviteCode
+	}
+	go ws.WriteMessage(mes)
 	c.JSON(http.StatusOK, respCreateGroup{
 		GroupID: group.ID,
 	})

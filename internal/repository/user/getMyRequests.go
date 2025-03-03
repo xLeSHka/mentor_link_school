@@ -2,24 +2,17 @@ package repositoryUser
 
 import (
 	"context"
-	"errors"
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
-	"gorm.io/gorm"
 )
 
-func (r *UsersRepository) GetMyRequests(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error) {
-	var resp []*models.HelpRequest
-	res := r.DB.Model(&models.HelpRequest{}).Where("user_id = ? AND status = 'pending'", userID).
-		WithContext(ctx).
-		Preload("Mentor").
+func (r *UsersRepository) GetMyRequests(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequestWithGIDs, error) {
+	var resp []*models.HelpRequestWithGIDs
+	err := r.DB.Table("help_requests").
+		Select("id,user_id,mentor_id,array_agg(group_id) as group_ids,goal,status").
+		Where("user_id = ? AND status = 'pending'", userID).Group("id,mentor_id").Group("user_id").Group("goal").Preload("Mentor").
+		Where("NOT EXISTS (SELECT 1 FROM pairs WHERE user_id = ? and mentor_id = help_requests.mentor_id)", userID).
 		Preload("Student").
-		Find(&resp)
-	if res.Error != nil {
-		if errors.Is(res.Error, gorm.ErrRecordNotFound) {
-			return resp, nil
-		}
-		return resp, res.Error
-	}
-	return resp, nil
+		Find(&resp).Error
+	return resp, err
 }

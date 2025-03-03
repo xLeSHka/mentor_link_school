@@ -25,6 +25,6 @@ func PublicRoute(apiRouters *ApiRouters.ApiRouters, db *gorm.DB) *Route {
 	apiRouters.Public.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, func(config *ginSwagger.Config) {
 		config.URL = "/api/docsstatic/doc.json"
 	}))
-	apiRouters.Public.GET("/ws", router.Websocket)
+
 	return router
 }

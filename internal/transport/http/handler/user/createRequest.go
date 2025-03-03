@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"net/http"
 )
@@ -49,5 +50,53 @@ func (h *Route) createRequest(c *gin.Context) {
 			err.(*httpError.HTTPError).SendError(c)
 			return
 		}
+		student, err := h.usersService.GetByID(c.Request.Context(), personId)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			return
+		}
+		if student.AvatarURL != nil {
+			avatarUrl, err := h.minioRepository.GetImage(*student.AvatarURL)
+			if err != nil {
+				err.(*httpError.HTTPError).SendError(c)
+				return
+			}
+			student.AvatarURL = &avatarUrl
+		}
+		mentor, err := h.usersService.GetByID(c.Request.Context(), r.MentorID)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			return
+		}
+		if mentor.AvatarURL != nil {
+			avatrUrl, err := h.minioRepository.GetImage(*mentor.AvatarURL)
+			if err != nil {
+				err.(*httpError.HTTPError).SendError(c)
+				return
+			}
+			mentor.AvatarURL = &avatrUrl
+		}
+		groupsIDs, err := h.usersService.GetCommonGroups(personId, r.MentorID)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			return
+
+		}
+		go ws.WriteMessage(&ws.Message{
+			Type:        "request",
+			ID:          &request.ID,
+			UserID:      &student.ID,
+			StudentID:   &student.ID,
+			MentorID:    &mentor.ID,
+			MentorName:  &mentor.Name,
+			StudentName: &student.Name,
+			MentorUrl:   mentor.AvatarURL,
+			StudentUrl:  student.AvatarURL,
+			GroupIDs:    &groupsIDs,
+			Goal:        &request.Goal,
+			BIO:         student.BIO,
+			Status:      &request.Status,
+		})
 	}
+
 }

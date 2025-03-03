@@ -41,5 +41,7 @@ func GroupsRoutes(opts FxOpts) *Route {
 	opts.ApiRouter.UserPrivate.PATCH("/groups/:id/members/role", router.updateRole)
 	opts.ApiRouter.UserPrivate.GET("/groups/:id/stat", router.getStat)
 	opts.ApiRouter.UserPrivate.POST("/groups/join/:code", router.acceptedInvite)
+	opts.ApiRouter.UserPrivate.POST("/mentors/uploadAvatar", router.uploadAvatar)
+
 	return router
 }

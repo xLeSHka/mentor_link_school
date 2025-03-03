@@ -1,7 +1,8 @@
-package usersRoute
+package groupsRoute
 
 import (
 	"fmt"
+	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
@@ -26,6 +27,18 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {
 		httpError.New(http.StatusUnauthorized, "Bad id").SendError(c)
+		c.Abort()
+		return
+	}
+	groupid := c.Param("id")
+	if groupid == "" {
+		httpError.New(http.StatusUnauthorized, "Header not found").SendError(c)
+		c.Abort()
+		return
+	}
+	groupID, err := uuid.Parse(groupid)
+	if err != nil {
+		httpError.New(http.StatusUnauthorized, "Header not found").SendError(c)
 		c.Abort()
 		return
 	}
@@ -61,7 +74,7 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 		File:     temp,
 		Mimetype: mimetype,
 	}
-	imageURL, hErr := h.usersService.UploadImage(c.Request.Context(), f, personId)
+	imageURL, hErr := h.groupService.UploadImage(c.Request.Context(), f, groupID)
 	if hErr != nil {
 		hErr.SendError(c)
 		c.Abort()
@@ -74,11 +87,13 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 		return
 	}
 	go ws.WriteMessage(&ws.Message{
-		Type:     "user",
+		Type:     "group",
 		UserID:   &personId,
 		UserUrl:  &imageURL,
 		Telegram: &user.Telegram,
 		BIO:      user.BIO,
 	})
-	c.JSON(http.StatusOK, respUploadAvatarDto{Url: imageURL})
+	c.JSON(http.StatusOK, gin.H{
+		"url": imageURL,
+	})
 }

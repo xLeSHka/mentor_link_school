@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func (s *UsersService) GetMyMentors(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error) {
+func (s *UsersService) GetMyMentors(ctx context.Context, userID uuid.UUID) ([]*models.PairWithGIDs, error) {
 	exist, err := s.usersRepository.CheckExists(ctx, userID)
 	if err != nil {
 		return nil, httpError.New(http.StatusInternalServerError, err.Error())
@@ -21,7 +21,7 @@ func (s *UsersService) GetMyMentors(ctx context.Context, userID uuid.UUID) ([]*m
 	mentors, err := s.usersRepository.GetMyMentors(ctx, userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return []*models.Pair{}, nil
+			return []*models.PairWithGIDs{}, nil
 		}
 		return nil, httpError.New(http.StatusInternalServerError, err.Error())
 	}

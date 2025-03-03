@@ -39,7 +39,7 @@ func (h *Route) students(c *gin.Context) {
 			}
 			m.Mentor.AvatarURL = &avatarURL
 		}
-		resp = append(resp, mapMyStudent(m.Student))
+		resp = append(resp, mapMyStudent(m))
 	}
 
 	c.JSON(http.StatusOK, resp)

@@ -1,6 +1,7 @@
 package groupsRoute
 
 import (
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -38,6 +39,34 @@ func (h *Route) acceptedInvite(c *gin.Context) {
 		c.Abort()
 		return
 	}
+	user, err := h.usersService.GetByID(c.Request.Context(), personID)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		return
+	}
+	if user.AvatarURL != nil {
+		avatrUrl, err := h.minioRepository.GetImage(*user.AvatarURL)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			return
+		}
+		user.AvatarURL = &avatrUrl
+	}
+	group, err := h.usersService.GetGroupByInviteCode(c.Request.Context(), code)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		return
+	}
+	role := "student"
+	mes := &ws.Message{
+		Type:     "role",
+		Role:     &role,
+		GroupID:  &group.ID,
+		UserID:   &personID,
+		GroupUrl: group.AvatarURL,
+		Name:     &group.Name,
+	}
+	go ws.WriteMessage(mes)
 	c.JSON(http.StatusOK, gin.H{
 		"status": "ok",
 	})

@@ -6,13 +6,8 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 )
 
-func (r *MentorRepository) GetStudents(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error) {
-	var users []*models.Pair
-	err := r.DB.Model(&models.Pair{}).Where("mentor_id = ?", userID).
-		WithContext(ctx).
-		Preload("Student").
-		Preload("Mentor").
-		Joins("JOIN users ON users.id = pairs.user_id").
-		Find(&users).Error
-	return users, err
+func (r *MentorRepository) GetStudents(ctx context.Context, userID uuid.UUID) ([]*models.PairWithGIDs, error) {
+	var resp []*models.PairWithGIDs
+	err := r.DB.Table("pairs").Select("user_id,mentor_id,array_agg(group_id) as group_id").Where("mentor_id = ?", userID).Group("mentor_id").Group("user_id").Preload("Student").Find(&resp).Error
+	return resp, err
 }

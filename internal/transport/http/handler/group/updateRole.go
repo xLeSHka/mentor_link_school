@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"net/http"
 )
@@ -50,5 +51,36 @@ func (h *Route) updateRole(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
+
+	user, err := h.usersService.GetByID(c.Request.Context(), userID)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		return
+	}
+	if user.AvatarURL != nil {
+		avatrUrl, err := h.minioRepository.GetImage(*user.AvatarURL)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			return
+		}
+		user.AvatarURL = &avatrUrl
+	}
+	group, err := h.usersService.GetGroupByID(c.Request.Context(), groupID)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		return
+	}
+	mes := &ws.Message{
+		Type:     "role",
+		Role:     &req.Role,
+		GroupID:  &groupID,
+		UserID:   &userID,
+		GroupUrl: group.AvatarURL,
+		Name:     &group.Name,
+	}
+	if req.Role == "owner" {
+		mes.InviteCode = group.InviteCode
+	}
+	go ws.WriteMessage(mes)
 	c.Writer.WriteHeader(http.StatusOK)
 }
