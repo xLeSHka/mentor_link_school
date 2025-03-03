@@ -26,11 +26,15 @@ func (s *MentorService) UpdateRequest(ctx context.Context, request *models.HelpR
 		return httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	if request.Status == "accepted" {
-		err := s.mentorRepository.CreatePair(ctx, &models.Pair{
-			UserID:   request.ID,
-			MentorID: request.MentorID,
-			GroupID:  request.GroupID,
-			Goal:     request.Goal,
+		req, err := s.usersRepository.GetRequestByID(ctx, request.ID)
+		if err != nil {
+			return httpError.New(http.StatusInternalServerError, err.Error())
+		}
+		err = s.mentorRepository.CreatePair(ctx, &models.Pair{
+			UserID:   req.UserID,
+			MentorID: req.MentorID,
+			GroupID:  req.GroupID,
+			Goal:     req.Goal,
 		})
 		if err != nil {
 			return httpError.New(http.StatusInternalServerError, err.Error())
