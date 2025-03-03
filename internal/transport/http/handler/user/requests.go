@@ -61,8 +61,9 @@ type respOtherProfile struct {
 	BIO      *string `json:"bio,omitempty"`
 }
 type reqEditUser struct {
-	Telegram *string `json:"telegram,omitempty"`
-	BIO      *string `json:"bio,omitempty"`
+	Name     string `json:"name" binding:"required"`
+	Telegram string `json:"telegram,required"`
+	BIO      string `json:"bio,required"`
 }
 
 func mapOtherProfile(user *models.User) *respOtherProfile {

@@ -20,7 +20,7 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /api/user/uploadAvatar [post]
+// @Router /api/groups/{id}/uploadAvatar [post]
 // @Success 200 {object} respUploadAvatarDto
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"

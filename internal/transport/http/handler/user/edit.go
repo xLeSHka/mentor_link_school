@@ -31,12 +31,9 @@ func (h *Route) edit(c *gin.Context) {
 		return
 	}
 	toUpdate := make(map[string]any)
-	if reqData.BIO != nil {
-		toUpdate["bio"] = reqData.BIO
-	}
-	if reqData.Telegram != nil {
-		toUpdate["telegram"] = reqData.Telegram
-	}
+	toUpdate["bio"] = reqData.BIO
+	toUpdate["telegram"] = reqData.Telegram
+	toUpdate["name"] = reqData.Name
 	err = h.usersService.Edit(c.Request.Context(), personID, toUpdate)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)

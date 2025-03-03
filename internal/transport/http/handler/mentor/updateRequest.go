@@ -33,9 +33,9 @@ func (h *Route) updateRequest(c *gin.Context) {
 	}
 	var status string
 	if req.Status {
-		status = "accept"
+		status = "accepted"
 	} else {
-		status = "reject"
+		status = "rejected"
 	}
 	request := &models.HelpRequest{
 		ID:       req.ID,
