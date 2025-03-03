@@ -16,10 +16,9 @@ import (
 // @Produce json
 // @Router /groups/join/{code} [post]
 // @Param Authorization header string true "Bearer <token>"
-// @Success 200 {object} {"status":"ok"}
+// @Success 200 {object} respJoinGrou
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
-// @Failure 403 {object} httpError.HTTPError "Нет прав доступа"
 func (h *Route) acceptedInvite(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {

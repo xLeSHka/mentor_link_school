@@ -14,7 +14,7 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /user/profile/edit [get]
+// @Router /user/profile/edit [put]
 // @Param Authorization header string true "Bearer <token>"
 // @Param body body reqEditUser true "body"
 // @Failure 400 {object} httpError.HTTPError
