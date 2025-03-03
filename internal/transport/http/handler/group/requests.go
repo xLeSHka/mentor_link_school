@@ -6,7 +6,7 @@ import (
 )
 
 type reqEditGroup struct {
-	Name
+	Name string `json:"name" binding:"required"`
 }
 type reqGetMentorDto struct {
 	GroupEmail string `json:"group_email" binding:"required,min=8,max=120,email"`
