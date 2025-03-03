@@ -14,6 +14,8 @@ type respGetMyStudent struct {
 	GroupIDs  []string  `json:"group_ids" binding:"required"`
 	AvatarUrl *string   `json:"avatar_url,omitempty"`
 	Name      string    `json:"name" binding:"required"`
+	BIO       *string   `json:"bio,omitempty"`
+	Telegram  string    `json:"telegram"`
 }
 type respGetRequest struct {
 	ID        uuid.UUID `json:"id"`
@@ -31,6 +33,8 @@ func mapMyStudent(user *models.PairWithGIDs) *respGetMyStudent {
 		GroupIDs:  user.GroupIDs,
 		AvatarUrl: user.Student.AvatarURL,
 		Name:      user.Student.Name,
+		BIO:       user.Student.BIO,
+		Telegram:  user.Student.Telegram,
 	}
 }
 func mapRequest(req *models.HelpRequestWithGIDs) (res *respGetRequest) {

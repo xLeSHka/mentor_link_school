@@ -28,6 +28,8 @@ type respGetMyMentor struct {
 	GroupIDs  []string  `json:"group_ids" binding:"required"`
 	AvatarUrl *string   `json:"avatar_url,omitempty"`
 	Name      string    `json:"name" binding:"required"`
+	Telegram  string    `json:"telegram"`
+	BIO       *string   `json:"bio,omitempty"`
 }
 type respGetMentor struct {
 	MentorID  uuid.UUID `json:"mentor_id" binding:"required"`
@@ -35,6 +37,7 @@ type respGetMentor struct {
 	AvatarUrl *string   `json:"avatar_url,omitempty"`
 	Name      string    `json:"name" binding:"required"`
 	BIO       *string   `json:"bio,omitempty"`
+	Telegram  string    `json:"telegram"`
 }
 type respGetHelp struct {
 	ID         uuid.UUID `json:"id"`
@@ -78,6 +81,8 @@ func mapMyMentor(mentor *models.PairWithGIDs) *respGetMyMentor {
 		AvatarUrl: mentor.Mentor.AvatarURL,
 		GroupIDs:  mentor.GroupIDs,
 		Name:      mentor.Mentor.Name,
+		Telegram:  mentor.Mentor.Telegram,
+		BIO:       mentor.Mentor.BIO,
 	}
 }
 func mapHelp(help *models.HelpRequestWithGIDs) *respGetHelp {
@@ -98,6 +103,7 @@ func mapMentor(mentor *models.RoleWithGIDs) *respGetMentor {
 		AvatarUrl: mentor.User.AvatarURL,
 		Name:      mentor.User.Name,
 		BIO:       mentor.User.BIO,
+		Telegram:  mentor.User.Telegram,
 	}
 }
 
