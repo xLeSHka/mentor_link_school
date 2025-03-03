@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -77,6 +78,20 @@ func WsHandler(c *gin.Context) {
 }
 
 func Echo() {
+	go func() {
+		ticker := time.NewTicker(45 * time.Second)
+		for {
+			<-ticker.C
+			for id, client := range clients {
+				err := client.WriteMessage(websocket.PingMessage, []byte("hello"))
+				if err != nil {
+					log.Println(err)
+					client.Close()
+					delete(clients, id)
+				}
+			}
+		}
+	}()
 	for {
 		val := <-broadcast
 		jsonData, err := json.Marshal(val)
