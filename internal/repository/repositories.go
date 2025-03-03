@@ -15,7 +15,7 @@ type GroupRepository interface {
 	GetMembers(ctx context.Context, groupID uuid.UUID) ([]*models.Role, error)
 	CheckGroupExists(ctx context.Context, userID, groupID uuid.UUID) (bool, error)
 	GetStat(ctx context.Context, groupID uuid.UUID) (*models.GroupStat, error)
-	Edit(ctx context.Context, groupID uuid.UUID, updates map[string]any) error
+	Edit(ctx context.Context, groupID uuid.UUID, updates map[string]any) (*models.Group, error)
 }
 type MentorRepository interface {
 	GetMyHelpers(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequestWithGIDs, error)
