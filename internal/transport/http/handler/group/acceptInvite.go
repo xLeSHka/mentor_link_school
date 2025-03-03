@@ -71,12 +71,14 @@ func (h *Route) acceptedInvite(c *gin.Context) {
 	}
 	role := "student"
 	mes := &ws.Message{
-		Type:     "role",
-		Role:     &role,
-		GroupID:  &group.ID,
-		UserID:   &personID,
-		GroupUrl: group.AvatarURL,
-		Name:     &group.Name,
+		Type:   "role",
+		UserID: personID,
+		Role: &ws.Role{
+			Role:     role,
+			GroupID:  group.ID,
+			GroupUrl: group.AvatarURL,
+			Name:     group.Name,
+		},
 	}
 	go ws.WriteMessage(mes)
 	c.JSON(http.StatusOK, gin.H{

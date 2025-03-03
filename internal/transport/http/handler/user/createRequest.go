@@ -87,19 +87,20 @@ func (h *Route) createRequest(c *gin.Context) {
 
 		}
 		go ws.WriteMessage(&ws.Message{
-			Type:        "request",
-			ID:          &request.ID,
-			UserID:      &student.ID,
-			StudentID:   &student.ID,
-			MentorID:    &mentor.ID,
-			MentorName:  &mentor.Name,
-			StudentName: &student.Name,
-			MentorUrl:   mentor.AvatarURL,
-			StudentUrl:  student.AvatarURL,
-			GroupIDs:    &groupsIDs,
-			Goal:        &request.Goal,
-			BIO:         student.BIO,
-			Status:      &request.Status,
+			Type:   "request",
+			UserID: student.ID,
+			Request: &ws.Request{
+				ID:          request.ID,
+				StudentID:   student.ID,
+				MentorID:    mentor.ID,
+				MentorName:  mentor.Name,
+				StudentName: student.Name,
+				MentorUrl:   mentor.AvatarURL,
+				StudentUrl:  student.AvatarURL,
+				GroupIDs:    groupsIDs,
+				Goal:        request.Goal,
+				Status:      request.Status,
+			},
 		})
 	}
 	c.Writer.WriteHeader(http.StatusOK)

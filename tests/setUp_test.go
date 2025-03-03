@@ -7,7 +7,6 @@ import (
 	jwtlib "github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/minio/minio-go/v7"
-	"github.com/redis/go-redis/v9"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/Validators"
 	db2 "gitlab.prodcontest.ru/team-14/lotti/internal/connetions/db"
 	minio2 "gitlab.prodcontest.ru/team-14/lotti/internal/connetions/minio"
@@ -34,7 +33,6 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"strconv"
 	"syscall"
 	"time"
 )
@@ -44,7 +42,6 @@ var config config2.Config
 var db *gorm.DB
 var http3 *gin.Engine
 var minioClient *minio.Client
-var rdb *redis.Client
 var jwt *jwt2.JWT
 var UserRepository repository.UsersRepository
 var MinioRepository repository.MinioRepository
@@ -58,6 +55,7 @@ var routers *ApiRouters.ApiRouters
 var profile1JWT string
 var unknownJWT string
 var profile2JWT string
+var profile3JWT string
 
 func init() {
 	gin.SetMode(gin.TestMode)
@@ -82,16 +80,9 @@ func init() {
 	http3 = gin.Default()
 	http3.Use(gin.Recovery())
 	http3.Use(http2.CORSMiddleware())
-	rdb = redis.NewClient(&redis.Options{
-		Addr: config.RedisHost + ":" + strconv.Itoa(int(config.RedisPort)),
-		DB:   0,
-	})
-	validator = Validators.New()
-	err = rdb.Ping(context.Background()).Err()
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	validator = Validators.New()
+
 	jwt = jwt2.New(config)
 	minioClient, err = minio2.New(config)
 	if err != nil {
@@ -273,7 +264,7 @@ type resGetProfile struct {
 }
 type respGetMentor struct {
 	MentorID  uuid.UUID `json:"mentor_id" binding:"required"`
-	GroupID   uuid.UUID `json:"group_id" binding:"required"`
+	GroupIDs  []string  `json:"group_id" binding:"required"`
 	AvatarUrl *string   `json:"avatar_url,omitempty"`
 	Name      string    `json:"name" binding:"required"`
 	BIO       *string   `json:"bio,omitempty"`
@@ -289,6 +280,7 @@ type reqCreateHelp struct {
 type respGetHelp struct {
 	ID         uuid.UUID `json:"id"`
 	MentorID   uuid.UUID `json:"mentor_id"`
+	GroupIDs   []string  `json:"group_ids"`
 	MentorName string    `json:"mentor_name"`
 	AvatarUrl  *string   `json:"avatar_url,omitempty"`
 	Goal       string    `json:"goal"`
@@ -301,6 +293,7 @@ type reqUpdateStatus struct {
 type respGetRequest struct {
 	ID        uuid.UUID `json:"id"`
 	UserID    uuid.UUID `json:"user_id"`
+	GroupIDs  []string  `json:"group_ids"`
 	AvatarUrl *string   `json:"avatar_url,omitempty"`
 	Name      string    `json:"name"`
 	Goal      string    `json:"goal"`
@@ -309,11 +302,13 @@ type respGetRequest struct {
 
 type respGetMyMentor struct {
 	MentorID  uuid.UUID `json:"mentor_id" binding:"required"`
+	GroupIDs  []string  `json:"group_ids" binding:"required"`
 	AvatarUrl *string   `json:"avatar_url,omitempty"`
 	Name      string    `json:"name" binding:"required"`
 }
 type respGetMyStudent struct {
 	StudentID uuid.UUID `json:"student_id" binding:"required"`
+	GroupIDs  []string  `json:"group_ids" binding:"required"`
 	AvatarUrl *string   `json:"avatar_url,omitempty"`
 	Name      string    `json:"name" binding:"required"`
 }

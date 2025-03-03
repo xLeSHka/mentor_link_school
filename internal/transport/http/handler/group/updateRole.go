@@ -83,15 +83,17 @@ func (h *Route) updateRole(c *gin.Context) {
 		group.AvatarURL = &avatrUrl
 	}
 	mes := &ws.Message{
-		Type:     "role",
-		Role:     &req.Role,
-		GroupID:  &groupID,
-		UserID:   &userID,
-		GroupUrl: group.AvatarURL,
-		Name:     &group.Name,
+		Type:   "role",
+		UserID: userID,
+		Role: &ws.Role{
+			Role:     req.Role,
+			GroupID:  groupID,
+			GroupUrl: group.AvatarURL,
+			Name:     group.Name,
+		},
 	}
 	if req.Role == "owner" {
-		mes.InviteCode = group.InviteCode
+		mes.Role.InviteCode = group.InviteCode
 	}
 	go ws.WriteMessage(mes)
 	c.Writer.WriteHeader(http.StatusOK)

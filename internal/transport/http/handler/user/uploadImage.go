@@ -75,11 +75,13 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 		return
 	}
 	go ws.WriteMessage(&ws.Message{
-		Type:     "user",
-		UserID:   &personId,
-		UserUrl:  &imageURL,
-		Telegram: &user.Telegram,
-		BIO:      user.BIO,
+		Type:   "user",
+		UserID: personId,
+		User: &ws.User{
+			UserUrl:  &imageURL,
+			Telegram: user.Telegram,
+			BIO:      user.BIO,
+		},
 	})
 	c.JSON(http.StatusOK, respUploadAvatarDto{Url: imageURL})
 }

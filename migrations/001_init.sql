@@ -19,8 +19,7 @@ CREATE TABLE groups (
 CREATE TABLE roles (
     group_id UUID REFERENCES groups(id),
     user_id UUID REFERENCES users(id),
-    role VARCHAR NOT NULL,
-    PRIMARY KEY (group_id, user_id)
+    role VARCHAR NOT NULL
 );
 
 CREATE TABLE help_requests (
@@ -31,7 +30,6 @@ CREATE TABLE help_requests (
     goal VARCHAR NOT NULL,
     bio TEXT DEFAULT NULL,
     status VARCHAR NOT NULL
-
 );
 
 CREATE TABLE pairs (

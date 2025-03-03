@@ -75,13 +75,15 @@ func (h *Route) updateInviteCode(c *gin.Context) {
 	}
 	role := "owner"
 	mes := &ws.Message{
-		Type:       "role",
-		Role:       &role,
-		GroupID:    &groupID,
-		UserID:     &personID,
-		GroupUrl:   group.AvatarURL,
-		Name:       &group.Name,
-		InviteCode: group.InviteCode,
+		Type:   "role",
+		UserID: personID,
+		Role: &ws.Role{
+			Role:       role,
+			GroupID:    groupID,
+			GroupUrl:   group.AvatarURL,
+			Name:       group.Name,
+			InviteCode: group.InviteCode,
+		},
 	}
 	go ws.WriteMessage(mes)
 	c.JSON(http.StatusOK, respUpdateCode{

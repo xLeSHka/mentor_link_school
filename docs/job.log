@@ -1,0 +1,150 @@
+[0KRunning with gitlab-runner 16.1.0 (b72e108d)[0;m
+[0K  on gitlab-runner-5f45fb4598-fvsdh t1_Bv4BC, system ID: r_5Ab6T91Ouzil[0;m
+section_start:1740997841:prepare_executor[0K[0K[36;1mPreparing the "kubernetes" executor[0;m[0;m
+[0KUsing Kubernetes namespace: default[0;m
+[0KUsing Kubernetes executor with image gcr.io/kaniko-project/executor:v1.23.2-debug ...[0;m
+[0KUsing attach strategy to execute scripts...[0;m
+section_end:1740997841:prepare_executor[0Ksection_start:1740997841:prepare_script[0K[0K[36;1mPreparing environment[0;m[0;m
+Waiting for pod default/runner-t1bv4bc-project-335-concurrent-056thk to be running, status is Pending
+Running on runner-t1bv4bc-project-335-concurrent-056thk via gitlab-runner-5f45fb4598-fvsdh...
+
+section_end:1740997845:prepare_script[0Ksection_start:1740997845:get_sources[0K[0K[36;1mGetting source from Git repository[0;m[0;m
+[32;1mFetching changes with git depth set to 20...[0;m
+Initialized empty Git repository in /builds/team-14/lotti/.git/
+[32;1mCreated fresh repository.[0;m
+[32;1mChecking out 3238f3aa as detached HEAD (ref is master)...[0;m
+
+[32;1mSkipping Git submodules setup[0;m
+
+section_end:1740997847:get_sources[0Ksection_start:1740997847:step_script[0K[0K[36;1mExecuting "step_script" stage of the job script[0;m[0;m
+[32;1m$ mkdir -p /kaniko/.docker[0;m
+[32;1m$ echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$REGISTRY_USER\",\"password\":\"$REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json[0;m
+[32;1m$ /kaniko/executor --context "${CONTEXT}" --dockerfile "${CI_PROJECT_DIR}/${DOCKERFILE_PATH}" --destination "${IMAGE_NAME}" --cache=True[0;m
+[36mINFO[0m[0000] Resolved base name golang:1.23-alpine3.21 to builder 
+[36mINFO[0m[0000] Resolved base name alpine:3.21 to runner     
+[36mINFO[0m[0000] Using dockerignore file: /builds/team-14/lotti/.dockerignore 
+[36mINFO[0m[0000] Retrieving image manifest golang:1.23-alpine3.21 
+[36mINFO[0m[0000] Retrieving image golang:1.23-alpine3.21 from registry index.docker.io 
+[36mINFO[0m[0001] Retrieving image manifest golang:1.23-alpine3.21 
+[36mINFO[0m[0001] Returning cached image manifest              
+[36mINFO[0m[0001] Retrieving image manifest alpine:3.21        
+[36mINFO[0m[0001] Retrieving image alpine:3.21 from registry index.docker.io 
+[36mINFO[0m[0002] Retrieving image manifest alpine:3.21        
+[36mINFO[0m[0002] Returning cached image manifest              
+[36mINFO[0m[0002] Built cross stage deps: map[0:[/app/docs /app/bin/application]] 
+[36mINFO[0m[0002] Retrieving image manifest golang:1.23-alpine3.21 
+[36mINFO[0m[0002] Returning cached image manifest              
+[36mINFO[0m[0002] Retrieving image manifest golang:1.23-alpine3.21 
+[36mINFO[0m[0002] Returning cached image manifest              
+[36mINFO[0m[0002] Executing 0 build triggers                   
+[36mINFO[0m[0002] Building stage 'golang:1.23-alpine3.21' [idx: '0', base-idx: '-1'] 
+[36mINFO[0m[0002] Checking for cached layer gitlab.prodcontest.ru:5050/team-14/lotti/cache:652cae4732546bc85743728909f50f1760f0b2acc4d22a885cdcd7af58170875... 
+[36mINFO[0m[0002] Using caching version of cmd: RUN apk update && apk add ca-certificates git 
+[36mINFO[0m[0002] Checking for cached layer gitlab.prodcontest.ru:5050/team-14/lotti/cache:7ba66f8a66dcdcae680a47e925fbdc79d1910a0331847c26d1beb8afab14dc91... 
+[36mINFO[0m[0003] Using caching version of cmd: RUN go mod download && go mod verify 
+[36mINFO[0m[0003] Checking for cached layer gitlab.prodcontest.ru:5050/team-14/lotti/cache:02021172d5bca96200c865d7aa2f0a04e4bf2c8285edfce029c9063b6f291d65... 
+[36mINFO[0m[0003] No cached layer found for cmd RUN chmod a+x ./deploy/swag 
+[36mINFO[0m[0003] Unpacking rootfs as cmd COPY go.mod go.sum ./ requires it. 
+[36mINFO[0m[0007] RUN apk update && apk add ca-certificates git 
+[36mINFO[0m[0007] Found cached layer, extracting to filesystem 
+[36mINFO[0m[0008] WORKDIR /app                                 
+[36mINFO[0m[0008] Cmd: workdir                                 
+[36mINFO[0m[0008] Changed working directory to /app            
+[36mINFO[0m[0008] Creating directory /app with uid -1 and gid -1 
+[36mINFO[0m[0008] Taking snapshot of files...                  
+[36mINFO[0m[0008] COPY go.mod go.sum ./                        
+[36mINFO[0m[0008] Taking snapshot of files...                  
+[36mINFO[0m[0008] RUN go mod download && go mod verify         
+[36mINFO[0m[0008] Found cached layer, extracting to filesystem 
+[36mINFO[0m[0018] COPY . .                                     
+[36mINFO[0m[0018] Taking snapshot of files...                  
+[36mINFO[0m[0018] RUN chmod a+x ./deploy/swag                  
+[36mINFO[0m[0018] Initializing snapshotter ...                 
+[36mINFO[0m[0018] Taking snapshot of full filesystem...        
+[36mINFO[0m[0044] Cmd: /bin/sh                                 
+[36mINFO[0m[0044] Args: [-c chmod a+x ./deploy/swag]           
+[36mINFO[0m[0044] Running: [/bin/sh -c chmod a+x ./deploy/swag] 
+[36mINFO[0m[0044] Taking snapshot of full filesystem...        
+[36mINFO[0m[0045] RUN ./deploy/swag init -g ./internal/transport/http/httpServer.go 
+[36mINFO[0m[0045] Cmd: /bin/sh                                 
+[36mINFO[0m[0045] Args: [-c ./deploy/swag init -g ./internal/transport/http/httpServer.go] 
+[36mINFO[0m[0045] Running: [/bin/sh -c ./deploy/swag init -g ./internal/transport/http/httpServer.go] 
+Swag version:  v2.0.0
+2025/03/03 10:31:33 Generate swagger docs....
+2025/03/03 10:31:33 Generate general API Info, search dir:./
+get pkg name for directory: ./
+[36mINFO[0m[0045] Pushing layer gitlab.prodcontest.ru:5050/team-14/lotti/cache:02021172d5bca96200c865d7aa2f0a04e4bf2c8285edfce029c9063b6f291d65 to cache now 
+[36mINFO[0m[0045] Pushing image to gitlab.prodcontest.ru:5050/team-14/lotti/cache:02021172d5bca96200c865d7aa2f0a04e4bf2c8285edfce029c9063b6f291d65 
+2025/03/03 10:31:33 warning: failed to get package name in dir: ./, error: execute go list command, exit status 1, stdout:, stderr:no Go files in /app
+2025/03/03 10:31:33 Generating httpError.HTTPError
+2025/03/03 10:31:33 Generating groupsRoute.reqCreateGroupDto
+2025/03/03 10:31:33 Generating groupsRoute.resGetMember
+2025/03/03 10:31:33 Generating groupsRoute.respStat
+2025/03/03 10:31:33 Generating groupsRoute.respUpdateCode
+2025/03/03 10:31:33 Generating groupsRoute.respUploadAvatarDto
+2025/03/03 10:31:33 Generating mentorsRoute.respGetRequest
+2025/03/03 10:31:33 Generating mentorsRoute.respGetMyStudent
+2025/03/03 10:31:33 Generating mentorsRoute.reqUpdateRequest
+2025/03/03 10:31:33 Generating usersRoute.respGetMentor
+2025/03/03 10:31:33 Generating usersRoute.reqCreateHelp
+2025/03/03 10:31:33 Generating usersRoute.Pair
+2025/03/03 10:31:33 Generating usersRoute.reqEditUser
+2025/03/03 10:31:33 Generating usersRoute.respGetHelp
+2025/03/03 10:31:33 Generating usersRoute.resGetInitData
+2025/03/03 10:31:33 Generating usersRoute.respGetGroupDto
+2025/03/03 10:31:33 Generating usersRoute.respGetMyMentor
+2025/03/03 10:31:33 Generating usersRoute.respOtherProfile
+2025/03/03 10:31:33 Generating usersRoute.reqLoginDto
+2025/03/03 10:31:33 Generating usersRoute.respLoginDto
+2025/03/03 10:31:33 Generating usersRoute.respUploadAvatarDto
+2025/03/03 10:31:33 create docs.go at docs/docs.go
+2025/03/03 10:31:33 create swagger.json at docs/swagger.json
+2025/03/03 10:31:33 create swagger.yaml at docs/swagger.yaml
+[36mINFO[0m[0045] Taking snapshot of full filesystem...        
+[36mINFO[0m[0046] Pushed gitlab.prodcontest.ru:5050/team-14/lotti/cache@sha256:28a921755abc870e52a8d6793fcbc5b8963c3cda31fb81c4f555384e0ab9c505 
+[36mINFO[0m[0046] RUN go build -o bin/application ./cmd/main.go 
+[36mINFO[0m[0046] Cmd: /bin/sh                                 
+[36mINFO[0m[0046] Args: [-c go build -o bin/application ./cmd/main.go] 
+[36mINFO[0m[0046] Running: [/bin/sh -c go build -o bin/application ./cmd/main.go] 
+[36mINFO[0m[0046] Pushing layer gitlab.prodcontest.ru:5050/team-14/lotti/cache:fcf38a78dd003a29214552899bb12e3d115f99e1bc3f77b41f4e3869f9e72d19 to cache now 
+[36mINFO[0m[0046] Pushing image to gitlab.prodcontest.ru:5050/team-14/lotti/cache:fcf38a78dd003a29214552899bb12e3d115f99e1bc3f77b41f4e3869f9e72d19 
+[36mINFO[0m[0048] Pushed gitlab.prodcontest.ru:5050/team-14/lotti/cache@sha256:b2dee300af743ad1daba0bf030addc6add0100bf05766f65ff1b5325349596f5 
+[36mINFO[0m[0125] Taking snapshot of full filesystem...        
+[36mINFO[0m[0136] Pushing layer gitlab.prodcontest.ru:5050/team-14/lotti/cache:2ceddaa3047d46ac023a45e8b417d5db21f6a5499b637bf1b27000deb7b9ee6c to cache now 
+[36mINFO[0m[0136] Pushing image to gitlab.prodcontest.ru:5050/team-14/lotti/cache:2ceddaa3047d46ac023a45e8b417d5db21f6a5499b637bf1b27000deb7b9ee6c 
+[36mINFO[0m[0137] Pushed gitlab.prodcontest.ru:5050/team-14/lotti/cache@sha256:e2cef623624fea661059a72baa2ae271f6f6681ebcd75107f3305dcabce158f3 
+[36mINFO[0m[0137] Saving file app/docs for later use           
+[36mINFO[0m[0137] Saving file app/bin/application for later use 
+[36mINFO[0m[0137] Deleting filesystem...                       
+[36mINFO[0m[0138] Retrieving image manifest alpine:3.21        
+[36mINFO[0m[0138] Returning cached image manifest              
+[36mINFO[0m[0138] Retrieving image manifest alpine:3.21        
+[36mINFO[0m[0138] Returning cached image manifest              
+[36mINFO[0m[0138] Executing 0 build triggers                   
+[36mINFO[0m[0138] Building stage 'alpine:3.21' [idx: '1', base-idx: '-1'] 
+[36mINFO[0m[0138] Checking for cached layer gitlab.prodcontest.ru:5050/team-14/lotti/cache:ca67d17a6923b68d8106d30fa854bdad6f240e2353d75a00847bfa95ac425440... 
+[36mINFO[0m[0139] Using caching version of cmd: RUN apk update && apk add ca-certificates bash && rm -rf /var/cache/apk/* 
+[36mINFO[0m[0139] Unpacking rootfs as cmd COPY migrations migrations requires it. 
+[36mINFO[0m[0140] RUN apk update && apk add ca-certificates bash && rm -rf /var/cache/apk/* 
+[36mINFO[0m[0140] Found cached layer, extracting to filesystem 
+[36mINFO[0m[0140] WORKDIR /app                                 
+[36mINFO[0m[0140] Cmd: workdir                                 
+[36mINFO[0m[0140] Changed working directory to /app            
+[36mINFO[0m[0140] Creating directory /app with uid -1 and gid -1 
+[36mINFO[0m[0140] Taking snapshot of files...                  
+[36mINFO[0m[0140] COPY migrations migrations                   
+[36mINFO[0m[0140] Taking snapshot of files...                  
+[36mINFO[0m[0140] COPY --from=builder /app/docs ./docs         
+[36mINFO[0m[0140] Taking snapshot of files...                  
+[36mINFO[0m[0140] COPY --from=builder /app/bin/application ./  
+[36mINFO[0m[0140] Taking snapshot of files...                  
+[36mINFO[0m[0141] COPY ./.env ./                               
+[36mINFO[0m[0141] Taking snapshot of files...                  
+[36mINFO[0m[0141] CMD ["./application"]                        
+[36mINFO[0m[0141] No files changed in this command, skipping snapshotting. 
+[36mINFO[0m[0141] Pushing image to gitlab.prodcontest.ru:5050/team-14/lotti:3238f3aaeea52b23566b9582d231e33c17dbd3aa 
+[36mINFO[0m[0143] Pushed gitlab.prodcontest.ru:5050/team-14/lotti@sha256:60d8e98d5fe9a9da9c4f5638d19cfe8c808e2a6f89c1c7f7fc263e436d04775b 
+
+section_end:1740997991:step_script[0Ksection_start:1740997991:cleanup_file_variables[0K[0K[36;1mCleaning up project directory and file based variables[0;m[0;m
+
+section_end:1740997991:cleanup_file_variables[0K[32;1mJob succeeded[0;m

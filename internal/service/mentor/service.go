@@ -15,22 +15,18 @@ import (
 )
 
 type MentorService struct {
-	usersRepository repository.UsersRepository
-	minioRepository repository.MinioRepository
-	//groupRepository  repository.GroupRepository
+	usersRepository  repository.UsersRepository
+	minioRepository  repository.MinioRepository
 	mentorRepository repository.MentorRepository
 	jwt              *jwt.JWT
-	//rdb              *redis.Client
-	cryptoKey []byte
+	cryptoKey        []byte
 }
 
 type FxOpts struct {
 	fx.In
-	UsersRepository repository.UsersRepository
-	JWT             *jwt.JWT
-	//RDB             *redis.Client
-	MinioRepository repository.MinioRepository
-	//GroupRepository  repository.GroupRepository
+	UsersRepository  repository.UsersRepository
+	JWT              *jwt.JWT
+	MinioRepository  repository.MinioRepository
 	MentorRepository repository.MentorRepository
 	Config           config.Config
 }

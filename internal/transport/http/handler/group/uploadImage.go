@@ -111,13 +111,15 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 	}
 	role := "owner"
 	mes := &ws.Message{
-		Type:       "role",
-		Role:       &role,
-		GroupID:    &groupID,
-		UserID:     &personId,
-		GroupUrl:   group.AvatarURL,
-		Name:       &group.Name,
-		InviteCode: group.InviteCode,
+		Type:   "role",
+		UserID: personId,
+		Role: &ws.Role{
+			Role:       role,
+			GroupID:    groupID,
+			GroupUrl:   group.AvatarURL,
+			Name:       group.Name,
+			InviteCode: group.InviteCode,
+		},
 	}
 	go ws.WriteMessage(mes)
 	c.JSON(http.StatusOK, respUploadAvatarDto{Url: imageURL})

@@ -17,21 +17,6 @@ services:
       timeout: 5s
       retries: 5
 
-  redis:
-    image: redis:latest
-    container_name: redis
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
-      interval: 10s
-      timeout: 30s
-      retries: 3
-      start_period: 10s
-      start_interval: 5s
-    networks:
-      - backend-network
-
   minio:
     restart: on-failure
     container_name: minio_container
@@ -57,7 +42,6 @@ services:
 networks:
   backend-network:
 volumes:
-  redis_data:
   postgres_data:
   minio_data:
 

@@ -55,11 +55,13 @@ func (h *Route) edit(c *gin.Context) {
 		user.AvatarURL = &avatarURL
 	}
 	go ws.WriteMessage(&ws.Message{
-		Type:     "user",
-		UserID:   &personID,
-		UserUrl:  user.AvatarURL,
-		Telegram: &user.Telegram,
-		BIO:      user.BIO,
+		Type:   "user",
+		UserID: personID,
+		User: &ws.User{
+			UserUrl:  user.AvatarURL,
+			Telegram: user.Telegram,
+			BIO:      user.BIO,
+		},
 	})
 	c.Writer.WriteHeader(http.StatusOK)
 }

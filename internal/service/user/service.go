@@ -18,15 +18,13 @@ type UsersService struct {
 	minioRepository  repository.MinioRepository
 	mentorRepository repository.MentorRepository
 	jwt              *jwt.JWT
-	//rdb             *redis.Client
-	cryptoKey []byte
+	cryptoKey        []byte
 }
 
 type FxOpts struct {
 	fx.In
-	UsersRepository repository.UsersRepository
-	JWT             *jwt.JWT
-	//RDB             *redis.Client
+	UsersRepository  repository.UsersRepository
+	JWT              *jwt.JWT
 	MentorRepository repository.MentorRepository
 	MinioRepository  repository.MinioRepository
 

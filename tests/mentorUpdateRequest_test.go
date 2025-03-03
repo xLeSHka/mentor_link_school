@@ -43,7 +43,7 @@ func TestMentorUpdateRequests(t *testing.T) {
 			},
 			jwt:          unknownJWT,
 			name:         "unknown user",
-			expectedCode: http.StatusBadRequest,
+			expectedCode: http.StatusForbidden,
 		},
 		{
 			Req: reqUpdateStatus{
@@ -52,7 +52,7 @@ func TestMentorUpdateRequests(t *testing.T) {
 			},
 			jwt:          profile1JWT,
 			name:         "not own request",
-			expectedCode: http.StatusBadRequest,
+			expectedCode: http.StatusForbidden,
 		},
 	}
 	db.Create(&profile1)
