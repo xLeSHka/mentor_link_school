@@ -15,9 +15,8 @@ import (
 func (r *UsersRepository) GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Role, error) {
 	var groups []*models.Role
 	err := r.DB.WithContext(ctx).Table("roles").
-		Preload("Group").
+		Preload("Group", "user_id = ?", userID).
 		Joins("JOIN groups ON groups.id = roles.group_id").
-		Select("groups.*").Where("user_id = ?", userID).
 		Find(&groups).Error
 	return groups, err
 }
