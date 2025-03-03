@@ -18,7 +18,7 @@ import (
 // @Schemes
 // @Description Загрузка аватарки. Возвращает ссылку на аватарку, которая действует 7 дней
 // @Tags Users
-// @Accept json
+// @Accept multipart/form-data
 // @Produce json
 // @Param image formData file true "Изображение для загрузки"
 // @Router /api/user/uploadAvatar [post]
