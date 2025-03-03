@@ -18,7 +18,7 @@ import (
 // @Param body body reqLoginDto true "body"
 // @Success 200 {object} respLoginDto
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
-// @Failure 401 {object} httpError.HTTPError "Неверный email или пароль"
+// @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 func (h *Route) login(c *gin.Context) {
 	var reqData reqLoginDto
 	if err := h.validator.ShouldBindJSON(c, &reqData); err != nil {

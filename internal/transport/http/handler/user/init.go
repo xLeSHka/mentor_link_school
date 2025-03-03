@@ -21,6 +21,7 @@ import (
 // @Success 200 {object} resGetInitData
 // @Failure 400 {object} httpError.HTTPError "Невалидный запрос"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
+// Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
 func (h *Route) init(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {

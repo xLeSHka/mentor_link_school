@@ -22,6 +22,7 @@ import (
 // @Success 200
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
+// @Failure 404 {object} httpError.HTTPError "Нет такого запроса"
 func (h *Route) updateRequest(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {

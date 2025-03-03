@@ -19,6 +19,7 @@ import (
 // @Success 200 {object} respStat
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
+// @Failure 403 {object} httpError.HTTPError "Нет прав доступа"
 func (h *Route) getStat(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {

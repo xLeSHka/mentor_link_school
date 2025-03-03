@@ -22,6 +22,8 @@ import (
 // @Success 200
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
+// Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
+// Failure 409 {object} httpError.HTTPError "Запрос уже отправлен"
 func (h *Route) createRequest(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {

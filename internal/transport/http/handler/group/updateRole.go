@@ -19,6 +19,8 @@ import (
 // @Success 200
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
+// @Failure 403 {object} httpError.HTTPError "Нет прав доступа"
+// @Failure 404 {object} httpError.HTTPError "Нет такого юзера"
 func (h *Route) updateRole(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {

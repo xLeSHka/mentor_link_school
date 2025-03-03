@@ -19,6 +19,7 @@ import (
 // @Param body body reqEditUser true "body"
 // @Failure 400 {object} httpError.HTTPError
 // @Failure 401 {object} httpError.HTTPError
+// Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
 // @Success 200
 func (h *Route) edit(c *gin.Context) {
 	personID, err := jwt.Parse(c)

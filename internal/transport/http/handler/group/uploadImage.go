@@ -26,6 +26,7 @@ import (
 // @Success 200 {object} respUploadAvatarDto
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
+// @Failure 403 {object} httpError.HTTPError "Нет прав доступа"
 func (h *Route) uploadAvatar(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {

@@ -19,6 +19,7 @@ import (
 // @Success 200 {object} respUpdateCode
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
+// @Failure 403 {object} httpError.HTTPError "Нет прав доступа"
 // @Router /api/groups/{groupID}/inviteCode [post]
 // @Param Authorization header string true "Bearer <token>"
 func (h *Route) updateInviteCode(c *gin.Context) {
