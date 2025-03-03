@@ -18,6 +18,7 @@ import (
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} []respGetMyStudent
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
+// @Failure 403 {object} httpError.HTTPError "Ошибка доступа"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // @Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
 func (h *Route) students(c *gin.Context) {
