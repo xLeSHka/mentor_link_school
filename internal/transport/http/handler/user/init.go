@@ -15,7 +15,7 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /api/user/profile [get]
+// @Router /api/init [get]
 // @Success 200 {object} resGetInitData
 // @Failure 400 {object} httpError.HTTPError "Невалидный запрос"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
