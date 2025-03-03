@@ -25,6 +25,7 @@ import (
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} respUploadAvatarDto
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
+// @Failure 403 {object} httpError.HTTPError "Ошибка доступа"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // @Failure 403 {object} httpError.HTTPError "Нет прав доступа"
 func (h *Route) uploadAvatar(c *gin.Context) {

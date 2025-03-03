@@ -18,6 +18,7 @@ import (
 // @Param id path string true "Group ID"
 // @Success 200 {object} respUpdateCode
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
+// @Failure 403 {object} httpError.HTTPError "Ошибка доступа"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // @Failure 403 {object} httpError.HTTPError "Нет прав доступа"
 // @Router /api/groups/{groupID}/inviteCode [post]
