@@ -15,7 +15,7 @@ import (
 // @Tags Groups
 // @Accept json
 // @Produce json
-// @Router api/groups/{id}/edit [put]
+// @Router /api/groups/{id}/edit [put]
 // @Param id path string true "Group ID"
 // @Param Authorization header string true "Bearer <token>"
 // @Param body body reqEditGroup true "body"
