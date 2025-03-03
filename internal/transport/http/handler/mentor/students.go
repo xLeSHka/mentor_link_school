@@ -30,14 +30,14 @@ func (h *Route) students(c *gin.Context) {
 	}
 	resp := make([]*respGetMyStudent, 0, len(students))
 	for _, m := range students {
-		if m.Mentor.AvatarURL != nil {
-			avatarURL, err := h.minioRepository.GetImage(*m.Mentor.AvatarURL)
+		if m.Student.AvatarURL != nil {
+			avatarURL, err := h.minioRepository.GetImage(*m.Student.AvatarURL)
 			if err != nil {
 				err.(*httpError.HTTPError).SendError(c)
 				c.Abort()
 				return
 			}
-			m.Mentor.AvatarURL = &avatarURL
+			m.Student.AvatarURL = &avatarURL
 		}
 		resp = append(resp, mapMyStudent(m))
 	}

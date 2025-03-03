@@ -57,6 +57,14 @@ func (h *Route) acceptedInvite(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
+	if group.AvatarURL != nil {
+		avatrUrl, err := h.minioRepository.GetImage(*group.AvatarURL)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			return
+		}
+		group.AvatarURL = &avatrUrl
+	}
 	role := "student"
 	mes := &ws.Message{
 		Type:     "role",
