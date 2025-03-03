@@ -25,6 +25,8 @@ type respGetRequest struct {
 	Name      string    `json:"name"`
 	Goal      string    `json:"goal"`
 	Status    string    `json:"status"`
+	Telegram  string    `json:"telegram"`
+	BIO       *string   `json:"bio,omitempty"`
 }
 
 func mapMyStudent(user *models.PairWithGIDs) *respGetMyStudent {
@@ -46,6 +48,8 @@ func mapRequest(req *models.HelpRequestWithGIDs) (res *respGetRequest) {
 		AvatarUrl: req.Student.AvatarURL,
 		Goal:      req.Goal,
 		Status:    req.Status,
+		Telegram:  req.Student.Telegram,
+		BIO:       req.Student.BIO,
 	}
 
 	return
