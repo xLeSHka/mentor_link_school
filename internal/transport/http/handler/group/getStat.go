@@ -15,6 +15,7 @@ import (
 // @Produce  json
 // @Param id path string true "Group ID"
 // @Router /groups/{GroupID}/stat [get]
+// @Security ApiKeyAuth
 // @Success 200 {object} respStat
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"

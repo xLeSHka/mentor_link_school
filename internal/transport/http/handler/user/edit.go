@@ -14,6 +14,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /user/profile/edit [get]
+// @Security ApiKeyAuth
 // @Param body body reqEditUser true "body"
 // @Failure 400 {object} httpError.HTTPError
 // @Failure 401 {object} httpError.HTTPError

@@ -15,6 +15,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/user/profile/{id} [get]
+// @Security ApiKeyAuth
 // @Success 200 {object} respOtherProfile
 // @Failure 400 {object} httpError.HTTPError "Невалидный запрос"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"

@@ -21,6 +21,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/groups/{id}/uploadAvatar [post]
+// @Security ApiKeyAuth
 // @Success 200 {object} respUploadAvatarDto
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"

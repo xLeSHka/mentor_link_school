@@ -16,6 +16,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/user/requests [post]
+// @Security ApiKeyAuth
 // @Param body body reqCreateHelp true "body"
 // @Success 200
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"

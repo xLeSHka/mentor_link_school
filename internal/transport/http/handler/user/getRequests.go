@@ -13,6 +13,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/user/requests [get]
+// @Security ApiKeyAuth
 // @Success 200 {object} []respGetHelp
 // @Failure 400 {object} httpError.HTTPError "Невалидный запрос"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"

@@ -16,11 +16,13 @@ import (
 // @Tags Groups
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param body body reqCreateGroupDto true "body"
 // @Success 200 {object} map[string]interface{}
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // @Router /api/groups/create [post]
+// @Security ApiKeyAuth
 func (h *Route) createGroup(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {
