@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestInit(t *testing.T) {
+func TestGetOtjerProfile(t *testing.T) {
 	fn, quit, err := setUp()
 	assert.Nil(t, err)
 	defer func() {
@@ -26,7 +26,7 @@ func TestInit(t *testing.T) {
 	tests := []Test{
 		{
 			Expected:     profile1,
-			jwt:          profile1JWT,
+			jwt:          profile2JWT,
 			name:         "get profile 1",
 			expectedCode: http.StatusOK,
 		},
@@ -37,9 +37,10 @@ func TestInit(t *testing.T) {
 		},
 	}
 	db.Create(&profile1)
+	db.Create(&profile2)
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			url := "/api/init"
+			url := "/api/user/profile/" + test.Expected.ID.String()
 			req, _ := http.NewRequest(http.MethodGet, url, nil) // bytes.NewBuffer(jsonData)
 			req.Header.Set("Authorization", "Bearer "+test.jwt)
 
@@ -51,10 +52,10 @@ func TestInit(t *testing.T) {
 			}()
 			assert.Equal(t, test.expectedCode, w.Code)
 			if test.expectedCode == http.StatusOK {
-				var user resGetProfile
+				var user respOtherProfile
 				err := json.Unmarshal(w.Body.Bytes(), &user)
 				assert.Nil(t, err)
-				assert.Equal(t, test.Expected.Name, user.Name)
+				assert.Equal(t, test.Expected.Telegram, user.Telegram)
 				assert.Equal(t, *test.Expected.BIO, *user.BIO)
 			}
 		})

@@ -33,7 +33,7 @@ func TestMentorGetRequests(t *testing.T) {
 		{
 			jwt:          unknownJWT,
 			name:         "unknown user",
-			expectedCode: http.StatusForbidden,
+			expectedCode: http.StatusNotFound,
 		},
 		{
 			Expected:     []models.HelpRequest{},

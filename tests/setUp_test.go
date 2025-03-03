@@ -312,3 +312,7 @@ type respGetMyStudent struct {
 	AvatarUrl *string   `json:"avatar_url,omitempty"`
 	Name      string    `json:"name" binding:"required"`
 }
+type respOtherProfile struct {
+	Telegram string  `json:"telegram"`
+	BIO      *string `json:"bio,omitempty"`
+}

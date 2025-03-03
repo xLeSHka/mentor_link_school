@@ -10,7 +10,7 @@ import (
 
 func (r *MentorRepository) CheckRequest(ctx context.Context, id, mentorID uuid.UUID) (bool, error) {
 	var res models.HelpRequest
-	err := r.DB.Model(&models.HelpRequest{}).WithContext(ctx).Where("id = ? AND mentor_id = ?", id, mentorID).First(&res).Error
+	err := r.DB.Model(&models.HelpRequest{}).WithContext(ctx).Where("id = ? AND mentor_id = ? AND status = 'pending'", id, mentorID).First(&res).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, nil
