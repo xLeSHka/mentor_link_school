@@ -12,12 +12,6 @@ import (
 	"time"
 )
 
-var upgrader = websocket.Upgrader{
-	// Solve cross-domain problems
-	CheckOrigin: func(r *http.Request) bool {
-		return true
-	},
-} // use default options
 type Role struct {
 	Role       string    `json:"role"`
 	GroupID    uuid.UUID `json:"group_id"`
@@ -75,12 +69,18 @@ func (p *WebSocket) WriteMessage(message *Message) {
 }
 
 func (p *WebSocket) WsHandler(c *gin.Context) {
+	println("wsHandler")
 	personID, err := jwt.Parse(c)
 	if err != nil {
 		httpError.New(http.StatusUnauthorized, err.Error())
 		c.Abort()
 		return
 	}
+	var upgrader = websocket.Upgrader{
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
+	} // use default options
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		log.Fatal(err)
