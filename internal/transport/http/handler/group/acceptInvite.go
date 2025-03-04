@@ -12,7 +12,7 @@ import (
 // @Tags Groups
 // @Accept json
 // @Produce json
-// @Router /groups/join/{code} [post]
+// @Router /api/groups/join/{code} [post]
 // @Param code path string true "Invite code"
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} respJoinGroup
