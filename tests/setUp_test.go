@@ -122,6 +122,7 @@ func init() {
 		Validator:       validator,
 		MinioRepository: MinioRepository,
 		UsersService:    UserService,
+		Ws:              wsconn,
 	})
 	mentorsRoute.MentorsRoute(mentorsRoute.FxOpts{
 		ApiRouter:       routers,
@@ -129,6 +130,7 @@ func init() {
 		MinioRepository: MinioRepository,
 		UsersService:    UserService,
 		MentorService:   MentorService,
+		Ws:              wsconn,
 	})
 	groupsRoute.GroupsRoutes(groupsRoute.FxOpts{
 		ApiRouter:       routers,
@@ -136,6 +138,7 @@ func init() {
 		MinioRepository: MinioRepository,
 		UsersService:    UserService,
 		GroupService:    GroupService,
+		Ws:              wsconn,
 	})
 }
 func setUp() (func(), chan os.Signal, error) {
