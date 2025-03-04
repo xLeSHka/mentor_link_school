@@ -21,7 +21,7 @@ func (s *UsersService) Login(ctx context.Context, name string) (*models.User, st
 	user, err := s.usersRepository.Login(ctx, &models.User{
 		Name:     name,
 		ID:       uuid.New(),
-		Telegram: "t.me/t_prodano",
+		Telegram: "t_prodano",
 		BIO:      &bio,
 	})
 

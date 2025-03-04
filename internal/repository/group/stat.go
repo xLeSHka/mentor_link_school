@@ -11,11 +11,11 @@ func (r *GroupRepository) GetStat(ctx context.Context, groupID uuid.UUID) (*mode
 
 	var stat models.GroupStat
 
-	err := r.DB.WithContext(ctx).Table("roles").Where("group_id = ? AND role = 'student'", groupID).Count(&stat.StudentsCount).Error
+	err := r.DB.WithContext(ctx).Table("roles").Where("group_id = ? AND role = 'student' OR role = 'student-mentor'", groupID).Count(&stat.StudentsCount).Error
 	if err != nil {
 		return nil, err
 	}
-	err = r.DB.WithContext(ctx).Table("roles").Where("group_id = ? AND role = 'mentor'", groupID).Count(&stat.MentorsCount).Error
+	err = r.DB.WithContext(ctx).Table("roles").Where("group_id = ? AND role = 'mentor' OR role = 'student-mentor'", groupID).Count(&stat.MentorsCount).Error
 	if err != nil {
 		return nil, err
 	}
