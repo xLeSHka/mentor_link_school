@@ -171,14 +171,12 @@ lotti/
 Актуальность документации достигается благодаря автогенерации документации при запуске CI
 ### Работа с Swagger UI 
 Для всех запросов кроме `/user/auth/sign-in` требуется токен аутентифицации в заголовке чтобы определить кто отправил запрос
-Тестовые данные:  
-1. Владелец №1 - владелец организации с ID
-`Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM5NjAsImlhdCI6MTc0MTAwOTE2MDY0Mjk3MCwiaWQiOiJiZjhmYTQ3NS0zMTVhLTRjYzAtYWVmNi1jN2ZiMTc1MjUzYjYifQ.1GAtbIgmKzIEiCmLLPYmsOOUE5v_KWDNR0PVQQ6UcU0`
-2. Владелец №2: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM5NjAsImlhdCI6MTc0MTAwOTE2MDY0Mjk3MCwiaWQiOiJiZjhmYTQ3NS0zMTVhLTRjYzAtYWVmNi1jN2ZiMTc1MjUzYjYifQ.1GAtbIgmKzIEiCmLLPYmsOOUE5v_KWDNR0PVQQ6UcU0`
-3. Пользователь Орг№1 : `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM3NTQsImlhdCI6MTc0MTAwODk1NDA4NzczMiwiaWQiOiIwOGVkZTVhZi01NDk2LTRmMjktYmVlYS04ODMwYjlkZDU0NWYifQ.4fnXW5oRXu8wE2rAxN_K8ZXFNJ2UpKH3QyXW_aFl4No`
-4. Пользователь Орг№1: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM4NzEsImlhdCI6MTc0MTAwOTA3MTIyNjAxOSwiaWQiOiI5OWZiNDljNS0wMThjLTQ0MjgtYTdmMy02MGEzY2NjN2Y0MDcifQ.BxGoo1Yql6ffUccjeCHsrXVLuuYRDwTKxabo9iZFSQg`
-5. Пользователь Орг№1: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM3NTQsImlhdCI6MTc0MTAwODk1NDA4NzczMiwiaWQiOiIwOGVkZTVhZi01NDk2LTRmMjktYmVlYS04ODMwYjlkZDU0NWYifQ.4fnXW5oRXu8wE2rAxN_K8ZXFNJ2UpKH3QyXW_aFl4No`
-6. Пользователь Орг№1: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM4NzEsImlhdCI6MTc0MTAwOTA3MTIyNjAxOSwiaWQiOiI5OWZiNDljNS0wMThjLTQ0MjgtYTdmMy02MGEzY2NjN2Y0MDcifQ.BxGoo1Yql6ffUccjeCHsrXVLuuYRDwTKxabo9iZFSQg`
+Тестовые данные:
+1. Владелец. Владелец Организации. Логин: `Сваггер Пользователь 1`
+2. Пользователь: Студент. Логин: `Сваггер Пользователь 2`
+3. Пользователь. Студент. Логин: `Сваггер Пользователь 3`
+4. Пользователь. Ментор. Логин: `Сваггер Пользователь 4`
+5. Пользователь. Ментор. Логин: `Сваггер Пользователь 5`
 
 ## Тесты
 Если у вас есть `Taskfile` вы можете ввести `task run_tests` в терминале.
