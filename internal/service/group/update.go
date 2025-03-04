@@ -19,7 +19,7 @@ func (s *GroupsService) UpdateInviteCode(ctx context.Context, groupID uuid.UUID,
 	if !exists {
 		return "", httpError.New(http.StatusForbidden, "group does not exist")
 	}
-	inviteCode, _ := generateInviteCode(10)
+	inviteCode, _ := generateInviteCode(5)
 
 	err = s.groupRepository.UpdateInviteCode(ctx, groupID, inviteCode)
 	if err != nil {
