@@ -31,20 +31,21 @@ CREATE TABLE help_requests (
                                bio TEXT DEFAULT NULL,
                                status VARCHAR NOT NULL
 );
+
 CREATE TABLE fast_helps (
                             id UUID PRIMARY KEY,
                             user_id UUID  REFERENCES users(id),
                             question VARCHAR NOT NULL,
                             status BOOLEAN NOT NULL
 );
+
+
 CREATE TABLE pairs (
                        user_id UUID REFERENCES users(id),
                        mentor_id UUID REFERENCES users(id),
                        group_id UUID REFERENCES groups(id),
                        goal VARCHAR NOT NULL
 );
-
-
 
 
 -- +goose Down
