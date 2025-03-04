@@ -82,7 +82,7 @@ func (h *Route) acceptedInvite(c *gin.Context) {
 			Name:     group.Name,
 		},
 	}
-	go h.ws.WriteMessage(mes)
+	go h.wsconn.WriteMessage(mes)
 	c.JSON(http.StatusOK, gin.H{
 		"status": "ok",
 	})

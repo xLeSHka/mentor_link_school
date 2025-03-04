@@ -2,7 +2,6 @@ package publicRoute
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ApiRouters"
@@ -23,11 +22,11 @@ func PublicRoute(apiRouters *ApiRouters.ApiRouters, db *gorm.DB, wsconn *ws.WebS
 
 	apiRouters.Public.GET("/ping", router.ping)
 	apiRouters.Public.GET("/pong", func(context *gin.Context) {
-		wsconn.WriteMessage(&ws.Message{
-			Type:    "request",
-			UserID:  uuid.MustParse("cb168f71-fd8a-4d0d-b12a-bd91053b2fcf"),
-			Request: &ws.Request{},
-		})
+		//wsconn.WriteMessage(&ws.Message{
+		//	Type:    "request",
+		//	UserID:  uuid.MustParse("cb168f71-fd8a-4d0d-b12a-bd91053b2fcf"),
+		//	Request: &ws.Request{},
+		//})
 		context.JSON(200, gin.H{
 			"message": "pong",
 		})
