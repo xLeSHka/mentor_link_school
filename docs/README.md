@@ -160,7 +160,7 @@ lotti/
 7. Устанавливаем переменные
 8. Запускаем скрипт поднятия докер компоуза, установки глобальных переменных и проверки правил CI/CD
 
-[Логи успешного деплоя](https://gitlab.prodcontest.ru/team-14/lotti/-/pipelines/18179)
+[Логи успешного деплоя](https://gitlab.prodcontest.ru/team-14/lotti/-/pipelines/19578)
 
 ## Исходный код
 [Ссылка на проект с репозиториями в GitLab](https://gitlab.prodcontest.ru/team-14)

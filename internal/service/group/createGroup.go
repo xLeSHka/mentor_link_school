@@ -11,7 +11,8 @@ import (
 )
 
 func (s *GroupsService) Create(ctx context.Context, group *models.Group, userID uuid.UUID) error {
-
+	inviteCode, _ := generateInviteCode(5)
+	group.InviteCode = &inviteCode
 	err := s.groupRepository.Create(ctx, group, userID)
 	if err != nil {
 		return httpError.New(http.StatusInternalServerError, err.Error())
