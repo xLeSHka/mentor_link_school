@@ -28,7 +28,7 @@ func (r *Route) mocks(c *gin.Context) {
 		BIO:      &BIO3,
 		Telegram: "t.me/t_prodano",
 	}
-	inviteCode := "angUTIytFD"
+	inviteCode := "gnjkf"
 	swaggerGroup := &models.Group{
 		ID:         uuid.New(),
 		Name:       "Свагер огранизация",
