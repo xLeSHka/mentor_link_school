@@ -102,6 +102,6 @@ func (h *Route) updateRole(c *gin.Context) {
 	if req.Role == "owner" {
 		mes.Role.InviteCode = group.InviteCode
 	}
-	//go ws.WriteMessage(mes)
+	go h.wsconn.WriteMessage(mes)
 	c.Writer.WriteHeader(http.StatusOK)
 }

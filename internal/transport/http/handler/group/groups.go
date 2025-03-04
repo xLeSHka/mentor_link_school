@@ -5,6 +5,7 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/repository"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/service"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ApiRouters"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 
 	"go.uber.org/fx"
 )
@@ -15,6 +16,7 @@ type Route struct {
 	groupService    service.GroupService
 	usersService    service.UserService
 	minioRepository repository.MinioRepository
+	wsconn          *ws.WebSocket
 }
 
 type FxOpts struct {
@@ -24,6 +26,7 @@ type FxOpts struct {
 	GroupService    service.GroupService
 	UsersService    service.UserService
 	MinioRepository repository.MinioRepository
+	Ws              *ws.WebSocket
 }
 
 func GroupsRoutes(opts FxOpts) *Route {
@@ -33,6 +36,7 @@ func GroupsRoutes(opts FxOpts) *Route {
 		groupService:    opts.GroupService,
 		usersService:    opts.UsersService,
 		minioRepository: opts.MinioRepository,
+		wsconn:          opts.Ws,
 	}
 
 	opts.ApiRouter.UserPrivate.POST("/groups/create", router.createGroup)

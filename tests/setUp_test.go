@@ -27,6 +27,7 @@ import (
 	mentorsRoute "gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/mentor"
 	publicRoute "gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/public"
 	usersRoute "gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/user"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	jwt2 "gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"gorm.io/gorm"
 	"log"
@@ -56,6 +57,7 @@ var profile1JWT string
 var unknownJWT string
 var profile2JWT string
 var profile3JWT string
+var wsconn *ws.WebSocket
 
 func init() {
 	gin.SetMode(gin.TestMode)
@@ -88,6 +90,7 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	wsconn = ws.New()
 	GroupRepository = group.New(db)
 	UserRepository = repositoryUser.New(db)
 	MinioRepository = repositoryMinio.New(minioClient, config)
@@ -113,7 +116,7 @@ func init() {
 	})
 	routers = ApiRouters.CreateApiRoutes(http3, jwt)
 
-	publicRoute.PublicRoute(routers, db)
+	publicRoute.PublicRoute(routers, db, wsconn)
 	usersRoute.UsersRoute(usersRoute.FxOpts{
 		ApiRouter:       routers,
 		Validator:       validator,
@@ -155,6 +158,7 @@ func setUp() (func(), chan os.Signal, error) {
 	profile3JWT, err = jwt.CreateToken(jwtlib.MapClaims{
 		"id": profile3.ID,
 	}, time.Now().Add(time.Hour*24*7))
+	wsconn = ws.New()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -280,7 +284,7 @@ var stats models.GroupStat = models.GroupStat{
 	RejectedRequestCount: 0,
 	Conversion:           100,
 }
-var inviteCode = "uhfdcvOIdF"
+var inviteCode = "uhfdc"
 var group2 models.Group = models.Group{
 	ID:         uuid.New(),
 	Name:       "Group2",

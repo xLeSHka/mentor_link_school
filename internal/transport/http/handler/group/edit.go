@@ -1,6 +1,7 @@
 package groupsRoute
 
 import (
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -76,18 +77,18 @@ func (h *Route) edit(c *gin.Context) {
 		}
 		group.AvatarURL = &avatrUrl
 	}
-	//role := "owner"
-	//mes := &ws.Message{
-	//	Type:   "role",
-	//	UserID: personID,
-	//	Role: &ws.Role{
-	//		Role:       role,
-	//		GroupID:    groupID,
-	//		GroupUrl:   group.AvatarURL,
-	//		Name:       group.Name,
-	//		InviteCode: group.InviteCode,
-	//	},
-	//}
-	//go ws.WriteMessage(mes)
+	role := "owner"
+	mes := &ws.Message{
+		Type:   "role",
+		UserID: personID,
+		Role: &ws.Role{
+			Role:       role,
+			GroupID:    groupID,
+			GroupUrl:   group.AvatarURL,
+			Name:       group.Name,
+			InviteCode: group.InviteCode,
+		},
+	}
+	go h.wsconn.WriteMessage(mes)
 	c.Writer.WriteHeader(http.StatusOK)
 }

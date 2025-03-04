@@ -1,6 +1,7 @@
 package mentorsRoute
 
 import (
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"net/http"
 
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
@@ -83,31 +84,31 @@ func (h *Route) updateRequest(c *gin.Context) {
 		}
 		mentor.AvatarURL = &avatrUrl
 	}
-	_, err = h.userService.GetCommonGroups(updatedReq.UserID, updatedReq.MentorID)
+	groupsIDs, err := h.userService.GetCommonGroups(updatedReq.UserID, updatedReq.MentorID)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 
 	}
-	//go ws.WriteMessage(&ws.Message{
-	//	Type:   "request",
-	//	UserID: student.ID,
-	//	Request: &ws.Request{
-	//		ID:              request.ID,
-	//		StudentID:       student.ID,
-	//		MentorID:        mentor.ID,
-	//		MentorName:      mentor.Name,
-	//		StudentName:     student.Name,
-	//		MentorUrl:       mentor.AvatarURL,
-	//		StudentUrl:      student.AvatarURL,
-	//		StudentTelegram: student.Telegram,
-	//		StudentBio:      student.BIO,
-	//		MentorTelegram:  mentor.Telegram,
-	//		MentorBio:       mentor.BIO,
-	//		GroupIDs:        groupsIDs,
-	//		Goal:            request.Goal,
-	//		Status:          request.Status,
-	//	},
-	//})
+	go h.wsconn.WriteMessage(&ws.Message{
+		Type:   "request",
+		UserID: student.ID,
+		Request: &ws.Request{
+			ID:              request.ID,
+			StudentID:       student.ID,
+			MentorID:        mentor.ID,
+			MentorName:      mentor.Name,
+			StudentName:     student.Name,
+			MentorUrl:       mentor.AvatarURL,
+			StudentUrl:      student.AvatarURL,
+			StudentTelegram: student.Telegram,
+			StudentBio:      student.BIO,
+			MentorTelegram:  mentor.Telegram,
+			MentorBio:       mentor.BIO,
+			GroupIDs:        groupsIDs,
+			Goal:            request.Goal,
+			Status:          request.Status,
+		},
+	})
 	c.Writer.WriteHeader(http.StatusOK)
 }

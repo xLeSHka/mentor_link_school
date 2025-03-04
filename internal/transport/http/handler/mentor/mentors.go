@@ -5,6 +5,7 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/repository"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/service"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ApiRouters"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 
 	"go.uber.org/fx"
 )
@@ -15,6 +16,7 @@ type Route struct {
 	mentorService   service.MentorService
 	userService     service.UserService
 	minioRepository repository.MinioRepository
+	wsconn          *ws.WebSocket
 }
 
 type FxOpts struct {
@@ -24,6 +26,7 @@ type FxOpts struct {
 	UsersService    service.UserService
 	MentorService   service.MentorService
 	MinioRepository repository.MinioRepository
+	Ws              *ws.WebSocket
 }
 
 func MentorsRoute(opts FxOpts) *Route {
@@ -33,6 +36,7 @@ func MentorsRoute(opts FxOpts) *Route {
 		userService:     opts.UsersService,
 		mentorService:   opts.MentorService,
 		minioRepository: opts.MinioRepository,
+		wsconn:          opts.Ws,
 	}
 
 	opts.ApiRouter.MentorRoute.GET("/mentors/students", router.students)

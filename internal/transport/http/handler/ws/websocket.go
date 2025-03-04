@@ -10,7 +10,6 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"log"
 	"net/http"
-	"time"
 )
 
 type Role struct {
@@ -95,20 +94,20 @@ func (p *WebSocket) WsHandler(c *gin.Context) {
 	log.Println("Client connected")
 	// register client
 	p.Clients[personID] = ws
-	go func() {
-		ticker := time.NewTicker(3 * time.Second)
-		defer ticker.Stop()
-		for range ticker.C {
-			err := ws.WriteMessage(websocket.TextMessage, []byte("hello"))
-			if err != nil {
-				log.Println(err)
-				//ws.Close()
-				//delete(clients, personID)
-				return
-			}
-		}
-
-	}()
+	//go func() {
+	//	ticker := time.NewTicker(3 * time.Second)
+	//	defer ticker.Stop()
+	//	for range ticker.C {
+	//		err := ws.WriteMessage(websocket.TextMessage, []byte("hello"))
+	//		if err != nil {
+	//			log.Println(err)
+	//			//ws.Close()
+	//			//delete(clients, personID)
+	//			return
+	//		}
+	//	}
+	//
+	//}()
 }
 
 func (p *WebSocket) Echo() {
@@ -127,8 +126,8 @@ func (p *WebSocket) Echo() {
 				err := client.WriteMessage(websocket.BinaryMessage, jsonData)
 				if err != nil {
 					log.Printf("Websocket error: %s", err)
-					//client.Close()
-					//delete(clients, val.Request.MentorID)
+					client.Close()
+					delete(p.Clients, val.Request.MentorID)
 				}
 			}
 		}
@@ -138,8 +137,8 @@ func (p *WebSocket) Echo() {
 			err := client.WriteMessage(websocket.BinaryMessage, jsonData)
 			if err != nil {
 				log.Printf("Websocket error: %s", err)
-				//client.Close()
-				//delete(clients, val.UserID)
+				client.Close()
+				delete(p.Clients, val.UserID)
 			}
 		}
 	}

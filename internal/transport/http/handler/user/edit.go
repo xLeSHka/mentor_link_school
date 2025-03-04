@@ -1,6 +1,7 @@
 package usersRoute
 
 import (
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -56,14 +57,14 @@ func (h *Route) edit(c *gin.Context) {
 		}
 		user.AvatarURL = &avatarURL
 	}
-	//go ws.WriteMessage(&ws.Message{
-	//	Type:   "user",
-	//	UserID: personID,
-	//	User: &ws.User{
-	//		UserUrl:  user.AvatarURL,
-	//		Telegram: user.Telegram,
-	//		BIO:      user.BIO,
-	//	},
-	//})
+	go h.wsconn.WriteMessage(&ws.Message{
+		Type:   "user",
+		UserID: personID,
+		User: &ws.User{
+			UserUrl:  user.AvatarURL,
+			Telegram: user.Telegram,
+			BIO:      user.BIO,
+		},
+	})
 	c.Writer.WriteHeader(http.StatusOK)
 }

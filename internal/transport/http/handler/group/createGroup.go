@@ -1,6 +1,7 @@
 package groupsRoute
 
 import (
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"net/http"
 
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
@@ -73,19 +74,19 @@ func (h *Route) createGroup(c *gin.Context) {
 		}
 		group.AvatarURL = &avatrUrl
 	}
-	//role := "owner"
-	//mes := &ws.Message{
-	//	Type:   "role",
-	//	UserID: personId,
-	//	Role: &ws.Role{
-	//		Role:       role,
-	//		GroupID:    group.ID,
-	//		GroupUrl:   group.AvatarURL,
-	//		Name:       group.Name,
-	//		InviteCode: group.InviteCode,
-	//	},
-	//}
-	//go ws.WriteMessage(mes)
+	role := "owner"
+	mes := &ws.Message{
+		Type:   "role",
+		UserID: personId,
+		Role: &ws.Role{
+			Role:       role,
+			GroupID:    group.ID,
+			GroupUrl:   group.AvatarURL,
+			Name:       group.Name,
+			InviteCode: group.InviteCode,
+		},
+	}
+	go h.wsconn.WriteMessage(mes)
 	c.JSON(http.StatusOK, respCreateGroup{
 		GroupID: group.ID,
 	})

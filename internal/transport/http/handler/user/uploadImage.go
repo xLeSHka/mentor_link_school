@@ -2,6 +2,7 @@ package usersRoute
 
 import (
 	"fmt"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"net/http"
 	"path/filepath"
 
@@ -71,20 +72,20 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	_, err = h.usersService.GetByID(c.Request.Context(), personId)
+	user, err := h.usersService.GetByID(c.Request.Context(), personId)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()
 		return
 	}
-	//go ws.WriteMessage(&ws.Message{
-	//	Type:   "user",
-	//	UserID: personId,
-	//	User: &ws.User{
-	//		UserUrl:  &imageURL,
-	//		Telegram: user.Telegram,
-	//		BIO:      user.BIO,
-	//	},
-	//})
+	go h.wsconn.WriteMessage(&ws.Message{
+		Type:   "user",
+		UserID: personId,
+		User: &ws.User{
+			UserUrl:  &imageURL,
+			Telegram: user.Telegram,
+			BIO:      user.BIO,
+		},
+	})
 	c.JSON(http.StatusOK, respUploadAvatarDto{Url: imageURL})
 }

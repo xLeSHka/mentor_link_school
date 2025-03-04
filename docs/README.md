@@ -1,9 +1,4 @@
-# Lotti - Система наставничества
-
-## Содержание
-- [Общая архитектура](#общая-архитектура)
-- [Структура проекта](#структура-проекта)
-- [База данных](#база-данных)
+# Mentor Link - Система наставничества
 
 ## Общая архитектура
 
@@ -35,22 +30,6 @@
 
 ![Диаграмма связей компонентов](./c4.png)
 
-## CI/CD-конфигурация
-[Репозиторий с файлом пайплайнов и директорией джобов](https://gitlab.prodcontest.ru/team-14/lotti)
-
-[Логи успешного деплоя](https://gitlab.prodcontest.ru/team-14/lotti/-/pipelines/16161)
-
-## Исходный код
-[Ссылка на проект с репозиториями в GitLab](https://gitlab.prodcontest.ru/team-14)
-
-## API-Документация
-
-Документация по взаимодействию с REST API сервера представлена в формате swagger и доступна по следующему адресу: [https://prod-team-14-mkg8u20m.final.prodcontest.ru/api/docs/index.html](https://prod-team-14-mkg8u20m.final.prodcontest.ru/api/docs/index.html)  
-Актуальность документации достигается благодаря автогенерации документации при запуске CI
-Тестовые данные:
-1. Студент: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM3NTQsImlhdCI6MTc0MTAwODk1NDA4NzczMiwiaWQiOiIwOGVkZTVhZi01NDk2LTRmMjktYmVlYS04ODMwYjlkZDU0NWYifQ.4fnXW5oRXu8wE2rAxN_K8ZXFNJ2UpKH3QyXW_aFl4No`
-2. Ментор: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM4NzEsImlhdCI6MTc0MTAwOTA3MTIyNjAxOSwiaWQiOiI5OWZiNDljNS0wMThjLTQ0MjgtYTdmMy02MGEzY2NjN2Y0MDcifQ.BxGoo1Yql6ffUccjeCHsrXVLuuYRDwTKxabo9iZFSQg`
-3. Владелец: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM5NjAsImlhdCI6MTc0MTAwOTE2MDY0Mjk3MCwiaWQiOiJiZjhmYTQ3NS0zMTVhLTRjYzAtYWVmNi1jN2ZiMTc1MjUzYjYifQ.1GAtbIgmKzIEiCmLLPYmsOOUE5v_KWDNR0PVQQ6UcU0`
 
 ## Структура проекта
 
@@ -167,6 +146,39 @@ lotti/
    - Создаются из принятых запросов на помощь
    - Привязаны к организации
    - Имеют определенную цель взаимодействия
+
+## CI/CD-конфигурация
+[Репозиторий с файлом пайплайнов и директорией джобов](https://gitlab.prodcontest.ru/team-14/lotti)
+
+### Описание pipeline
+1. Включаем jobs`ы в pipeline
+2. Определяем скирпт выставления глобальных переменных
+3. Определяем стадии CI/CD
+4. Переходим на стадию билда
+5. Запускаем скрипт билда и проверки правил CI/CD
+6. Переходим к стадии деплоя
+7. Устанавливаем переменные
+8. Запускаем скрипт поднятия докер компоуза, установки глобальных переменных и проверки условий CI/CD
+
+[Логи успешного деплоя](https://gitlab.prodcontest.ru/team-14/lotti/-/pipelines/18179)
+
+## Исходный код
+[Ссылка на проект с репозиториями в GitLab](https://gitlab.prodcontest.ru/team-14)
+
+## API-Документация
+
+Документация по взаимодействию с REST API сервера представлена в формате swagger и доступна по следующему адресу: [https://prod-team-14-mkg8u20m.final.prodcontest.ru/api/docs/index.html](https://prod-team-14-mkg8u20m.final.prodcontest.ru/api/docs/index.html)  
+Актуальность документации достигается благодаря автогенерации документации при запуске CI
+### Работа с Swagger UI 
+Для всех запросов кроме `/user/auth/sign-in` требуется токен аутентифицации в заголовке чтобы определить кто отправил запрос
+Тестовые данные:  
+1. Владелец №1 - владелец организации с ID
+`Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM5NjAsImlhdCI6MTc0MTAwOTE2MDY0Mjk3MCwiaWQiOiJiZjhmYTQ3NS0zMTVhLTRjYzAtYWVmNi1jN2ZiMTc1MjUzYjYifQ.1GAtbIgmKzIEiCmLLPYmsOOUE5v_KWDNR0PVQQ6UcU0`
+2. Владелец №2: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM5NjAsImlhdCI6MTc0MTAwOTE2MDY0Mjk3MCwiaWQiOiJiZjhmYTQ3NS0zMTVhLTRjYzAtYWVmNi1jN2ZiMTc1MjUzYjYifQ.1GAtbIgmKzIEiCmLLPYmsOOUE5v_KWDNR0PVQQ6UcU0`
+3. Пользователь Орг№1 : `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM3NTQsImlhdCI6MTc0MTAwODk1NDA4NzczMiwiaWQiOiIwOGVkZTVhZi01NDk2LTRmMjktYmVlYS04ODMwYjlkZDU0NWYifQ.4fnXW5oRXu8wE2rAxN_K8ZXFNJ2UpKH3QyXW_aFl4No`
+4. Пользователь Орг№1: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM4NzEsImlhdCI6MTc0MTAwOTA3MTIyNjAxOSwiaWQiOiI5OWZiNDljNS0wMThjLTQ0MjgtYTdmMy02MGEzY2NjN2Y0MDcifQ.BxGoo1Yql6ffUccjeCHsrXVLuuYRDwTKxabo9iZFSQg`
+5. Пользователь Орг№1: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM3NTQsImlhdCI6MTc0MTAwODk1NDA4NzczMiwiaWQiOiIwOGVkZTVhZi01NDk2LTRmMjktYmVlYS04ODMwYjlkZDU0NWYifQ.4fnXW5oRXu8wE2rAxN_K8ZXFNJ2UpKH3QyXW_aFl4No`
+6. Пользователь Орг№1: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE2MTM4NzEsImlhdCI6MTc0MTAwOTA3MTIyNjAxOSwiaWQiOiI5OWZiNDljNS0wMThjLTQ0MjgtYTdmMy02MGEzY2NjN2Y0MDcifQ.BxGoo1Yql6ffUccjeCHsrXVLuuYRDwTKxabo9iZFSQg`
 
 ## Тесты
 Если у вас есть `Taskfile` вы можете ввести `task run_tests` в терминале.
