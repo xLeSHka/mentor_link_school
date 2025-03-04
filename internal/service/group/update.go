@@ -36,5 +36,5 @@ func generateInviteCode(length int) (string, error) {
 	}
 	encoded := base64.URLEncoding.EncodeToString(bytes)
 	inviteCode := strings.TrimRight(encoded, "=")
-	return inviteCode[:length], nil
+	return strings.ToLower(inviteCode[:length]), nil
 }
