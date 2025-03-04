@@ -76,14 +76,14 @@ func WsHandler(c *gin.Context) {
 	// register client
 	clients[personID] = ws
 	go func() {
-		ticker := time.NewTicker(30 * time.Second)
+		ticker := time.NewTicker(1 * time.Second)
 		defer ticker.Stop()
 		for range ticker.C {
-			err := ws.WriteMessage(websocket.PingMessage, []byte("hello"))
+			err := ws.WriteMessage(websocket.TextMessage, []byte("hello"))
 			if err != nil {
 				log.Println(err)
 				ws.Close()
-				delete(clients, personID)
+				//delete(clients, personID)
 				return
 			}
 		}
