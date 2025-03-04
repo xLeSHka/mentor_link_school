@@ -2,6 +2,7 @@ package ws
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
@@ -65,22 +66,28 @@ func New() *WebSocket {
 }
 
 func (p *WebSocket) WriteMessage(message *Message) {
+
 	p.Broadcast <- message
 }
 
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
+
 func (p *WebSocket) WsHandler(c *gin.Context) {
+	//c.Writer.Header().Set("Connection", "Upgrade")
+	//c.Writer.Header().Set("Upgrade", "websocket")
 	println("wsHandler")
 	personID, err := jwt.Parse(c)
 	if err != nil {
-		httpError.New(http.StatusUnauthorized, err.Error())
+		fmt.Println(err)
+		httpError.New(http.StatusUnauthorized, err.Error()).SendError(c)
 		c.Abort()
 		return
 	}
-	var upgrader = websocket.Upgrader{
-		CheckOrigin: func(r *http.Request) bool {
-			return true
-		},
-	} // use default options
+	// use default options
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		log.Fatal(err)

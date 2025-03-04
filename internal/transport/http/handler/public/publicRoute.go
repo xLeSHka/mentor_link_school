@@ -25,7 +25,7 @@ func PublicRoute(apiRouters *ApiRouters.ApiRouters, db *gorm.DB, wsconn *ws.WebS
 	apiRouters.Public.GET("/pong", func(context *gin.Context) {
 		wsconn.WriteMessage(&ws.Message{
 			Type:    "request",
-			UserID:  uuid.New(),
+			UserID:  uuid.MustParse("cb168f71-fd8a-4d0d-b12a-bd91053b2fcf"),
 			Request: &ws.Request{},
 		})
 		context.JSON(200, gin.H{
@@ -37,7 +37,7 @@ func PublicRoute(apiRouters *ApiRouters.ApiRouters, db *gorm.DB, wsconn *ws.WebS
 	apiRouters.Public.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, func(config *ginSwagger.Config) {
 		config.URL = "/api/docsstatic/doc.json"
 	}))
-	apiRouters.Public.GET("/ws", wsconn.WsHandler)
+	apiRouters.UserPrivate.GET("/ws", wsconn.WsHandler)
 	go wsconn.Echo()
 
 	return router
