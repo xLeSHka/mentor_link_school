@@ -46,43 +46,48 @@ func (h *Route) acceptedInvite(c *gin.Context) {
 	user, err := h.usersService.GetByID(c.Request.Context(), personID)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
+		c.Abort()
 		return
 	}
 	if user.AvatarURL != nil {
-		avatrUrl, err := h.minioRepository.GetImage(*user.AvatarURL)
+		avatarURL, err := h.minioRepository.GetImage(*user.AvatarURL)
 		if err != nil {
 			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
 			c.Abort()
 			return
 		}
-		user.AvatarURL = &avatrUrl
+		user.AvatarURL = &avatarURL
 	}
-	group, err := h.usersService.GetGroupByInviteCode(c.Request.Context(), code)
+	groups, err := h.usersService.GetGroups(c.Request.Context(), personID)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
+		c.Abort()
 		return
 	}
-	if group.AvatarURL != nil {
-		avatrUrl, err := h.minioRepository.GetImage(*group.AvatarURL)
-		if err != nil {
-			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-			c.Abort()
-			return
+	resp := make([]*ws.RespGetGroupDto, 0, len(groups))
+	for _, group := range groups {
+		if group.Group.AvatarURL != nil {
+			groupAvatarURL, err := h.minioRepository.GetImage(*group.Group.AvatarURL)
+			if err != nil {
+				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
+				c.Abort()
+				return
+			}
+			group.Group.AvatarURL = &groupAvatarURL
 		}
-		group.AvatarURL = &avatrUrl
+		resp = append(resp, ws.MapGroup(group.Group, group.Role))
 	}
-	role := "student"
-	mes := &ws.Message{
-		Type:   "role",
+	go h.wsconn.WriteMessage(&ws.Message{
+		Type:   "user",
 		UserID: personID,
-		Role: &ws.Role{
-			Role:     role,
-			GroupID:  group.ID,
-			GroupUrl: group.AvatarURL,
-			Name:     group.Name,
+		User: &ws.User{
+			Name:      user.Name,
+			AvatarUrl: user.AvatarURL,
+			Telegram:  user.Telegram,
+			BIO:       user.BIO,
+			Groups:    resp,
 		},
-	}
-	go h.wsconn.WriteMessage(mes)
+	})
 	c.JSON(http.StatusOK, gin.H{
 		"status": "ok",
 	})

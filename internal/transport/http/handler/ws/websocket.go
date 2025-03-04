@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
+	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 	"log"
 	"net/http"
@@ -19,10 +20,33 @@ type Role struct {
 	GroupUrl   *string   `json:"group_url,omitempty"`
 	InviteCode *string   `json:"invite_code,omitempty"`
 }
+type RespGetGroupDto struct {
+	Name       string  `json:"name"`
+	ID         string  `json:"id"`
+	AvatarUrl  *string `json:"avatar_url,omitempty"`
+	InviteCode *string `json:"invite_code,omitempty"`
+	Role       string  `json:"role"`
+}
+
+func MapGroup(group *models.Group, role string) *RespGetGroupDto {
+	resp := &RespGetGroupDto{
+		Name:      group.Name,
+		ID:        group.ID.String(),
+		AvatarUrl: group.AvatarURL,
+		Role:      role,
+	}
+	if role == "owner" {
+		resp.InviteCode = group.InviteCode
+	}
+	return resp
+}
+
 type User struct {
-	UserUrl  *string `json:"user_url,omitempty"`
-	Telegram string  `json:"telegram"`
-	BIO      *string `json:"bio,omitempty"`
+	Name      string             `json:"name"`
+	AvatarUrl *string            `json:"avatar_url,omitempty"`
+	Telegram  string             `json:"telegram"`
+	BIO       *string            `json:"bio,omitempty"`
+	Groups    []*RespGetGroupDto `json:"groups"`
 }
 type Request struct {
 	ID              uuid.UUID   `json:"id"`

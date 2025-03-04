@@ -50,7 +50,7 @@ func (h *Route) init(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	resp := make([]*respGetGroupDto, 0, len(groups))
+	resp := make([]*RespGetGroupDto, 0, len(groups))
 	for _, group := range groups {
 		if group.Group.AvatarURL != nil {
 			groupAvatarURL, err := h.minioRepository.GetImage(*group.Group.AvatarURL)

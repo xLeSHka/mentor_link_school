@@ -60,48 +60,50 @@ func (h *Route) updateRole(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-
 	user, err := h.usersService.GetByID(c.Request.Context(), userID)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
+		c.Abort()
 		return
 	}
 	if user.AvatarURL != nil {
-		avatrUrl, err := h.minioRepository.GetImage(*user.AvatarURL)
+		avatarURL, err := h.minioRepository.GetImage(*user.AvatarURL)
 		if err != nil {
 			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
 			c.Abort()
 			return
 		}
-		user.AvatarURL = &avatrUrl
+		user.AvatarURL = &avatarURL
 	}
-	group, err := h.usersService.GetGroupByID(c.Request.Context(), groupID)
+	groups, err := h.usersService.GetGroups(c.Request.Context(), userID)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
+		c.Abort()
 		return
 	}
-	if group.AvatarURL != nil {
-		avatrUrl, err := h.minioRepository.GetImage(*group.AvatarURL)
-		if err != nil {
-			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-			c.Abort()
-			return
+	resp := make([]*ws.RespGetGroupDto, 0, len(groups))
+	for _, group := range groups {
+		if group.Group.AvatarURL != nil {
+			groupAvatarURL, err := h.minioRepository.GetImage(*group.Group.AvatarURL)
+			if err != nil {
+				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
+				c.Abort()
+				return
+			}
+			group.Group.AvatarURL = &groupAvatarURL
 		}
-		group.AvatarURL = &avatrUrl
+		resp = append(resp, ws.MapGroup(group.Group, group.Role))
 	}
-	mes := &ws.Message{
-		Type:   "role",
+	go h.wsconn.WriteMessage(&ws.Message{
+		Type:   "user",
 		UserID: userID,
-		Role: &ws.Role{
-			Role:     req.Role,
-			GroupID:  groupID,
-			GroupUrl: group.AvatarURL,
-			Name:     group.Name,
+		User: &ws.User{
+			Name:      user.Name,
+			AvatarUrl: user.AvatarURL,
+			Telegram:  user.Telegram,
+			BIO:       user.BIO,
+			Groups:    resp,
 		},
-	}
-	if req.Role == "owner" {
-		mes.Role.InviteCode = group.InviteCode
-	}
-	go h.wsconn.WriteMessage(mes)
+	})
 	c.Writer.WriteHeader(http.StatusOK)
 }

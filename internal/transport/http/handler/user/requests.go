@@ -20,7 +20,7 @@ type resGetInitData struct {
 	AvatarUrl *string            `json:"avatar_url,omitempty"`
 	BIO       *string            `json:"bio,omitempty"`
 	Telegram  *string            `json:"telegram"`
-	Groups    []*respGetGroupDto `json:"groups"`
+	Groups    []*RespGetGroupDto `json:"groups"`
 }
 
 type respGetMyMentor struct {
@@ -111,7 +111,7 @@ func mapMentor(mentor *models.RoleWithGIDs) *respGetMentor {
 	}
 }
 
-type respGetGroupDto struct {
+type RespGetGroupDto struct {
 	Name       string  `json:"name"`
 	ID         string  `json:"id"`
 	AvatarUrl  *string `json:"avatar_url,omitempty"`
@@ -119,8 +119,8 @@ type respGetGroupDto struct {
 	Role       string  `json:"role"`
 }
 
-func mapGroup(group *models.Group, role string) *respGetGroupDto {
-	resp := &respGetGroupDto{
+func mapGroup(group *models.Group, role string) *RespGetGroupDto {
+	resp := &RespGetGroupDto{
 		Name:      group.Name,
 		ID:        group.ID.String(),
 		AvatarUrl: group.AvatarURL,

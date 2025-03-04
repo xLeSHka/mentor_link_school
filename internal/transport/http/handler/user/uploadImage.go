@@ -78,13 +78,43 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 		c.Abort()
 		return
 	}
+	if user.AvatarURL != nil {
+		avatarURL, err := h.minioRepository.GetImage(*user.AvatarURL)
+		if err != nil {
+			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
+			c.Abort()
+			return
+		}
+		user.AvatarURL = &avatarURL
+	}
+	groups, err := h.usersService.GetGroups(c.Request.Context(), personId)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		c.Abort()
+		return
+	}
+	resp := make([]*ws.RespGetGroupDto, 0, len(groups))
+	for _, group := range groups {
+		if group.Group.AvatarURL != nil {
+			groupAvatarURL, err := h.minioRepository.GetImage(*group.Group.AvatarURL)
+			if err != nil {
+				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
+				c.Abort()
+				return
+			}
+			group.Group.AvatarURL = &groupAvatarURL
+		}
+		resp = append(resp, ws.MapGroup(group.Group, group.Role))
+	}
 	go h.wsconn.WriteMessage(&ws.Message{
 		Type:   "user",
 		UserID: personId,
 		User: &ws.User{
-			UserUrl:  &imageURL,
-			Telegram: user.Telegram,
-			BIO:      user.BIO,
+			Name:      user.Name,
+			AvatarUrl: user.AvatarURL,
+			Telegram:  user.Telegram,
+			BIO:       user.BIO,
+			Groups:    resp,
 		},
 	})
 	c.JSON(http.StatusOK, respUploadAvatarDto{Url: imageURL})
