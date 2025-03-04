@@ -8,7 +8,6 @@ import (
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 
 	"github.com/bachvtuan/mime2extension"
@@ -115,18 +114,18 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 		}
 		group.AvatarURL = &avatrUrl
 	}
-	role := "owner"
-	mes := &ws.Message{
-		Type:   "role",
-		UserID: personId,
-		Role: &ws.Role{
-			Role:       role,
-			GroupID:    groupID,
-			GroupUrl:   group.AvatarURL,
-			Name:       group.Name,
-			InviteCode: group.InviteCode,
-		},
-	}
-	go ws.WriteMessage(mes)
+	//role := "owner"
+	//mes := &ws.Message{
+	//	Type:   "role",
+	//	UserID: personId,
+	//	Role: &ws.Role{
+	//		Role:       role,
+	//		GroupID:    groupID,
+	//		GroupUrl:   group.AvatarURL,
+	//		Name:       group.Name,
+	//		InviteCode: group.InviteCode,
+	//	},
+	//}
+	//go ws.WriteMessage(mes)
 	c.JSON(http.StatusOK, respUploadAvatarDto{Url: imageURL})
 }

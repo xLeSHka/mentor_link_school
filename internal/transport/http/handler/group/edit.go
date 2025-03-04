@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 )
 
@@ -77,18 +76,18 @@ func (h *Route) edit(c *gin.Context) {
 		}
 		group.AvatarURL = &avatrUrl
 	}
-	role := "owner"
-	mes := &ws.Message{
-		Type:   "role",
-		UserID: personID,
-		Role: &ws.Role{
-			Role:       role,
-			GroupID:    groupID,
-			GroupUrl:   group.AvatarURL,
-			Name:       group.Name,
-			InviteCode: group.InviteCode,
-		},
-	}
-	go ws.WriteMessage(mes)
+	//role := "owner"
+	//mes := &ws.Message{
+	//	Type:   "role",
+	//	UserID: personID,
+	//	Role: &ws.Role{
+	//		Role:       role,
+	//		GroupID:    groupID,
+	//		GroupUrl:   group.AvatarURL,
+	//		Name:       group.Name,
+	//		InviteCode: group.InviteCode,
+	//	},
+	//}
+	//go ws.WriteMessage(mes)
 	c.Writer.WriteHeader(http.StatusOK)
 }

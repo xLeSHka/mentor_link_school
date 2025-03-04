@@ -53,15 +53,28 @@ type Message struct {
 	User    *User     `json:"user,omitempty"`
 	Request *Request  `json:"request,omitempty"`
 }
-
-var clients = make(map[uuid.UUID]*websocket.Conn)
-var broadcast = make(chan *Message)
-
-func WriteMessage(message *Message) {
-	broadcast <- message
+type WebSocket struct {
+	Conn      *websocket.Conn
+	Clients   map[uuid.UUID]*websocket.Conn
+	Broadcast chan *Message
 }
 
-func WsHandler(c *gin.Context) {
+func New() *WebSocket {
+	var clients = make(map[uuid.UUID]*websocket.Conn)
+	var broadcast = make(chan *Message)
+
+	return &WebSocket{
+		Conn:      nil,
+		Clients:   clients,
+		Broadcast: broadcast,
+	}
+}
+
+func (p *WebSocket) WriteMessage(message *Message) {
+	p.Broadcast <- message
+}
+
+func (p *WebSocket) WsHandler(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {
 		httpError.New(http.StatusUnauthorized, err.Error())
@@ -74,15 +87,15 @@ func WsHandler(c *gin.Context) {
 	}
 	log.Println("Client connected")
 	// register client
-	clients[personID] = ws
+	p.Clients[personID] = ws
 	go func() {
-		ticker := time.NewTicker(1 * time.Second)
+		ticker := time.NewTicker(3 * time.Second)
 		defer ticker.Stop()
 		for range ticker.C {
 			err := ws.WriteMessage(websocket.TextMessage, []byte("hello"))
 			if err != nil {
 				log.Println(err)
-				ws.Close()
+				//ws.Close()
 				//delete(clients, personID)
 				return
 			}
@@ -91,10 +104,10 @@ func WsHandler(c *gin.Context) {
 	}()
 }
 
-func Echo() {
+func (p *WebSocket) Echo() {
 
 	for {
-		val := <-broadcast
+		val := <-p.Broadcast
 		jsonData, err := json.Marshal(val)
 		if err != nil {
 			log.Println(err)
@@ -102,24 +115,24 @@ func Echo() {
 		}
 		log.Println("Message: " + string(jsonData))
 		if val.Type == "request" {
-			client, ok := clients[val.Request.MentorID]
+			client, ok := p.Clients[val.Request.MentorID]
 			if ok {
 				err := client.WriteMessage(websocket.BinaryMessage, jsonData)
 				if err != nil {
 					log.Printf("Websocket error: %s", err)
-					client.Close()
-					delete(clients, val.Request.MentorID)
+					//client.Close()
+					//delete(clients, val.Request.MentorID)
 				}
 			}
 		}
 		// send to every client that is currently connected
-		client, ok := clients[val.UserID]
+		client, ok := p.Clients[val.UserID]
 		if ok {
 			err := client.WriteMessage(websocket.BinaryMessage, jsonData)
 			if err != nil {
 				log.Printf("Websocket error: %s", err)
-				client.Close()
-				delete(clients, val.UserID)
+				//client.Close()
+				//delete(clients, val.UserID)
 			}
 		}
 	}

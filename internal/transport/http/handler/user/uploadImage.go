@@ -7,7 +7,6 @@ import (
 
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
 
 	"github.com/bachvtuan/mime2extension"
@@ -72,20 +71,20 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	user, err := h.usersService.GetByID(c.Request.Context(), personId)
+	_, err = h.usersService.GetByID(c.Request.Context(), personId)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()
 		return
 	}
-	go ws.WriteMessage(&ws.Message{
-		Type:   "user",
-		UserID: personId,
-		User: &ws.User{
-			UserUrl:  &imageURL,
-			Telegram: user.Telegram,
-			BIO:      user.BIO,
-		},
-	})
+	//go ws.WriteMessage(&ws.Message{
+	//	Type:   "user",
+	//	UserID: personId,
+	//	User: &ws.User{
+	//		UserUrl:  &imageURL,
+	//		Telegram: user.Telegram,
+	//		BIO:      user.BIO,
+	//	},
+	//})
 	c.JSON(http.StatusOK, respUploadAvatarDto{Url: imageURL})
 }

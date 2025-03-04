@@ -5,8 +5,6 @@ import (
 	"gitlab.prodcontest.ru/team-14/lotti/internal/repository"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/service"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ApiRouters"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
-
 	"go.uber.org/fx"
 )
 
@@ -44,9 +42,6 @@ func UsersRoute(opts FxOpts) *Route {
 	opts.ApiRouter.UserPrivate.GET("/user/requests", router.getRequests)
 	opts.ApiRouter.UserPrivate.POST("/user/uploadAvatar", router.uploadAvatar)
 	//opts.ApiRouter.UserPrivate.POST("/user/invite", router.acceptedInvite)
-
-	opts.ApiRouter.UserPrivate.GET("/ws", ws.WsHandler)
-	go ws.Echo()
 
 	return router
 }

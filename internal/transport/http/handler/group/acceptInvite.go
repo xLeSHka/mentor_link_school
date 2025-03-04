@@ -3,8 +3,6 @@ package groupsRoute
 import (
 	"net/http"
 
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
-
 	"github.com/gin-gonic/gin"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
 	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
@@ -72,18 +70,18 @@ func (h *Route) acceptedInvite(c *gin.Context) {
 		}
 		group.AvatarURL = &avatrUrl
 	}
-	role := "student"
-	mes := &ws.Message{
-		Type:   "role",
-		UserID: personID,
-		Role: &ws.Role{
-			Role:     role,
-			GroupID:  group.ID,
-			GroupUrl: group.AvatarURL,
-			Name:     group.Name,
-		},
-	}
-	go ws.WriteMessage(mes)
+	//role := "student"
+	//mes := &ws.Message{
+	//	Type:   "role",
+	//	UserID: personID,
+	//	Role: &ws.Role{
+	//		Role:     role,
+	//		GroupID:  group.ID,
+	//		GroupUrl: group.AvatarURL,
+	//		Name:     group.Name,
+	//	},
+	//}
+	//go ws.WriteMessage(mes)
 	c.JSON(http.StatusOK, gin.H{
 		"status": "ok",
 	})
