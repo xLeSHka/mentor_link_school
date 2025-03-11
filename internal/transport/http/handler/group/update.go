@@ -88,7 +88,7 @@ func (h *Route) updateInviteCode(c *gin.Context) {
 			InviteCode: group.InviteCode,
 		},
 	}
-	go h.wsconn.WriteMessage(mes)
+	go h.producer.Send(mes)
 	c.JSON(http.StatusOK, respUpdateCode{
 		Code: code,
 	})

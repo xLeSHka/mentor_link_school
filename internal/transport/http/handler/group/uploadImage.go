@@ -127,6 +127,6 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 			InviteCode: group.InviteCode,
 		},
 	}
-	go h.wsconn.WriteMessage(mes)
+	go h.producer.Send(mes)
 	c.JSON(http.StatusOK, respUploadAvatarDto{Url: imageURL})
 }

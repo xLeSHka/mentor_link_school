@@ -2,11 +2,10 @@ package mentorsRoute
 
 import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/Validators"
+	"github.com/xLeSHka/mentorLinkSchool/internal/connetions/broker"
 	"github.com/xLeSHka/mentorLinkSchool/internal/repository"
 	"github.com/xLeSHka/mentorLinkSchool/internal/service"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ApiRouters"
-	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
-
 	"go.uber.org/fx"
 )
 
@@ -16,7 +15,7 @@ type Route struct {
 	mentorService   service.MentorService
 	userService     service.UserService
 	minioRepository repository.MinioRepository
-	wsconn          *ws.Hub
+	producer        *broker.Producer
 }
 
 type FxOpts struct {
@@ -26,7 +25,7 @@ type FxOpts struct {
 	UsersService    service.UserService
 	MentorService   service.MentorService
 	MinioRepository repository.MinioRepository
-	Ws              *ws.Hub
+	Producer        *broker.Producer
 }
 
 func MentorsRoute(opts FxOpts) *Route {
@@ -36,7 +35,7 @@ func MentorsRoute(opts FxOpts) *Route {
 		userService:     opts.UsersService,
 		mentorService:   opts.MentorService,
 		minioRepository: opts.MinioRepository,
-		wsconn:          opts.Ws,
+		producer:        opts.Producer,
 	}
 
 	opts.ApiRouter.MentorRoute.GET("/mentors/students", router.students)

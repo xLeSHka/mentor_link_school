@@ -80,7 +80,7 @@ func (h *Route) createGroup(c *gin.Context) {
 		}
 		resp = append(resp, ws.MapGroup(group.Group, group.Role))
 	}
-	go h.wsconn.WriteMessage(&ws.Message{
+	go h.producer.Send(&ws.Message{
 		Type:   "user",
 		UserID: personId,
 		User: &ws.User{

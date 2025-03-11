@@ -89,6 +89,6 @@ func (h *Route) edit(c *gin.Context) {
 			InviteCode: group.InviteCode,
 		},
 	}
-	go h.wsconn.WriteMessage(mes)
+	go h.producer.Send(mes)
 	c.Writer.WriteHeader(http.StatusOK)
 }

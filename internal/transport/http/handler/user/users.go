@@ -2,6 +2,7 @@ package usersRoute
 
 import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/Validators"
+	"github.com/xLeSHka/mentorLinkSchool/internal/connetions/broker"
 	"github.com/xLeSHka/mentorLinkSchool/internal/repository"
 	"github.com/xLeSHka/mentorLinkSchool/internal/service"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ApiRouters"
@@ -13,6 +14,7 @@ type Route struct {
 	validator       *Validators.Validator
 	usersService    service.UserService
 	minioRepository repository.MinioRepository
+	producer        *broker.Producer
 }
 
 type FxOpts struct {
@@ -21,6 +23,7 @@ type FxOpts struct {
 	Validator       *Validators.Validator
 	UsersService    service.UserService
 	MinioRepository repository.MinioRepository
+	Producer        *broker.Producer
 }
 
 func UsersRoute(opts FxOpts) *Route {
@@ -29,6 +32,7 @@ func UsersRoute(opts FxOpts) *Route {
 		validator:       opts.Validator,
 		usersService:    opts.UsersService,
 		minioRepository: opts.MinioRepository,
+		producer:        opts.Producer,
 	}
 
 	opts.ApiRouter.UserPrivate.POST("/user/requests", router.createRequest)

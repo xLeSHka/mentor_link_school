@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/xLeSHka/mentorLinkSchool/internal/connetions/broker"
 	"github.com/xLeSHka/mentorLinkSchool/internal/connetions/db"
 	"github.com/xLeSHka/mentorLinkSchool/internal/connetions/minio"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http"
@@ -17,6 +18,7 @@ var App = fx.Options(
 		jwt.New,
 		//redis.New,
 		minio.New,
+		broker.NewProducer,
 	),
 	Repositories,
 	Services,

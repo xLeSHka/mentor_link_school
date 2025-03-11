@@ -2,6 +2,7 @@ package httpHandlers
 
 import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/Validators"
+	"github.com/xLeSHka/mentorLinkSchool/internal/connetions/broker"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ApiRouters"
 	groupsRoute "github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/group"
 	mentorsRoute "github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/mentor"
@@ -29,6 +30,7 @@ var WSHandler = fx.Module("wsHandler",
 		ApiRouters.CreateApiRoutes,
 		Validators.New,
 		ws.New,
+		broker.NewConsumer,
 		fx.Private),
 	fx.Invoke(
 		ws.WsRoute,

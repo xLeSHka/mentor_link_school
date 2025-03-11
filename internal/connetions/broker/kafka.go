@@ -3,9 +3,10 @@ package broker
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/confluentinc/confluent-kafka-go/kafka"
+	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/xLeSHka/mentorLinkSchool/internal/pkg/config"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
+	"go.uber.org/fx"
 	"log"
 	"sync"
 )
@@ -24,12 +25,13 @@ func NewProducer(config config.Config) (*Producer, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	return &Producer{
+	prod := &Producer{
 		producer: p,
 		group:    config.KafkaGroupId,
 		topic:    config.KafkaTopic,
-	}, nil
+	}
+	prod.Run()
+	return prod, nil
 }
 func (p *Producer) Run() {
 	go func() {
@@ -76,22 +78,34 @@ func (c *Consumer) SetR(r bool) {
 	defer c.mu.Unlock()
 	c.r = r
 }
-func NewConsumer(config config.Config) (*Consumer, error) {
+
+type FxOpts struct {
+	fx.In
+	Config config.Config
+	Wsconn *ws.WebSocket
+}
+
+func NewConsumer(opts FxOpts) (*Consumer, error) {
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": config.KafkaAddress,
-		"group.id":          config.KafkaGroupId,
+		"bootstrap.servers": opts.Config.KafkaAddress,
+		"group.id":          opts.Config.KafkaGroupId,
 		"auto.offset.reset": "earliest",
 	})
 	if err != nil {
 		return nil, err
 	}
-	c.Subscribe(config.KafkaTopic, nil)
+	c.Subscribe(opts.Config.KafkaTopic, nil)
 
-	return &Consumer{
+	cons := &Consumer{
 		consumer: c,
-		topic:    config.KafkaTopic,
-		group:    config.KafkaGroupId,
-	}, nil
+		topic:    opts.Config.KafkaTopic,
+		group:    opts.Config.KafkaGroupId,
+		r:        true,
+		mu:       &sync.RWMutex{},
+		wsconn:   opts.Wsconn,
+	}
+	cons.Run()
+	return cons, nil
 }
 func (c *Consumer) Run() {
 	go func() {

@@ -90,7 +90,7 @@ func (h *Route) updateRequest(c *gin.Context) {
 		return
 
 	}
-	go h.wsconn.WriteMessage(&ws.Message{
+	go h.producer.Send(&ws.Message{
 		Type:   "request",
 		UserID: student.ID,
 		Request: &ws.Request{

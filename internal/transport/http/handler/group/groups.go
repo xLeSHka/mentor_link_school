@@ -2,11 +2,10 @@ package groupsRoute
 
 import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/Validators"
+	"github.com/xLeSHka/mentorLinkSchool/internal/connetions/broker"
 	"github.com/xLeSHka/mentorLinkSchool/internal/repository"
 	"github.com/xLeSHka/mentorLinkSchool/internal/service"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ApiRouters"
-	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
-
 	"go.uber.org/fx"
 )
 
@@ -16,7 +15,7 @@ type Route struct {
 	groupService    service.GroupService
 	usersService    service.UserService
 	minioRepository repository.MinioRepository
-	wsconn          *ws.Hub
+	producer        *broker.Producer
 }
 
 type FxOpts struct {
@@ -26,7 +25,7 @@ type FxOpts struct {
 	GroupService    service.GroupService
 	UsersService    service.UserService
 	MinioRepository repository.MinioRepository
-	Ws              *ws.Hub
+	Producer        *broker.Producer
 }
 
 func GroupsRoutes(opts FxOpts) *Route {
@@ -36,7 +35,7 @@ func GroupsRoutes(opts FxOpts) *Route {
 		groupService:    opts.GroupService,
 		usersService:    opts.UsersService,
 		minioRepository: opts.MinioRepository,
-		wsconn:          opts.Ws,
+		producer:        opts.Producer,
 	}
 
 	opts.ApiRouter.UserPrivate.POST("/groups/create", router.createGroup)

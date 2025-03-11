@@ -1,9 +1,10 @@
 module github.com/xLeSHka/mentorLinkSchool
 
-go 1.23.6
+go 1.24
 
 require (
 	github.com/bachvtuan/mime2extension v0.0.0-20151228044205-df6416a55b25
+	github.com/confluentinc/confluent-kafka-go/v2 v2.8.0
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-playground/validator/v10 v10.25.0
 	github.com/golang-jwt/jwt/v5 v5.2.1
@@ -29,7 +30,6 @@ require (
 	github.com/bytedance/sonic/loader v0.1.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
-	github.com/confluentinc/confluent-kafka-go v1.9.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/fatih/color v1.18.0 // indirect

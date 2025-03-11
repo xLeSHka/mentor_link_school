@@ -52,5 +52,6 @@ func WsRoute(opts FxOpts) *Route {
 		wsconn:    opts.Wsconn,
 	}
 	opts.ApiRouter.UserPrivate.GET("/ws", router.wsconn.wsHandler)
+	go opts.Wsconn.Echo()
 	return router
 }

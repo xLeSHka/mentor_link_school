@@ -18,7 +18,8 @@ tasks:
   start:
     desc: Run go server
     cmds:
-      - go run cmd/main.go
+      - go run cmd/back/main.go
+      - go run cmd/ws/main.go
 
   tidy:
     desc: Go mod tidy

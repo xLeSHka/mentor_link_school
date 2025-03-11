@@ -2,7 +2,7 @@ version: '3.9'
 services:
   backend1:
     restart: always
-    image: ${IMAGE_REF}
+    image: ghcr.io/mentor_link:latest
     container_name: backend1
     expose:
      - "8080"
@@ -13,7 +13,26 @@ services:
         condition: service_healthy
       minio:
         condition: service_healthy
-      kafka1:
+      kafka:
+        condition: service_started
+    networks:
+      - backend-network
+    volumes:
+      - /home/ubuntu/.env:/app/.env
+  backendws:
+    restart: always
+    image: ghcr.io/mentor_link_ws:latest
+    container_name: backendws
+    expose:
+      - "8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      kafka:
         condition: service_started
     networks:
       - backend-network
@@ -21,7 +40,7 @@ services:
       - /home/ubuntu/.env:/app/.env
   backend2:
     restart: always
-    image: ${IMAGE_REF}
+    image: ghcr.io/mentor_link:latest
     container_name: backend2
     expose:
       - "8080"
@@ -32,7 +51,7 @@ services:
         condition: service_healthy
       minio:
         condition: service_healthy
-      kafka1:
+      kafka:
         condition: service_started
     networks:
       - backend-network
@@ -135,6 +154,7 @@ services:
     depends_on:
       - backend1
       - backend2
+      - backendws
     networks:
       - backend-network
 networks:

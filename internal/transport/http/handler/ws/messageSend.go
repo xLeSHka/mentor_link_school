@@ -15,27 +15,6 @@ func (p *WebSocket) WriteMessage(message *Message) {
 	p.Broadcast <- message
 }
 
-func (p *WebSocket) WsHandler(c *gin.Context) {
-	//c.Writer.Header().Set("Connection", "Upgrade")
-	//c.Writer.Header().Set("Upgrade", "websocket")
-	println("wsHandler")
-	personID, err := jwt.Parse(c)
-	if err != nil {
-		fmt.Println(err)
-		httpError.New(http.StatusUnauthorized, err.Error()).SendError(c)
-		c.Abort()
-		return
-	}
-	// use default options
-	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println("Client connected")
-	// register client
-	p.Clients[personID] = ws
-}
-
 func (p *WebSocket) Echo() {
 
 	for {
