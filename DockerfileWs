@@ -1,4 +1,4 @@
-FROM golang:1.24-alpine3.21 AS builder
+FROM golang:1.24.1-alpine3.21 AS builder
 
 # Setup base software for building an app.
 RUN apk update && apk add ca-certificates git
