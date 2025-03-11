@@ -30,5 +30,6 @@ COPY migrations migrations
 COPY --from=builder /app/docs ./docs
 COPY --from=builder /app/bin/application ./
 COPY ./.env ./
+
 # Run the application.
 CMD ["./application"]
