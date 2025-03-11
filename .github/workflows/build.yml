@@ -6,19 +6,15 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
-env:
-  REGISTRY: ghcr.io
-
 jobs:
   build:
     runs-on: self-hosted
     strategy:
       matrix:
         include:
-          - image: ${{ env.REGISTRY }}/mentor_link:latest
+          - image: ghcr.io/mentor_link:latest
             dockerfile: ./Dockerfile
-          - image: ${{ env.REGISTRY }}/mentor_link_ws:latest
+          - image: ghcr.io/mentor_link_ws:latest
             dockerfile: ./DockerfileWs
     steps:
       - name: Checkout
@@ -27,7 +23,7 @@ jobs:
       - name: Log in to the Container registry
         uses: docker/login-action@v3.0.0
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
