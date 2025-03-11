@@ -26,12 +26,15 @@ jobs:
         run: |
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           install -m 600 -D /dev/null ~/.ssh/id_rsa
+          install -m 600 -D /dev/null ~/.ssh/authorized_keys
           echo "SSH_HOST: ${{ secrets.SSH_HOST }}"
           echo "SSH_USER: ${{ secrets.SSH_USER }}"
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ~/.ssh/authorized_keys
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa
+          ssh-add ~/.ssh/authorized_keys
           if docker context inspect remote &>/dev/null; then
             echo "Docker context 'remote' already exists. Skipping creation."
           else
@@ -51,7 +54,7 @@ jobs:
         run: |
           echo "Using Docker context:"
           docker context ls
-          ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} | ${{ secrets.SSH_PASSWORD }} echo "SSH connection successful"
+          ssh -v -i ~/.ssh/id_rsa echo "${{ secrets.SSH_PASSWORD }} | ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}"
           ssh ~/.ssh/id_rsa docker compose -f docker-compose.yml up -d
 
       - name: Cleanup
