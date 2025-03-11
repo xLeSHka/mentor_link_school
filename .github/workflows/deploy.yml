@@ -33,11 +33,14 @@ jobs:
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa
           if docker context inspect remote &>/dev/null; then
-          echo "Deleting existing Docker context 'remote'."
-          docker context rm -f remote
-          fi 
-          docker context create remote --docker host=ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
-
+            echo "Docker context 'remote' already exists. Skipping creation."
+          else
+            docker context create remote --docker host=ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+          fi
+      - name: Test SSH Connection
+        run: |
+          echo "Testing SSH connection:"
+          ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} echo "SSH connection successful"
       - name: Log in to the Container registry
         uses: docker/login-action@v3.0.0
         with:
@@ -52,8 +55,6 @@ jobs:
         run: |
           echo "Using Docker context:"
           docker context ls
-          echo "Testing SSH connection:"
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} echo "SSH connection successful"
           docker compose -f docker-compose.yml up -d
 
       - name: Cleanup
