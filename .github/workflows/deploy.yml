@@ -54,16 +54,23 @@ jobs:
 
       - name: Use Docker Context
         run: docker context use remote
-
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: mentor_link_school
+          path: ${{ runner.temp }}mentor_link_school.tar
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: mentor_link_school_ws
+          path: ${{ runner.temp }}mentor_link_school_ws.tar
       - name: Docker Compose Deployment
         run: |
           echo "Using Docker context:"
           docker context ls
-          docker --context remote pull ghcr.io/mentor_link_school:master
-          docker --context remote pull ghcr.io/mentor_link_school_ws:master
-          docker --context remote stop mentor_link_school || true
-          docker --context remote rm mentor_link_school || true
-          docker --context remote compose -f docker-compose.yml up -d
+          docker load --input ${{ runner.temp }}mentor_link_school.tar
+          docker load --input ${{ runner.temp }}mentor_link_school_ws.tar
+          docker compose -f docker-compose.yml up -d
 
       - name: Cleanup
         if: always()

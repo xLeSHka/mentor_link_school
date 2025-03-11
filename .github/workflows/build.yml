@@ -48,9 +48,15 @@ jobs:
           echo "Labels: ${{ steps.meta.outputs.labels }}"
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ${{ matrix.dockerfile }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+          outputs: type=docker,dest=${{ runner.temp }}/${{ matrix.image }}.tar
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.image }}
+          path: ${{ runner.temp }}/${{ matrix.image }}.tar
