@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
     strategy:
       matrix:
         include:
@@ -52,4 +55,3 @@ jobs:
           file: ${{ matrix.dockerfile }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
