@@ -1,9 +1,9 @@
 package broker
 
 import (
+	"context"
 	"encoding/json"
-	"fmt"
-	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
+	"github.com/segmentio/kafka-go"
 	"github.com/xLeSHka/mentorLinkSchool/internal/pkg/config"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
 	"go.uber.org/fx"
@@ -13,56 +13,37 @@ import (
 )
 
 type Producer struct {
-	producer *kafka.Producer
+	producer *kafka.Conn
 	topic    string
 	group    string
 }
 
 func NewProducer(config config.Config) (*Producer, error) {
-	p, err := kafka.NewProducer(&kafka.ConfigMap{
-
-		"bootstrap.servers": config.KafkaAddress,
-	})
+	p, err := kafka.DialLeader(context.Background(), "tcp", config.KafkaAddress, config.KafkaTopic, 0)
 	if err != nil {
 		return nil, err
 	}
+
 	prod := &Producer{
 		producer: p,
 		group:    config.KafkaGroupId,
 		topic:    config.KafkaTopic,
 	}
-	prod.Run()
 	return prod, nil
 }
-func (p *Producer) Run() {
-	go func() {
-		defer p.producer.Close()
-		for e := range p.producer.Events() {
-			switch ev := e.(type) {
-			case *kafka.Message:
-				if ev.TopicPartition.Error != nil {
-					fmt.Printf("Delivery failed: %v\n", ev.TopicPartition)
-				} else {
-					fmt.Printf("Delivered message to %v\n", ev.TopicPartition)
-				}
-			}
-		}
-	}()
-}
+
 func (p *Producer) Send(message *ws.Message) error {
+	p.producer.SetWriteDeadline(time.Now().Add(10 * time.Second))
 	jsonData, err := json.Marshal(message)
 	if err != nil {
 		return err
 	}
-	err = p.producer.Produce(&kafka.Message{
-		TopicPartition: kafka.TopicPartition{Topic: &p.topic, Partition: kafka.PartitionAny},
-		Value:          jsonData,
-	}, nil)
+	_, err = p.producer.Write(jsonData)
 	return err
 }
 
 type Consumer struct {
-	consumer *kafka.Consumer
+	consumer *kafka.Conn
 	topic    string
 	group    string
 	r        bool
@@ -88,15 +69,7 @@ type FxOpts struct {
 }
 
 func NewConsumer(opts FxOpts) (*Consumer, error) {
-	c, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": opts.Config.KafkaAddress,
-		"group.id":          opts.Config.KafkaGroupId,
-		"auto.offset.reset": "earliest",
-	})
-	if err != nil {
-		return nil, err
-	}
-	err := c.SubscribeTopics([]string{opts.Config.KafkaTopic}, nil)
+	c, err := kafka.DialLeader(context.Background(), "tcp", opts.Config.KafkaAddress, opts.Config.KafkaTopic, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +87,8 @@ func NewConsumer(opts FxOpts) (*Consumer, error) {
 func (c *Consumer) Run() {
 	go func() {
 		for c.R() {
-			msg, err := c.consumer.ReadMessage(time.Second)
+			c.consumer.SetReadDeadline(time.Now().Add(10 * time.Second))
+			msg, err := c.consumer.ReadMessage(10e3)
 			if err == nil {
 				var m ws.Message
 				err := json.Unmarshal(msg.Value, &m)
@@ -123,7 +97,7 @@ func (c *Consumer) Run() {
 					continue
 				}
 				c.wsconn.WriteMessage(&m)
-			} else if !err.(kafka.Error).IsTimeout() {
+			} else if !err.(kafka.Error).Timeout() {
 				log.Printf("Consumer error: %v (%v)\n", err, msg)
 			}
 		}
