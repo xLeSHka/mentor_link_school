@@ -33,8 +33,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker Compose Deployment
-        env:
-          IMAGE_REF: ${{ steps.meta.outputs.tags }}
         run: |
           docker-compose --context remote -f docker-compose.yml up -d
 
