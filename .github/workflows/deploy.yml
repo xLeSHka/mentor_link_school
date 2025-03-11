@@ -47,10 +47,8 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Use Docker Context
         run: docker context use remote
-
       - name: Docker Compose Deployment
         run: |
           echo "Using Docker context:"
