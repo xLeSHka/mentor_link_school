@@ -32,6 +32,7 @@ jobs:
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa
+          ssh-keyscan -H "$SSH_HOST"
           if docker context inspect remote &>/dev/null; then
             echo "Docker context 'remote' already exists. Skipping creation."
           else
