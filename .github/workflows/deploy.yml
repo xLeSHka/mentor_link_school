@@ -25,21 +25,18 @@ jobs:
       - name: Install SSH keys
         run: |
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
-          echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config && chmod 600 ~/.ssh/config
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "SSH_HOST: ${{ secrets.SSH_HOST }}"
           echo "SSH_USER: ${{ secrets.SSH_USER }}"
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa && chmod 400 ~/.ssh/id_rsa
-          ssh-agent sh -c "ssh-add ~/.ssh/id_rsa"
-          ssh-keyscan -H "$SSH_HOST"
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
           if docker context inspect remote &>/dev/null; then
             echo "Docker context 'remote' already exists. Skipping creation."
           else
             docker context create remote --docker host=ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
           fi
-      - name: Test SSH Connection
-        run: |
-          echo "Testing SSH connection:"
-          ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} --password-stdin echo "SSH connection successful"
       - name: Log in to the Container registry
         uses: docker/login-action@v3.0.0
         with:
@@ -54,7 +51,7 @@ jobs:
         run: |
           echo "Using Docker context:"
           docker context ls
-          ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} --password-stdin echo "SSH connection successful"
+          ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} | ${{ secrets.SSH_PASSWORD }} echo "SSH connection successful"
           ssh ~/.ssh/id_rsa docker compose -f docker-compose.yml up -d
 
       - name: Cleanup
