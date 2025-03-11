@@ -27,10 +27,8 @@ jobs:
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           install -m 600 -D /dev/null ~/.ssh/authorized_keys
-          echo "SSH_HOST: ${{ secrets.SSH_HOST }}"
-          echo "SSH_USER: ${{ secrets.SSH_USER }}"
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
-          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ~/.ssh/authorized_keys
+          echo "${{ secrets.SSH_PUBLIC_KEY }}" | base64 --decode > ~/.ssh/authorized_keys
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa
