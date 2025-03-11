@@ -2,12 +2,14 @@ version: '3.9'
 services:
   backend:
     restart: always
-    image: $IMAGE_NAME
+    image: ${IMAGE_REF}
     container_name: backend
     expose:
      - "8080"
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     networks:
       - backend-network
@@ -35,7 +37,7 @@ services:
       timeout: 5s
       retries: 5
   minio:
-      restart: unless-stopped
+      restart: always
       container_name: minio_container
       image: minio/minio:latest
       env_file:
@@ -60,8 +62,27 @@ services:
         start_period: 10s
       networks:
         - backend-network
+  redis:
+    env_file:
+     - .env
+    restart: always
+    image: redis:latest
+    container_name: redis
+    expose:
+     - "6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 30s
+      retries: 3
+      start_period: 10s
+      start_interval: 5s
+    volumes:
+      - redis-data:/data
+    networks:
+      - backend-network
   nginx:
-    restart: unless-stopped
+    restart: always
     image: nginx:latest
     container_name: nginx_container
     ports:
@@ -78,4 +99,4 @@ networks:
 volumes:
   postgres_data:
   minio_data:
-
+  redis-data:

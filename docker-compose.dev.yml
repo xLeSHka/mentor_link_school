@@ -13,7 +13,6 @@ services:
       - "${POSTGRES_PORT:-5432}:5432"
     networks:
       - backend-network
-      - test-network
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
@@ -42,11 +41,30 @@ services:
       start_period: 10s
     networks:
       - backend-network
-      - test-network
+  redis:
+    env_file:
+      - dev.env
+    restart: unless-stopped
+    image: redis:latest
+    container_name: cache
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: [ "CMD", "cache-cli", "ping" ]
+      interval: 10s
+      timeout: 30s
+      retries: 3
+      start_period: 10s
+      start_interval: 5s
+    volumes:
+      - cache-data:/data
+    networks:
+      - backend-network
 networks:
   backend-network:
-  test-network:
 volumes:
   postgres_data:
   minio_data:
+  redis-data:
+
 
