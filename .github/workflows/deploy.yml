@@ -10,7 +10,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-
+  SSH_AUTH_SOCK: /tmp/ssh-auth.sock
 jobs:
   deploy:
     runs-on: self-hosted
@@ -28,8 +28,10 @@ jobs:
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           install -m 600 -D /dev/null ~/.ssh/authorized_keys
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
-          echo "${{ secrets.SSH_PUBLIC_KEY }}" | base64 --decode > ~/.ssh/authorized_keys
+          chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_PUBLIC_KEY }}" | base64 --decode > ~/.ssh/authorized_keys
+          chmod 600 ~/.ssh/authorized_keys
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa
           if docker context inspect remote &>/dev/null; then
