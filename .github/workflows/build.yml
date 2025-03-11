@@ -19,9 +19,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          - image: ghcr.io/${{ github.repository }}
             dockerfile: ./Dockerfile
-          - image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}_ws
+          - image: ghcr.io/${{ github.repository }}_ws
             dockerfile: ./DockerfileWs
     steps:
       - name: Debug Matrix
