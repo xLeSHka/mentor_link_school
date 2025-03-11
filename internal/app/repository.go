@@ -1,10 +1,10 @@
 package app
 
 import (
-	repositoryGroup "gitlab.prodcontest.ru/team-14/lotti/internal/repository/group"
-	repositoryMentor "gitlab.prodcontest.ru/team-14/lotti/internal/repository/mentor"
-	repositoryMinio "gitlab.prodcontest.ru/team-14/lotti/internal/repository/minio"
-	repositoryUser "gitlab.prodcontest.ru/team-14/lotti/internal/repository/user"
+	repositoryGroup "github.com/xLeSHka/mentorLinkSchool/internal/repository/group"
+	repositoryMentor "github.com/xLeSHka/mentorLinkSchool/internal/repository/mentor"
+	repositoryMinio "github.com/xLeSHka/mentorLinkSchool/internal/repository/minio"
+	repositoryUser "github.com/xLeSHka/mentorLinkSchool/internal/repository/user"
 
 	"go.uber.org/fx"
 )

@@ -3,7 +3,7 @@ package repositoryUser
 import (
 	"context"
 	"github.com/google/uuid"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
+	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
 func (r *UsersRepository) GetMyMentors(ctx context.Context, id uuid.UUID) ([]*models.PairWithGIDs, error) {

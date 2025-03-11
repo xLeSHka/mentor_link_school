@@ -2,8 +2,8 @@ package ApiRouters
 
 import (
 	"github.com/gin-gonic/gin"
-	middlewares "gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/middleware"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
+	middlewares "github.com/xLeSHka/mentorLinkSchool/internal/transport/http/middleware"
+	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
 )
 
 type ApiRouters struct {

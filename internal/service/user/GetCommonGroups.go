@@ -3,7 +3,7 @@ package userService
 import (
 	"errors"
 	"github.com/google/uuid"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
+	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 	"gorm.io/gorm"
 	"net/http"
 )

@@ -148,7 +148,7 @@ lotti/
    - Имеют определенную цель взаимодействия
 
 ## CI/CD-конфигурация
-[Репозиторий с файлом пайплайнов и директорией джобов](https://gitlab.prodcontest.ru/team-14/lotti)
+[Репозиторий с файлом пайплайнов и директорией джобов](https://github.com/xLeSHka/mentorLinkSchool)
 
 ### Описание pipeline
 1. Включаем jobs`ы в pipeline
@@ -160,7 +160,7 @@ lotti/
 7. Устанавливаем переменные
 8. Запускаем скрипт поднятия докер компоуза, установки глобальных переменных и проверки правил CI/CD
 
-[Логи успешного деплоя](https://gitlab.prodcontest.ru/team-14/lotti/-/pipelines/19578)
+[Логи успешного деплоя](https://github.com/xLeSHka/mentorLinkSchool/-/pipelines/19578)
 
 ## Исходный код
 [Ссылка на проект с репозиториями в GitLab](https://gitlab.prodcontest.ru/team-14)

@@ -1,7 +1,7 @@
 package repositoryMentor
 
 import (
-	"gitlab.prodcontest.ru/team-14/lotti/internal/repository"
+	"github.com/xLeSHka/mentorLinkSchool/internal/repository"
 
 	"gorm.io/gorm"
 )

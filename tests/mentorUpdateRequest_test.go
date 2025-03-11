@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/stretchr/testify/assert"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
+	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 	"net/http"
 	"net/http/httptest"
 	"syscall"

@@ -2,8 +2,8 @@ package repositoryMinio
 
 import (
 	"github.com/minio/minio-go/v7"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/pkg/config"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/repository"
+	"github.com/xLeSHka/mentorLinkSchool/internal/pkg/config"
+	"github.com/xLeSHka/mentorLinkSchool/internal/repository"
 )
 
 type MinioRepository struct {

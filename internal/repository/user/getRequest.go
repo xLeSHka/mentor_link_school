@@ -3,7 +3,7 @@ package repositoryUser
 import (
 	"context"
 	"github.com/google/uuid"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
+	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
 func (r *UsersRepository) GetRequest(ctx context.Context, UserID, MentorID, GroupID uuid.UUID) (models.HelpRequest, error) {

@@ -1,8 +1,8 @@
 package groupService
 
 import (
-	"gitlab.prodcontest.ru/team-14/lotti/internal/repository"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/service"
+	"github.com/xLeSHka/mentorLinkSchool/internal/repository"
+	"github.com/xLeSHka/mentorLinkSchool/internal/service"
 
 	"go.uber.org/fx"
 )

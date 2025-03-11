@@ -3,7 +3,7 @@ package minio
 import (
 	"context"
 	"fmt"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/pkg/config"
+	"github.com/xLeSHka/mentorLinkSchool/internal/pkg/config"
 	"log"
 
 	"github.com/minio/minio-go/v7"

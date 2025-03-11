@@ -2,7 +2,7 @@ package usersRoute
 
 import (
 	"github.com/google/uuid"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
+	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
 type reqLoginDto struct {

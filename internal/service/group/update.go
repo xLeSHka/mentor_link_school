@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
+	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 )
 
 func (s *GroupsService) UpdateInviteCode(ctx context.Context, groupID uuid.UUID, ownerID uuid.UUID) (string, error) {

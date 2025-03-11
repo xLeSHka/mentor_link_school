@@ -1,14 +1,14 @@
 package mentorsRoute
 
 import (
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
+	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
 	"net/http"
 
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
+	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
 
 	"github.com/gin-gonic/gin"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
+	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
+	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
 // @Summary Изменить состояние заявки

@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
+	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
 
 	"github.com/gin-gonic/gin"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
+	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 )
 
 // @Summary Получение доступных менторов

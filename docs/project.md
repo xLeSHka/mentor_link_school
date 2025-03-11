@@ -1,4 +1,4 @@
 Репозиторий бэкэнда - Lotti
-https://gitlab.prodcontest.ru/team-14/lotti
+https://github.com/xLeSHka/mentorLinkSchool
 Репозиторий мобильного приложения - Mobile
 https://gitlab.prodcontest.ru/team-14/mobile

@@ -5,9 +5,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/pkg/jwt"
+	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
+	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
+	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
 )
 
 // @Summary Обновить роль юзера

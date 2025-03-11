@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/app/httpError"
+	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 )
 
 func (s *GroupsService) UpdateRole(ctx context.Context, ownerID, groupID, userID uuid.UUID, role string) error {

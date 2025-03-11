@@ -3,7 +3,7 @@ package jwt
 import (
 	"errors"
 	"github.com/golang-jwt/jwt/v5"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/pkg/config"
+	"github.com/xLeSHka/mentorLinkSchool/internal/pkg/config"
 	"time"
 )
 

@@ -2,7 +2,7 @@ package repositoryMentor
 
 import (
 	"context"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
+	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
 func (r *MentorRepository) UpdateRequest(ctx context.Context, request *models.HelpRequest) error {

@@ -3,7 +3,7 @@ package publicRoute
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/models"
+	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
 func (r *Route) mocks(c *gin.Context) {

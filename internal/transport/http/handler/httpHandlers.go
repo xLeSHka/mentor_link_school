@@ -1,13 +1,13 @@
 package httpHandlers
 
 import (
-	"gitlab.prodcontest.ru/team-14/lotti/internal/app/Validators"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ApiRouters"
-	groupsRoute "gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/group"
-	mentorsRoute "gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/mentor"
-	publicRoute "gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/public"
-	usersRoute "gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/user"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
+	"github.com/xLeSHka/mentorLinkSchool/internal/app/Validators"
+	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ApiRouters"
+	groupsRoute "github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/group"
+	mentorsRoute "github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/mentor"
+	publicRoute "github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/public"
+	usersRoute "github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/user"
+	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
 	"go.uber.org/fx"
 )
 

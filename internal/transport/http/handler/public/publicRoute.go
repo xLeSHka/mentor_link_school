@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ApiRouters"
-	"gitlab.prodcontest.ru/team-14/lotti/internal/transport/http/handler/ws"
+	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ApiRouters"
+	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
 	"gorm.io/gorm"
 )
 
