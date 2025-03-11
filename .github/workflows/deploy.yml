@@ -6,18 +6,7 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-    strategy:
-      matrix:
-        include:
-          - image: ghcr.io/mentor_link
-            dockerfile: ./Dockerfile
-          - image: ghcr.io/mentor_link_ws
-            dockerfile: ./DockerfileWs
     steps:
-      - name: Debug Matrix
-        run: |
-          echo "Image: ${{ matrix.image }}"
-          echo "Dockerfile: ${{ matrix.dockerfile }}"
 
       - name: Checkout
         uses: actions/checkout@v4.1.1

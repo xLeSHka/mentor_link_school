@@ -21,6 +21,7 @@ jobs:
         run: |
           echo "Image: ${{ matrix.image }}"
           echo "Dockerfile: ${{ matrix.dockerfile }}"
+
       - name: Checkout
         uses: actions/checkout@v4.1.1
 
@@ -36,6 +37,11 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ matrix.image }}
+
+      - name: Debug Metadata
+        run: |
+          echo "Tags: ${{ steps.meta.outputs.tags }}"
+          echo "Labels: ${{ steps.meta.outputs.labels }}"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
