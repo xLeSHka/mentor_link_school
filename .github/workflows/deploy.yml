@@ -51,6 +51,10 @@ jobs:
         run: |
           echo "Using Docker context:"
           docker context ls
+          ssh ~/.ssh/id_rsa docker pull mentor_link_school:master
+          ssh ~/.ssh/id_rsa docker pull mentor_link_school_ws:master
+          ssh ~/.ssh/id_rsa docker stop mentor_link_school || true
+          ssh ~/.ssh/id_rsa docker rm mentor_link_school || true
           ssh ~/.ssh/id_rsa docker compose -f docker-compose.yml up -d
 
       - name: Cleanup
