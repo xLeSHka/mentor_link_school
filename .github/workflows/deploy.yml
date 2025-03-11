@@ -30,6 +30,8 @@ jobs:
           echo "SSH_USER: ${{ secrets.SSH_USER }}"
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
           if docker context inspect remote &>/dev/null; then
           echo "Deleting existing Docker context 'remote'."
           docker context rm -f remote
@@ -43,9 +45,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Use Docker Context
+        run: docker context use remote
+
       - name: Docker Compose Deployment
         run: |
-          docker context use remote
+          echo "Using Docker context:"
+          docker context ls
+          echo "Testing SSH connection:"
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} echo "SSH connection successful"
           docker compose -f docker-compose.yml up -d
 
       - name: Cleanup
