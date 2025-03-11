@@ -9,6 +9,7 @@ import (
 	"go.uber.org/fx"
 	"log"
 	"sync"
+	"time"
 )
 
 type Producer struct {
@@ -35,6 +36,7 @@ func NewProducer(config config.Config) (*Producer, error) {
 }
 func (p *Producer) Run() {
 	go func() {
+		defer p.producer.Close()
 		for e := range p.producer.Events() {
 			switch ev := e.(type) {
 			case *kafka.Message:
@@ -94,8 +96,10 @@ func NewConsumer(opts FxOpts) (*Consumer, error) {
 	if err != nil {
 		return nil, err
 	}
-	c.Subscribe(opts.Config.KafkaTopic, nil)
-
+	err := c.SubscribeTopics([]string{opts.Config.KafkaTopic}, nil)
+	if err != nil {
+		return nil, err
+	}
 	cons := &Consumer{
 		consumer: c,
 		topic:    opts.Config.KafkaTopic,
@@ -110,21 +114,17 @@ func NewConsumer(opts FxOpts) (*Consumer, error) {
 func (c *Consumer) Run() {
 	go func() {
 		for c.R() {
-			ev := c.consumer.Poll(100)
-			switch e := ev.(type) {
-			case *kafka.Message:
-				var msg ws.Message
-				err := json.Unmarshal(e.Value, &msg)
+			msg, err := c.consumer.ReadMessage(time.Second)
+			if err == nil {
+				var m ws.Message
+				err := json.Unmarshal(msg.Value, &m)
 				if err != nil {
 					log.Printf("Error unmarshalling message: %v\n", err)
 					continue
 				}
-				c.wsconn.WriteMessage(&msg)
-			case kafka.Error:
-				log.Println(e)
-				c.SetR(false)
-			default:
-				log.Println("ignored %v", e)
+				c.wsconn.WriteMessage(&m)
+			} else if !err.(kafka.Error).IsTimeout() {
+				log.Printf("Consumer error: %v (%v)\n", err, msg)
 			}
 		}
 		err := c.consumer.Close()

@@ -4,7 +4,7 @@ FROM golang:1.24.1-alpine3.21 AS builder
 RUN apk update && apk add ca-certificates git
 
 WORKDIR /app
-
+RUN apk add librdkafka-dev pkgconf
 # Download dependencies.
 COPY go.mod go.sum ./
 RUN go mod download && go mod verify
@@ -16,11 +16,11 @@ RUN chmod a+x ./deploy/swag
 
 RUN ./deploy/swag init -g ./internal/transport/http/httpServer.go
 # Build the application.
-RUN go build -o bin/application ./cmd/back/main.go
+RUN go build -o bin/application ./cmd/back/main.go -tags musl
 
 # Prepare executor image.
 FROM alpine:3.21 AS runner
-
+RUN apk add librdkafka-dev pkgconf
 RUN apk update && apk add ca-certificates bash && rm -rf /var/cache/apk/*
 
 WORKDIR /app
