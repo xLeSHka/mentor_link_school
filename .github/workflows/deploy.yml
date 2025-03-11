@@ -1,9 +1,5 @@
 name: Deploy
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-
 on:
   workflow_dispatch
 
@@ -13,11 +9,16 @@ jobs:
     strategy:
       matrix:
         include:
-          - image: ghcr.io/mentor_link:latest
+          - image: ghcr.io/mentor_link
             dockerfile: ./Dockerfile
-          - image: ghcr.io/mentor_link_ws:latest
+          - image: ghcr.io/mentor_link_ws
             dockerfile: ./DockerfileWs
     steps:
+      - name: Debug Matrix
+        run: |
+          echo "Image: ${{ matrix.image }}"
+          echo "Dockerfile: ${{ matrix.dockerfile }}"
+
       - name: Checkout
         uses: actions/checkout@v4.1.1
         env:
@@ -25,18 +26,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install ssh keys
+      - name: Install SSH keys
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
           docker context create remote --docker host=ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: ${{ matrix.image }}
       - name: Log in to the Container registry
         uses: docker/login-action@v3.0.0
         with:
@@ -44,9 +40,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Docker compose
+      - name: Docker Compose Deployment
         run: |
           docker-compose --context remote -f docker-compose.yml up -d
 
-      - name: cleanup
-        run: rm -rf ~/.ssh
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -rf ~/.ssh
