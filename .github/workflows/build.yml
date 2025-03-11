@@ -35,18 +35,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ matrix.image }}
-          tags: |
-            type=raw,value=latest
-
-      - name: Debug Metadata
-        run: |
-          echo "Tags: ${{ steps.meta.outputs.tags }}"
-          echo "Labels: ${{ steps.meta.outputs.labels }}"
+#      - name: Extract metadata (tags, labels) for Docker
+#        id: meta
+#        uses: docker/metadata-action@v4
+#        with:
+#          images: ${{ matrix.image }}
+#          tags: |
+#            type=raw,value=latest
+#
+#      - name: Debug Metadata
+#        run: |
+#          echo "Tags: ${{ steps.meta.outputs.tags }}"
+#          echo "Labels: ${{ steps.meta.outputs.labels }}"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -54,4 +54,4 @@ jobs:
           context: .
           file: ${{ matrix.dockerfile }}
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ matrix.image }}:latest
