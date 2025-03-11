@@ -1,9 +1,9 @@
 version: '3.9'
 services:
-  backend:
+  backend1:
     restart: always
     image: ${IMAGE_REF}
-    container_name: backend
+    container_name: backend1
     expose:
      - "8080"
     depends_on:
@@ -11,6 +11,29 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      minio:
+        condition: service_healthy
+      kafka1:
+        condition: service_started
+    networks:
+      - backend-network
+    volumes:
+      - /home/ubuntu/.env:/app/.env
+  backend2:
+    restart: always
+    image: ${IMAGE_REF}
+    container_name: backend2
+    expose:
+      - "8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      kafka1:
+        condition: service_started
     networks:
       - backend-network
     volumes:
@@ -81,6 +104,25 @@ services:
       - redis-data:/data
     networks:
       - backend-network
+  zoo:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zoo
+    expose:
+      - "2181:2181"
+    networks:
+      - backend-network
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    expose:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_ZOOKEEPER_CONNECT: "zoo:2181"
+    depends_on:
+      - zoo
+    networks:
+      - backend-network
   nginx:
     restart: always
     image: nginx:latest
@@ -91,7 +133,8 @@ services:
       - /home/ubuntu/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - /home/ubuntu/nginx/ssl:/etc/nginx/ssl
     depends_on:
-      - backend
+      - backend1
+      - backend2
     networks:
       - backend-network
 networks:

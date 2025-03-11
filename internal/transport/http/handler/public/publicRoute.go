@@ -5,7 +5,6 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ApiRouters"
-	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
 	"gorm.io/gorm"
 )
 
@@ -14,7 +13,7 @@ type Route struct {
 	DB      *gorm.DB
 }
 
-func PublicRoute(apiRouters *ApiRouters.ApiRouters, db *gorm.DB, wsconn *ws.WebSocket) *Route {
+func PublicRoute(apiRouters *ApiRouters.ApiRouters, db *gorm.DB) *Route {
 	router := &Route{
 		Routers: apiRouters,
 		DB:      db,
@@ -36,8 +35,6 @@ func PublicRoute(apiRouters *ApiRouters.ApiRouters, db *gorm.DB, wsconn *ws.WebS
 	apiRouters.Public.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, func(config *ginSwagger.Config) {
 		config.URL = "/api/docsstatic/doc.json"
 	}))
-	apiRouters.UserPrivate.GET("/ws", wsconn.WsHandler)
-	go wsconn.Echo()
 
 	return router
 }

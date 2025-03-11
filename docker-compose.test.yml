@@ -33,9 +33,10 @@ services:
       start_period: 10s
       start_interval: 5s
     volumes:
-      - cache-data:/data
+      - redis-data:/data
     networks:
       - backend-network
+
   minio:
     env_file:
       - dev.env

@@ -41,6 +41,27 @@ services:
       start_period: 10s
     networks:
       - backend-network
+  zoo:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zoo
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+    expose:
+      - "2181:2181"
+    networks:
+      - backend-network
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    expose:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_ZOOKEEPER_CONNECT: "zoo:2181"
+    depends_on:
+      - zoo
+    networks:
+      - backend-network
   redis:
     env_file:
       - dev.env
@@ -57,7 +78,7 @@ services:
       start_period: 10s
       start_interval: 5s
     volumes:
-      - cache-data:/data
+      - redis-data:/data
     networks:
       - backend-network
 networks:

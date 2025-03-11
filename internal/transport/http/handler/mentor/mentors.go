@@ -16,7 +16,7 @@ type Route struct {
 	mentorService   service.MentorService
 	userService     service.UserService
 	minioRepository repository.MinioRepository
-	wsconn          *ws.WebSocket
+	wsconn          *ws.Hub
 }
 
 type FxOpts struct {
@@ -26,7 +26,7 @@ type FxOpts struct {
 	UsersService    service.UserService
 	MentorService   service.MentorService
 	MinioRepository repository.MinioRepository
-	Ws              *ws.WebSocket
+	Ws              *ws.Hub
 }
 
 func MentorsRoute(opts FxOpts) *Route {

@@ -22,3 +22,9 @@ var App = fx.Options(
 	Services,
 	httpHandlers.HttpHandlers,
 )
+var WSApp = fx.Options(
+	fx.Provide(
+		http.New,
+	),
+	httpHandlers.WSHandler,
+)

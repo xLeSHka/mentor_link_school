@@ -15,7 +15,6 @@ var HttpHandlers = fx.Module("httpHandlers",
 	fx.Provide(
 		ApiRouters.CreateApiRoutes,
 		Validators.New,
-		ws.New,
 		fx.Private),
 	//publicRoute.PublicRoute,
 	fx.Invoke(
@@ -23,5 +22,15 @@ var HttpHandlers = fx.Module("httpHandlers",
 		usersRoute.UsersRoute,
 		mentorsRoute.MentorsRoute,
 		groupsRoute.GroupsRoutes,
+	),
+)
+var WSHandler = fx.Module("wsHandler",
+	fx.Provide(
+		ApiRouters.CreateApiRoutes,
+		Validators.New,
+		ws.New,
+		fx.Private),
+	fx.Invoke(
+		ws.WsRoute,
 	),
 )

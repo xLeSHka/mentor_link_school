@@ -57,7 +57,7 @@ var profile1JWT string
 var unknownJWT string
 var profile2JWT string
 var profile3JWT string
-var wsconn *ws.WebSocket
+var wsconn *ws.Hub
 
 func init() {
 	gin.SetMode(gin.TestMode)

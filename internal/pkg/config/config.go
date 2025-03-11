@@ -32,6 +32,9 @@ type Config struct {
 	IsModerationEnabled  bool   `envconfig:"IS_MODERATION_ENABLED" default:"false"`
 	AIToken              string `envconfig:"AI_TOKEN" default:""`
 	AIModel              string `envconfig:"AI_MODEL" default:""`
+	KafkaAddress         string `envconfig:"KAFKA_ADDRESS" default:"localhost:9092"`
+	KafkaTopic           string `envconfig:"KAFKA_TOPIC" default:"websocket"`
+	KafkaGroupId         string `envconfig:"KAFKA_GROUP_ID" default:"1"`
 }
 
 func New() (Config, error) {
