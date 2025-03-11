@@ -45,7 +45,8 @@ jobs:
 
       - name: Docker Compose Deployment
         run: |
-          docker compose --context remote -f docker-compose.yml up -d
+          docker context use remote
+          docker compose -f docker-compose.yml up -d
 
       - name: Cleanup
         if: always()
