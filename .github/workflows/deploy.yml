@@ -25,13 +25,11 @@ jobs:
       - name: Install SSH keys
         run: |
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
-          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config && chmod 600 ~/.ssh/config
           echo "SSH_HOST: ${{ secrets.SSH_HOST }}"
           echo "SSH_USER: ${{ secrets.SSH_USER }}"
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa && chmod 400 ~/.ssh/id_rsa
+          ssh-agent sh -c "ssh-add ~/.ssh/id_rsa"
           ssh-keyscan -H "$SSH_HOST"
           if docker context inspect remote &>/dev/null; then
             echo "Docker context 'remote' already exists. Skipping creation."
@@ -57,7 +55,7 @@ jobs:
           echo "Using Docker context:"
           docker context ls
           ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} --password-stdin echo "SSH connection successful"
-          ssh docker ~/.ssh/id_rsa compose -f docker-compose.yml up -d
+          ssh ~/.ssh/id_rsa docker compose -f docker-compose.yml up -d
 
       - name: Cleanup
         if: always()
