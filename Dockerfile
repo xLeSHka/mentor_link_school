@@ -16,7 +16,7 @@ RUN chmod a+x ./deploy/swag
 
 RUN ./deploy/swag init -g ./internal/transport/http/httpServer.go
 # Build the application.
-RUN go build -o bin/application ./cmd/main.go
+RUN go build -o bin/application ./cmd/back/main.go
 
 # Prepare executor image.
 FROM alpine:3.21 AS runner
