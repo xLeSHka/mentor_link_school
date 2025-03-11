@@ -13,7 +13,7 @@ RUN go mod download && go mod verify
 COPY . .
 
 # Build the application.
-RUN go build -o bin/application ./cmd/main.go
+RUN go build -o bin/ws ./cmd/main.go
 
 # Prepare executor image.
 FROM alpine:3.21 AS runner
@@ -22,8 +22,8 @@ RUN apk update && apk add ca-certificates bash && rm -rf /var/cache/apk/*
 
 WORKDIR /app
 
-COPY --from=builder /app/bin/application ./
+COPY --from=builder /app/bin/ws ./
 COPY ./.env ./
 
 # Run the application.
-CMD ["./application"]
+CMD ["./ws"]
