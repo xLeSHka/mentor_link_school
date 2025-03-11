@@ -56,11 +56,11 @@ jobs:
 #          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker stop mentor_link_school || true"
 #          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker rm mentor_link_school || true"
 #          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker compose -f docker-compose.yml up -d"
-           docker --context remote pull ghcr.io/mentor_link_school:master
-           docker --context remote pull ghcr.io/mentor_link_school_ws:master
-           docker --context remote stop mentor_link_school || true
-           docker --context remote rm mentor_link_school || true
-           docker --context remote compose -f docker-compose.yml up -d
+          docker --context remote pull ghcr.io/mentor_link_school:master
+          docker --context remote pull ghcr.io/mentor_link_school_ws:master
+          docker --context remote stop mentor_link_school || true
+          docker --context remote rm mentor_link_school || true
+          docker --context remote compose -f docker-compose.yml up -d
       - name: Cleanup
         if: always()
         run: |
