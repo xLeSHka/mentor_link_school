@@ -37,6 +37,10 @@ jobs:
           else
             docker context create remote --docker host=ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
           fi
+      - name: Test SSH Connection
+        run: |
+          echo "Testing SSH connection:"
+          ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} echo "SSH connection successful"
       - name: Log in to the Container registry
         uses: docker/login-action@v3.0.0
         with:
