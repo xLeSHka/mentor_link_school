@@ -20,7 +20,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4.1.1
-
+      - name: Install SSH keys
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          install -m 600 -D /dev/null ~/.ssh/authorized_keys
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_PUBLIC_KEY }}" | base64 --decode > ~/.ssh/authorized_keys
+          chmod 600 ~/.ssh/authorized_keys
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+          if docker context inspect remote &>/dev/null; then
+            echo "Docker context 'remote' already exists. Skipping creation."
+          else
+            docker context create remote --docker host=ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+          fi
       - name: Log in to the Container registry
         uses: docker/login-action@v3.0.0
         with:
@@ -28,7 +44,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push Docker image
-        run: docker-compose build --no-cache --force-rm
+        run: ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker-compose build --no-cache --force-rm"
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -rf ~/.ssh
   deploy:
     runs-on: self-hosted
     permissions:
@@ -37,6 +57,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4.1.1
+      - name: Install SSH keys
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          install -m 600 -D /dev/null ~/.ssh/authorized_keys
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_PUBLIC_KEY }}" | base64 --decode > ~/.ssh/authorized_keys
+          chmod 600 ~/.ssh/authorized_keys
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+          if docker context inspect remote &>/dev/null; then
+            echo "Docker context 'remote' already exists. Skipping creation."
+          else
+            docker context create remote --docker host=ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+          fi
       - name: Log in to the Container registry
         uses: docker/login-action@v3.0.0
         with:
@@ -44,7 +81,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Run docker compose
-        run: docker-compose up -d
+        run: ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker-compose up -d"
       - name: Cleanup
         if: always()
         run: |
