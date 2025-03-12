@@ -50,6 +50,7 @@ jobs:
 #        run: |
 #          rm -rf ~/.ssh
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
