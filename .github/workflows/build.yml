@@ -45,12 +45,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push backend
         run: |
-          docker build -f ./Dockerfile -t xleshka/mentorlinkschool-backend:latest .
-          docker push ghcr.io/xleshka/mentorlinkschool-backend:latest
+          docker build -f ./Dockerfile -t mentorLinkShcool/mentorlinkschool-backend:latest .
+          docker push ghcr.io/mentorLinkShcool/mentorlinkschool-backend:latest
       - name: Build and push backend websocket
         run: |
-          docker build -f ./DockerfileWs -t xleshka/mentorlinkschool-backendws:latest .
-          docker push ghcr.io/xleshka/mentorlinkschool-backendws:latest
+          docker build -f ./DockerfileWs -t mentorLinkShcool/mentorlinkschool-backendws:latest .
+          docker push ghcr.io/mentorLinkShcool/mentorlinkschool-backendws:latest
   #      - name: Cleanup
 #        if: always()
 #        run: |
@@ -89,6 +89,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Run docker compose
         run: |
-          docker pull ghcr.io/xleshka/mentorlinkshcool-backend:latest
-          docker pull ghcr.io/xleshka/mentorlinkshcool-backendws:latest
+          docker pull ghcr.io/mentorLinkShcool/mentorlinkshcool-backend:latest
+          docker pull ghcr.io/mentorLinkShcool/mentorlinkshcool-backendws:latest
           docker compose -f docker-compose.yml up -d
