@@ -45,7 +45,25 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push Docker image
         run: docker compose -f docker-compose.yml build --no-cache --force-rm
-#      - name: Cleanup
+      - name: Push backend1
+        uses: docker/build-push-action@v5
+        with:
+          file: ./Dockerfile
+          push: true
+          tags: ghcr.io/mentorlinkschool-backend1:latest
+      - name: Push backend2
+        uses: docker/build-push-action@v5
+        with:
+          file: ./Dockerfile
+          push: true
+          tags: ghcr.io/mentorlinkschool-backend2:latest
+      - name: Push backendws
+        uses: docker/build-push-action@v5
+        with:
+          file: ./DockerfileWs
+          push: true
+          tags: ghcr.io/mentorlinkschool-backendws:latest
+  #      - name: Cleanup
 #        if: always()
 #        run: |
 #          rm -rf ~/.ssh
@@ -82,4 +100,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Run docker compose
-        run: docker compose -f docker-compose.yml up -d
+        run: |
+          docker pull ghcr.io/mentorlinkshcool-backend1:latest
+          docker pull ghcr.io/mentorlinkshcool-backend2:latest
+          docker pull ghcr.io/mentorlinkshcool-backendws:latest
+          docker compose -f docker-compose.yml up -d

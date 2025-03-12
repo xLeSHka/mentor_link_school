@@ -4,7 +4,8 @@ services:
     restart: always
     build:
       dockerfile: ./Dockerfile
-
+    env_file:
+      - .env
     container_name: backend1
     expose:
      - "8080"
@@ -19,12 +20,12 @@ services:
         condition: service_started
     networks:
       - backend-network
-    volumes:
-      - /home/ubuntu/.env:/app/.env
   backendws:
     restart: always
     build:
       dockerfile: ./DockerfileWs
+    env_file:
+      - .env
     container_name: backendws
     expose:
       - "8080"
@@ -39,12 +40,12 @@ services:
         condition: service_started
     networks:
       - backend-network
-    volumes:
-      - /home/ubuntu/.env:/app/.env
   backend2:
     restart: always
     build:
       dockerfile: ./Dockerfile
+    env_file:
+      - .env
     container_name: backend2
     expose:
       - "8080"
@@ -59,8 +60,6 @@ services:
         condition: service_started
     networks:
       - backend-network
-    volumes:
-      - /home/ubuntu/.env:/app/.env
   postgres:
     env_file:
       - .env
@@ -153,8 +152,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - /home/ubuntu/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - /home/ubuntu/nginx/ssl:/etc/nginx/ssl
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - backend1
       - backend2
