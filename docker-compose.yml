@@ -2,7 +2,7 @@ version: '3.9'
 services:
   backend1:
     restart: always
-    image: mentorlinkshcool/mentorlinkshcool-backend:latest
+    image: xleshka/mentorlinkshcool-backend:latest
     env_file:
       - .env
     container_name: backend1
@@ -21,7 +21,7 @@ services:
       - backend-network
   backendws:
     restart: always
-    image: mentorlinkshcool/mentorlinkshcool-backendws:latest
+    image: xleshka/mentorlinkshcool-backend-ws:latest
     env_file:
       - .env
     container_name: backendws
@@ -40,7 +40,7 @@ services:
       - backend-network
   backend2:
     restart: always
-    image: mentorlinkshcool/mentorlinkshcool-backend:latest
+    image: xleshka/mentorlinkshcool-backend:latest
     env_file:
       - .env
     container_name: backend2
