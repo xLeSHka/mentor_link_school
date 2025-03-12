@@ -54,9 +54,3 @@ jobs:
           file: ${{ matrix.dockerfile }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          outputs: type=docker,dest=${{ runner.temp }}/${{ matrix.image }}.tar
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.image }}
-          path: ${{ runner.temp }}/${{ matrix.image }}.tar
