@@ -45,11 +45,11 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push backend
         run: |
-          docker build -t xleshka/mentorlinkschool-backend:latest -f ./Dockerfile
+          docker build -f ./Dockerfile -t xleshka/mentorlinkschool-backend:latest .
           docker push ghcr.io/xleshka/mentorlinkschool-backend:latest
       - name: Build and push backend websocket
         run: |
-          docker build -t xleshka/mentorlinkschool-backendws:latest -f ./DockerfileWs
+          docker build -f ./DockerfileWs -t xleshka/mentorlinkschool-backendws:latest .
           docker push ghcr.io/xleshka/mentorlinkschool-backendws:latest
   #      - name: Cleanup
 #        if: always()
