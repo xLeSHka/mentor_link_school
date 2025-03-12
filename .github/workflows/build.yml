@@ -91,6 +91,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Run docker compose
         run: |
-          docker pull ghcr.io/xleshka/$IMAGE_NAME:latest
-          docker pull ghcr.io/xleshka/$IMAGE_NAME-ws:latest
           docker compose -f docker-compose.yml up -d

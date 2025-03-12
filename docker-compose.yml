@@ -2,7 +2,7 @@ version: '3.9'
 services:
   backend1:
     restart: always
-    image: xleshka/mentor_link_school:latest
+    image: ghcr.io/xleshka/mentor_link_school:latest
     env_file:
       - .env
     container_name: backend1
@@ -21,7 +21,7 @@ services:
       - backend-network
   backendws:
     restart: always
-    image: xleshka/mentor_link_school-ws:latest
+    image: ghcr.io/xleshka/mentor_link_school-ws:latest
     env_file:
       - .env
     container_name: backendws
@@ -40,7 +40,7 @@ services:
       - backend-network
   backend2:
     restart: always
-    image: xleshka/mentor_link_school:latest
+    image: ghcr.io/xleshka/mentor_link_school:latest
     env_file:
       - .env
     container_name: backend2
