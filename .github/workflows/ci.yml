@@ -27,9 +27,9 @@ jobs:
           install -m 600 -D /dev/null ~/.ssh/authorized_keys
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
           echo "${{ secrets.SSH_PUBLIC_KEY }}" | base64 --decode > ~/.ssh/authorized_keys
           chmod 600 ~/.ssh/authorized_keys
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa
           if docker context inspect remote &>/dev/null; then
