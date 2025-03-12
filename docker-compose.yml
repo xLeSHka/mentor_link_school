@@ -4,6 +4,8 @@ services:
     restart: always
     build:
       dockerfile: ./Dockerfile
+    env_file:
+      - .env
     container_name: backend1
     expose:
      - "8080"
@@ -24,6 +26,8 @@ services:
     restart: always
     build:
       dockerfile: ./DockerfileWs
+    env_file:
+      - .env
     container_name: backendws
     expose:
       - "8080"
@@ -44,6 +48,8 @@ services:
     restart: always
     build:
       dockerfile: ./Dockerfile
+    env_file:
+      - .env
     container_name: backend2
     expose:
       - "8080"
