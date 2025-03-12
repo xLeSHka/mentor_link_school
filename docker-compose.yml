@@ -2,7 +2,7 @@ version: '3.9'
 services:
   backend1:
     restart: always
-    image: ghcr.io/mentor_link_school:master
+    image: ghcr.io/xleshka/mentor_link_school:master
     container_name: backend1
     expose:
      - "8080"
@@ -21,7 +21,7 @@ services:
       - /home/ubuntu/.env:/app/.env
   backendws:
     restart: always
-    image: ghcr.io/mentor_link_school_ws:master
+    image: ghcr.io/xleshka/mentor_link_school_ws:master
     container_name: backendws
     expose:
       - "8080"
@@ -40,7 +40,7 @@ services:
       - /home/ubuntu/.env:/app/.env
   backend2:
     restart: always
-    image: ghcr.io/mentor_link_school:master
+    image: ghcr.io/xleshka/mentor_link_school:master
     container_name: backend2
     expose:
       - "8080"
