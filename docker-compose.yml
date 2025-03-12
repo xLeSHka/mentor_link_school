@@ -2,8 +2,7 @@ version: '3.9'
 services:
   backend1:
     restart: always
-    build:
-      dockerfile: ./Dockerfile
+    image: mentorlinkshcool-backend:latest
     env_file:
       - .env
     container_name: backend1
@@ -22,8 +21,7 @@ services:
       - backend-network
   backendws:
     restart: always
-    build:
-      dockerfile: ./DockerfileWs
+    image: mentorlinkshcool-backendws:latest
     env_file:
       - .env
     container_name: backendws
@@ -42,8 +40,7 @@ services:
       - backend-network
   backend2:
     restart: always
-    build:
-      dockerfile: ./Dockerfile
+    image: mentorlinkshcool-backend:latest
     env_file:
       - .env
     container_name: backend2

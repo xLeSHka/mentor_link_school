@@ -43,24 +43,14 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Push backend1
-        uses: docker/build-push-action@v5
-        with:
-          file: ./Dockerfile
-          push: true
-          tags: mentorlinkschool-backend1:latest
-      - name: Push backend2
-        uses: docker/build-push-action@v5
-        with:
-          file: ./Dockerfile
-          push: true
-          tags: mentorlinkschool-backend2:latest
-      - name: Push backendws
-        uses: docker/build-push-action@v5
-        with:
-          file: ./DockerfileWs
-          push: true
-          tags: mentorlinkschool-backendws:latest
+      - name: Build and push backend
+        run: |
+          docker build -t mentorlinkschool-backend:latest ./Dockerfile
+          docker push ghcr.io/xleshka/mentorlinkschool-backend:latest
+      - name: Build and push backend websocket
+        run: |
+          docker build -t mentorlinkschool-backendws:latest ./DockerfileWs
+          docker push ghcr.io/xleshka/mentorlinkschool-backendws:latest
   #      - name: Cleanup
 #        if: always()
 #        run: |
@@ -99,7 +89,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Run docker compose
         run: |
-          docker pull mentorlinkshcool-backend1:latest
-          docker pull mentorlinkshcool-backend2:latest
-          docker pull mentorlinkshcool-backendws:latest
+          docker pull ghcr.io/xleshka/mentorlinkshcool-backend:latest
+          docker pull ghcr.io/xleshka/mentorlinkshcool-backendws:latest
           docker compose -f docker-compose.yml up -d
