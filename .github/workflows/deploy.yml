@@ -1,67 +1,108 @@
 name: Deploy
-on:
-  workflow_dispatch
 
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    types:
+      - closed
+    branches: [ "master" ]
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  SSH_AUTH_SOCK: /tmp/ssh-auth.sock
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4.1.1
-        env:
-          GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          fetch-depth: 0
-
-      - name: Install SSH keys
-        run: |
-          mkdir -p ~/.ssh && chmod 700 ~/.ssh
-          install -m 600 -D /dev/null ~/.ssh/id_rsa
-          install -m 600 -D /dev/null ~/.ssh/authorized_keys
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
-          echo "${{ secrets.SSH_PUBLIC_KEY }}" | base64 --decode > ~/.ssh/authorized_keys
-          chmod 600 ~/.ssh/authorized_keys
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
-          if docker context inspect remote &>/dev/null; then
-            echo "Docker context 'remote' already exists. Skipping creation."
-          else
-            docker context create remote --docker host=ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
-          fi
-
-      - name: Test SSH Connection
-        run: |
-          echo "Testing SSH connection:"
-          ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} echo "SSH connection successful"
-
+      #      - name: Install SSH keys
+      #        run: |
+      #          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+      #          install -m 600 -D /dev/null ~/.ssh/id_rsa
+      #          install -m 600 -D /dev/null ~/.ssh/authorized_keys
+      #          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
+      #          chmod 600 ~/.ssh/id_rsa
+      #          ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+      #          echo "${{ secrets.SSH_PUBLIC_KEY }}" | base64 --decode > ~/.ssh/authorized_keys
+      #          chmod 600 ~/.ssh/authorized_keys
+      #          eval "$(ssh-agent -s)"
+      #          ssh-add ~/.ssh/id_rsa
+      #          if docker context inspect remote &>/dev/null; then
+      #            echo "Docker context 'remote' already exists. Skipping creation."
+      #          else
+      #            docker context create remote --docker host=ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+      #          fi
       - name: Log in to the Container registry
         uses: docker/login-action@v3.0.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Use Docker Context
-        run: docker context use remote
-
-      - name: Docker Compose Deployment
-        run: |
-          echo "Using Docker context:"
-          docker context ls
-           ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker --context remote pull ghcr.io/mentor_link_school:master"
-           ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker --context remote pull ghcr.io/mentor_link_school_ws:master"
-           ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker --context remote stop mentor_link_school || true"
-           ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker --context remote rm mentor_link_school || true"
-           ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker --context remote compose -f docker-compose.yml up -d"
-
-      - name: Cleanup
-        if: always()
-        run: |
-          rm -rf ~/.ssh
+      - name: Run docker compose
+        run: docker compose -f docker-compose.yml up -d
+  #      - name: Cleanup
+  #        if: always()
+  #        run: |
+  #          rm -rf ~/.ssh
+#  deploy:
+#    runs-on: self-hosted
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4.1.1
+#        env:
+#          GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Install SSH keys
+#        run: |
+#          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+#          install -m 600 -D /dev/null ~/.ssh/id_rsa
+#          install -m 600 -D /dev/null ~/.ssh/authorized_keys
+#          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 --decode > ~/.ssh/id_rsa
+#          chmod 600 ~/.ssh/id_rsa
+#          ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+#          echo "${{ secrets.SSH_PUBLIC_KEY }}" | base64 --decode > ~/.ssh/authorized_keys
+#          chmod 600 ~/.ssh/authorized_keys
+#          eval "$(ssh-agent -s)"
+#          ssh-add ~/.ssh/id_rsa
+#          if docker context inspect remote &>/dev/null; then
+#            echo "Docker context 'remote' already exists. Skipping creation."
+#          else
+#            docker context create remote --docker host=ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+#          fi
+#
+#      - name: Test SSH Connection
+#        run: |
+#          echo "Testing SSH connection:"
+#          ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} echo "SSH connection successful"
+#
+#      - name: Log in to the Container registry
+#        uses: docker/login-action@v3.0.0
+#        with:
+#          registry: ${{ env.REGISTRY }}
+#          username: ${{ github.actor }}
+#          password: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Use Docker Context
+#        run: docker context use remote
+#
+#      - name: Docker Compose Deployment
+#        run: |
+#          echo "Using Docker context:"
+#          docker context ls
+#           ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker --context remote pull ghcr.io/mentor_link_school:master"
+#           ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker --context remote pull ghcr.io/mentor_link_school_ws:master"
+#           ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker --context remote stop mentor_link_school || true"
+#           ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker --context remote rm mentor_link_school || true"
+#           ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker --context remote compose -f docker-compose.yml up -d"
+#
+#      - name: Cleanup
+#        if: always()
+#        run: |
+#          rm -rf ~/.ssh
