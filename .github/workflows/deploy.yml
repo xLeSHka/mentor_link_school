@@ -59,11 +59,11 @@ jobs:
         run: |
           echo "Using Docker context:"
           docker context ls
-          docker --context remote pull ghcr.io/xleshka/mentor_link_school:master
-          docker --context remote pull ghcr.io/xleshka/mentor_link_school_ws:master
-          docker --context remote stop mentor_link_school || true
-          docker --context remote rm mentor_link_school || true
-          docker --context remote compose -f docker-compose.yml up -d
+           ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker --context remote pull ghcr.io/xleshka/mentor_link_school:master"
+           ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker --context remote pull ghcr.io/xleshka/mentor_link_school_ws:master"
+           ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker --context remote stop mentor_link_school || true"
+           ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker --context remote rm mentor_link_school || true"
+           ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "docker --context remote compose -f docker-compose.yml up -d"
 
       - name: Cleanup
         if: always()
