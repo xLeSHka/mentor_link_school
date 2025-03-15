@@ -160,8 +160,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx/conf/nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./ubuntu/home/ssl/localhost.crt:/etc/nginx/ssl/localhost.crt
-      - ./ubuntu/home/ssl/localhost.key:/etc/nginx/ssl/localhost.key
+      - /home/ubuntu/nginx/ssl:/etc/nginx/ssl
     depends_on:
       - backend1
       - backend2
