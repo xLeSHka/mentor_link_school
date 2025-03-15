@@ -26,6 +26,7 @@ var App = fx.Options(
 )
 var WSApp = fx.Options(
 	fx.Provide(
+		jwt.New,
 		http.New,
 	),
 	httpHandlers.WSHandler,

@@ -126,6 +126,8 @@ services:
   zoo:
     image: confluentinc/cp-zookeeper:latest
     container_name: zoo
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
     expose:
       - "2181:2181"
     networks:

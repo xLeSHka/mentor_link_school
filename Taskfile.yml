@@ -10,7 +10,7 @@ tasks:
   devdocker:
     desc: Run docker compose in detached mode
     cmds:
-      - docker compose -f docker-compose.dev.yml up -d
+      - docker compose -f docker-compose.dev.yml up
   down:
     desc: Run docker compose in detached mode
     cmds:
