@@ -136,19 +136,19 @@ services:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
     expose:
-      - "9092:9092"
+      - "29092:29092"
     environment:
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092
       KAFKA_ZOOKEEPER_CONNECT: "zoo:2181"
     depends_on:
       - zoo
     volumes:
       # volume с данными kafka
-      - kafka_data:/bitnami/kafka
+      - kafka-data:/bitnami/kafka
     networks:
       - backend-network
     healthcheck:
-      test: [ "CMD-SHELL", "kafka-topics --list --bootstrap-server kafka:9092" ]
+      test: [ "CMD-SHELL", "kafka-topics --list --bootstrap-server kafka:29092" ]
       interval: 10s
       timeout: 30s
       retries: 3
