@@ -3,7 +3,7 @@ package broker
 import (
 	"context"
 	"encoding/json"
-	"github.com/segmentio/kafka-go"
+	"github.com/IBM/sarama"
 	"github.com/xLeSHka/mentorLinkSchool/internal/pkg/config"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
 	"go.uber.org/fx"
@@ -13,42 +13,67 @@ import (
 )
 
 type Producer struct {
-	producer *kafka.Conn
+	producer sarama.AsyncProducer
 	topic    string
 	group    string
 }
 
-func NewProducer(config config.Config) (*Producer, error) {
-	p, err := kafka.DialLeader(context.Background(), "tcp", config.KafkaAddress, config.KafkaTopic, 0)
+func NewProducer(config config.Config, lc fx.Lifecycle) (*Producer, error) {
+	c := sarama.NewConfig()
+	c.Net.TLS.Enable = false
+	c.Producer.RequiredAcks = sarama.WaitForLocal       // Only wait for the leader to ack
+	c.Producer.Compression = sarama.CompressionSnappy   // Compress messages
+	c.Producer.Flush.Frequency = 500 * time.Millisecond // Flush batches every 500ms
+	producer, err := sarama.NewAsyncProducer([]string{config.KafkaAddress}, c)
 	if err != nil {
 		return nil, err
 	}
-
+	go func() {
+		for err := range producer.Errors() {
+			log.Println(err)
+		}
+	}()
 	prod := &Producer{
-		producer: p,
+		producer: producer,
 		group:    config.KafkaGroupId,
 		topic:    config.KafkaTopic,
 	}
+	lc.Append(fx.Hook{
+		OnStop: func(ctx context.Context) error {
+			return prod.Close()
+		},
+	})
 	return prod, nil
 }
 
 func (p *Producer) Send(message *ws.Message) error {
-	p.producer.SetWriteDeadline(time.Now().Add(10 * time.Second))
 	jsonData, err := json.Marshal(message)
 	if err != nil {
 		return err
 	}
-	_, err = p.producer.Write(jsonData)
+	p.producer.Input() <- &sarama.ProducerMessage{
+		Topic: p.topic,
+		Key:   sarama.StringEncoder(p.group),
+		Value: sarama.ByteEncoder(jsonData),
+	}
 	return err
+}
+func (p *Producer) Close() error {
+	if err := p.producer.Close(); err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
 }
 
 type Consumer struct {
-	consumer *kafka.Conn
-	topic    string
-	group    string
-	r        bool
-	mu       *sync.RWMutex
-	wsconn   *ws.WebSocket
+	consumer     sarama.Consumer
+	partConsumer sarama.PartitionConsumer
+	topic        string
+	group        string
+	r            bool
+	mu           *sync.RWMutex
+	wsconn       *ws.WebSocket
 }
 
 func (c *Consumer) R() bool {
@@ -68,28 +93,42 @@ type FxOpts struct {
 	Wsconn *ws.WebSocket
 }
 
-func NewConsumer(opts FxOpts) (*Consumer, error) {
-	c, err := kafka.DialLeader(context.Background(), "tcp", opts.Config.KafkaAddress, opts.Config.KafkaTopic, 0)
+func NewConsumer(opts FxOpts, lc fx.Lifecycle) (*Consumer, error) {
+	consumer, err := sarama.NewConsumer([]string{opts.Config.KafkaAddress}, nil)
 	if err != nil {
-		return nil, err
+		log.Fatalf("Failed to create consumer: %v", err)
+	}
+
+	partConsumer, err := consumer.ConsumePartition("ping", 0, sarama.OffsetNewest)
+	if err != nil {
+		log.Fatalf("Failed to consume partition: %v", err)
 	}
 	cons := &Consumer{
-		consumer: c,
-		topic:    opts.Config.KafkaTopic,
-		group:    opts.Config.KafkaGroupId,
-		r:        true,
-		mu:       &sync.RWMutex{},
-		wsconn:   opts.Wsconn,
+		consumer:     consumer,
+		partConsumer: partConsumer,
+		topic:        opts.Config.KafkaTopic,
+		group:        opts.Config.KafkaGroupId,
+		r:            true,
+		mu:           &sync.RWMutex{},
+		wsconn:       opts.Wsconn,
 	}
 	cons.Run()
+	lc.Append(fx.Hook{
+		OnStop: func(ctx context.Context) error {
+			return cons.Close()
+		},
+	})
 	return cons, nil
 }
 func (c *Consumer) Run() {
 	go func() {
 		for c.R() {
-			c.consumer.SetReadDeadline(time.Now().Add(10 * time.Second))
-			msg, err := c.consumer.ReadMessage(10e3)
-			if err == nil {
+			select {
+			case msg, ok := <-c.partConsumer.Messages():
+				if !ok {
+					log.Println("Consumer closed the message")
+					return
+				}
 				var m ws.Message
 				err := json.Unmarshal(msg.Value, &m)
 				if err != nil {
@@ -97,13 +136,19 @@ func (c *Consumer) Run() {
 					continue
 				}
 				c.wsconn.WriteMessage(&m)
-			} else if !err.(kafka.Error).Timeout() {
-				log.Printf("Consumer error: %v (%v)\n", err, msg)
+
 			}
 		}
-		err := c.consumer.Close()
-		if err != nil {
-			log.Fatal(err)
-		}
 	}()
+}
+func (c *Consumer) Close() error {
+	if err := c.consumer.Close(); err != nil {
+		log.Println(err)
+		return err
+	}
+	if err := c.partConsumer.Close(); err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
 }
