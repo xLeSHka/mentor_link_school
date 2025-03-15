@@ -16,7 +16,7 @@ services:
       minio:
         condition: service_healthy
       kafka:
-        condition: service_started
+        condition: service_healthy
     networks:
       - backend-network
   backendws:
