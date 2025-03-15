@@ -11,13 +11,13 @@ import (
 
 // @Summary Список участников организации
 // @Schemes
-// @Tags Groups
+// @Tags Roles
 // @Accept json
 // @Produce json
 // @Param id path string true "Group ID"
 // @Router /api/groups/{id}/members [get]
 // @Param Authorization header string true "Bearer <token>"
-// @Success 200 {object} []respGetMember
+// @Success 200 {object} []GespGetMember
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 403 {object} httpError.HTTPError "Ошибка доступа"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
@@ -47,7 +47,7 @@ func (h *Route) getMembers(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	resp := make([]*respGetMember, 0, len(members))
+	resp := make([]*GespGetMember, 0, len(members))
 	for _, m := range members {
 		if m.User.AvatarURL != nil {
 			avatarURL, err := h.minioRepository.GetImage(*m.User.AvatarURL)

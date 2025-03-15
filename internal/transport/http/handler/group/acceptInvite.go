@@ -10,7 +10,7 @@ import (
 )
 
 // @Summary Присоединиться к организации по коду
-// @Tags Groups
+// @Tags Roles
 // @Accept json
 // @Produce json
 // @Router /api/groups/join/{code} [post]
@@ -43,51 +43,48 @@ func (h *Route) acceptedInvite(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	user, err := h.usersService.GetByID(c.Request.Context(), personID)
-	if err != nil {
-		err.(*httpError.HTTPError).SendError(c)
-		c.Abort()
-		return
-	}
-	if user.AvatarURL != nil {
-		avatarURL, err := h.minioRepository.GetImage(*user.AvatarURL)
+	if h.producer != nil {
+		user, err := h.usersService.GetByID(c.Request.Context(), personID)
 		if err != nil {
-			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
+			err.(*httpError.HTTPError).SendError(c)
 			c.Abort()
 			return
 		}
-		user.AvatarURL = &avatarURL
-	}
-	groups, err := h.usersService.GetGroups(c.Request.Context(), personID)
-	if err != nil {
-		err.(*httpError.HTTPError).SendError(c)
-		c.Abort()
-		return
-	}
-	resp := make([]*ws.RespGetGroupDto, 0, len(groups))
-	for _, group := range groups {
-		if group.Group.AvatarURL != nil {
-			groupAvatarURL, err := h.minioRepository.GetImage(*group.Group.AvatarURL)
+		if user.AvatarURL != nil {
+			avatarURL, err := h.minioRepository.GetImage(*user.AvatarURL)
 			if err != nil {
 				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
 				c.Abort()
 				return
 			}
-			group.Group.AvatarURL = &groupAvatarURL
+			user.AvatarURL = &avatarURL
 		}
-		resp = append(resp, ws.MapGroup(group.Group, group.Role))
+		group, err := h.usersService.GetGroupByInviteCode(c.Request.Context(), code)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			c.Abort()
+			return
+		}
+		if group.AvatarURL != nil {
+			groupAvatarURL, err := h.minioRepository.GetImage(*group.AvatarURL)
+			if err != nil {
+				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
+				c.Abort()
+				return
+			}
+			group.AvatarURL = &groupAvatarURL
+		}
+		go h.producer.Send(&ws.Message{
+			Type:   "role",
+			UserID: personID,
+			Role: &ws.Role{
+				Name:     user.Name,
+				GroupID:  group.ID,
+				GroupUrl: group.AvatarURL,
+				Role:     "student",
+			},
+		})
 	}
-	go h.producer.Send(&ws.Message{
-		Type:   "user",
-		UserID: personID,
-		User: &ws.User{
-			Name:      user.Name,
-			AvatarUrl: user.AvatarURL,
-			Telegram:  user.Telegram,
-			BIO:       user.BIO,
-			Groups:    resp,
-		},
-	})
 	c.JSON(http.StatusOK, gin.H{
 		"status": "ok",
 	})

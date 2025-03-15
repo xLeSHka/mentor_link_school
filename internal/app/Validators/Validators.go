@@ -17,10 +17,20 @@ func New() *Validator {
 	if err := v.validator.RegisterValidation("c-password", validatePassword); err != nil {
 		panic("Error create c-password validator")
 	}
+	if err := v.validator.RegisterValidation("c-role", validateRole); err != nil {
+		panic("Error create c-role validator")
+	}
 	//if err := v.validator.RegisterValidation("c-country", validateCountry, true); err != nil {
 	//	panic("Error create c-country validator")
 	//}
 	return v
+}
+func validateRole(field validator.FieldLevel) bool {
+	role := field.Field().String()
+	if role != "user" {
+		return false
+	}
+	return true
 }
 func validatePassword(field validator.FieldLevel) bool {
 	fmt.Println("tryValidate: " + field.Field().String())

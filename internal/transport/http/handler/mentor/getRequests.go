@@ -16,7 +16,7 @@ import (
 // @Produce json
 // @Router /api/mentors/requests [get]
 // @Param Authorization header string true "Bearer <token>"
-// @Success 200 {object} []respGetRequest
+// @Success 200 {object} []RespGetRequest
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 403 {object} httpError.HTTPError "Ошибка доступа"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
@@ -34,9 +34,9 @@ func (h *Route) getRequests(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	resp := make([]*respGetRequest, 0, len(mentors))
+	resp := make([]*RespGetRequest, 0, len(mentors))
 	for _, m := range mentors {
-		resp = append(resp, mapRequest(m))
+		resp = append(resp, MapRequest(m))
 	}
 
 	c.JSON(http.StatusOK, resp)

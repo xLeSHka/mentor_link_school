@@ -1,7 +1,6 @@
 package models
 
 import (
-	"github.com/lib/pq"
 	"io"
 
 	"gorm.io/gorm"
@@ -20,11 +19,13 @@ type GroupStat struct {
 }
 type User struct {
 	ID        uuid.UUID `gorm:"type:uuid;primaryKey" `
-	Name      string    `gorm:"unique;not null"`
 	AvatarURL *string
+	Name      string `gorm:"unique;not null"`
 	BIO       *string
-	Telegram  string `gorm:"not null"`
-	Role      *Role  `gorm:"foreignKey:user_id"`
+	Telegram  string  `gorm:"not null"`
+	Password  []byte  `gorm:"not null"`
+	Banned    bool    `gorm:"not null"`
+	Roles     []*Role `gorm:"foreignKey:user_id"`
 }
 
 func (_ *User) TableName() string {
@@ -62,32 +63,6 @@ func (_ *HelpRequest) BeforeCreate(tx *gorm.DB) (err error) {
 	return nil
 }
 
-type HelpRequestWithGIDs struct {
-	ID       uuid.UUID      `gorm:"type:uuid;primaryKey"`
-	UserID   uuid.UUID      `gorm:"type:uuid;not null"`
-	MentorID uuid.UUID      `gorm:"type:uuid;not null"`
-	GroupIDs pq.StringArray `gorm:"type:uuid[];not null"`
-	Goal     string         `gorm:"not null"`
-	BIO      *string
-	Status   string `gorm:"not null"`
-	Mentor   *User  `gorm:"foreignKey:mentor_id"`
-	Student  *User  `gorm:"foreignKey:user_id"`
-}
-
-func (_ *HelpRequestWithGIDs) TableName() string {
-	return "help_requests_with_gids"
-}
-
-type RoleWithGIDs struct {
-	UserID   uuid.UUID      `gorm:"type:uuid;not null"`
-	GroupIDs pq.StringArray `gorm:"type:uuid[];not null"`
-	User     *User          `gorm:"foreignKey:user_id"`
-}
-
-func (_ *RoleWithGIDs) TableName() string {
-	return "role_with_gids"
-}
-
 type Role struct {
 	UserID  uuid.UUID `gorm:"type:uuid;not null"`
 	GroupID uuid.UUID `gorm:"type:uuid;not null"`
@@ -112,15 +87,7 @@ type Pair struct {
 	Mentor   *User     `gorm:"foreignKey:mentor_id"`
 	Student  *User     `gorm:"foreignKey:user_id"`
 }
-type PairWithGIDs struct {
-	UserID   uuid.UUID      `gorm:"type:uuid;not null"`
-	MentorID uuid.UUID      `gorm:"type:uuid;not null"`
-	GroupIDs pq.StringArray `gorm:"type:uuid[];not null"`
-	Mentor   *User          `gorm:"foreignKey:mentor_id"`
-	Student  *User          `gorm:"foreignKey:user_id"`
-}
 
-func (_ *PairWithGIDs) TableName() string { return "pair_with_gids" }
 func (_ *Pair) TableName() string {
 	return "pairs"
 }

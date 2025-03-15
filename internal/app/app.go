@@ -4,6 +4,7 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/connetions/broker"
 	"github.com/xLeSHka/mentorLinkSchool/internal/connetions/db"
 	"github.com/xLeSHka/mentorLinkSchool/internal/connetions/minio"
+	"github.com/xLeSHka/mentorLinkSchool/internal/connetions/rdb"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http"
 	httpHandlers "github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
@@ -18,6 +19,7 @@ var App = fx.Options(
 		jwt.New,
 		//redis.New,
 		minio.New,
+		rdb.New,
 		broker.NewProducer,
 	),
 	Repositories,

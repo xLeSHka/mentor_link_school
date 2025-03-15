@@ -8,6 +8,12 @@ import (
 	"github.com/google/uuid"
 )
 
+type CacheRepository interface {
+	AddRoles(ctx context.Context, roles []*models.Role) error
+	RemoveRoles(ctx context.Context, roles []*models.Role) error
+	SaveToken(ctx context.Context, userID uuid.UUID, token string) error
+	DeleteToken(ctx context.Context, userID uuid.UUID) error
+}
 type GroupRepository interface {
 	Create(ctx context.Context, group *models.Group, userID uuid.UUID) error
 	UpdateRole(ctx context.Context, groupID, userID uuid.UUID, role string) error

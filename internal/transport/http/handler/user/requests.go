@@ -5,44 +5,57 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
-type reqLoginDto struct {
-	Name string `json:"name" binding:"required"`
+type ReqRegisterDto struct {
+	Name     *string `form:"name" binding:"required,gte=1,lte=120"`
+	Telegram *string `json:"telegram" binding:"required,gte=1,lte=120"`
+	Password *string `json:"password" binding:"required,gte=8,lte=60" validate:"c-password"`
 }
-type respLoginDto struct {
+type RespRegisterDto struct {
 	Token string `json:"token"`
 }
-
+type ReqLoginDto struct {
+	Telegram *string `json:"telegram" binding:"required,gte=1,lte=120"`
+	Password *string `json:"password" binding:"required,gte=8,lte=60" validate:"c-password"`
+}
+type RespLoginDto struct {
+	Token string `json:"token"`
+}
+type ReqOtherProfileDto struct {
+	ProfileID *string `uri:"id" binding:"required,uuid"`
+}
 type reqGetRole struct {
 	Role string `from:"role" binding:"required"`
 }
-type resGetInitData struct {
-	Name      string             `json:"name"`
-	AvatarUrl *string            `json:"avatar_url,omitempty"`
-	BIO       *string            `json:"bio,omitempty"`
-	Telegram  *string            `json:"telegram"`
-	Groups    []*RespGetGroupDto `json:"groups"`
+type Role struct {
+	GroupID uuid.UUID `json:"group_id"`
+	Role    string    `json:"role"`
+}
+type ResGetProfile struct {
+	ID        uuid.UUID `json:"id"`
+	Name      string    `json:"name"`
+	AvatarUrl *string   `json:"avatar_url,omitempty"`
+	BIO       *string   `json:"bio,omitempty"`
+	Telegram  string    `json:"telegram"`
+	Roles     []*Role   `json:"roles"`
 }
 
-type respGetMyMentor struct {
+type RespGetMyMentor struct {
 	MentorID  uuid.UUID `json:"mentor_id" binding:"required"`
-	GroupIDs  []string  `json:"group_ids" binding:"required"`
 	AvatarUrl *string   `json:"avatar_url,omitempty"`
 	Name      string    `json:"name" binding:"required"`
 	Telegram  string    `json:"telegram"`
 	BIO       *string   `json:"bio,omitempty"`
 }
-type respGetMentor struct {
+type RespGetMentor struct {
 	MentorID  uuid.UUID `json:"mentor_id" binding:"required"`
-	GroupIDs  []string  `json:"group_id" binding:"required"`
 	AvatarUrl *string   `json:"avatar_url,omitempty"`
 	Name      string    `json:"name" binding:"required"`
 	BIO       *string   `json:"bio,omitempty"`
 	Telegram  string    `json:"telegram"`
 }
-type respGetHelp struct {
+type RespGetHelp struct {
 	ID         uuid.UUID `json:"id"`
 	MentorID   uuid.UUID `json:"mentor_id"`
-	GroupIDs   []string  `json:"group_ids"`
 	MentorName string    `json:"mentor_name"`
 	AvatarUrl  *string   `json:"avatar_url,omitempty"`
 	Goal       string    `json:"goal"`
@@ -54,44 +67,63 @@ type Pair struct {
 	MentorID uuid.UUID `json:"mentor_id"`
 	GroupId  uuid.UUID `json:"group_id"`
 }
-type reqCreateHelp struct {
+type ReqCreateHelp struct {
 	Requests []Pair `json:"requests" binding:"required"`
 	Goal     string `json:"goal" binding:"required"`
 }
-type respUploadAvatarDto struct {
+type RespUploadAvatarDto struct {
 	Url string `json:"url"`
 }
-type respOtherProfile struct {
-	Telegram string  `json:"telegram"`
-	BIO      *string `json:"bio,omitempty"`
+type RespOtherProfile struct {
+	ID        uuid.UUID `json:"id"`
+	Telegram  string    `json:"telegram"`
+	Name      string    `json:"name"`
+	AvatarURL *string   `json:"avatar_url,omitempty"`
+	BIO       *string   `json:"bio,omitempty"`
 }
-type reqEditUser struct {
-	Name     string `json:"name" binding:"required"`
-	Telegram string `json:"telegram,required"`
-	BIO      string `json:"bio,required"`
+type ReqEditUser struct {
+	Telegram *string `form:"telegram" binding:"omitempty,gte=1,lte=120"`
+	Name     *string `json:"name" binding:"omitempty,gte=1,lte=120"`
+	BIO      *string `json:"bio" binding:"omitempty,lte=500"`
 }
 
-func mapOtherProfile(user *models.User) *respOtherProfile {
-	return &respOtherProfile{
-		Telegram: user.Telegram,
-		BIO:      user.BIO,
+func MapOtherProfile(user *models.User) *RespOtherProfile {
+	return &RespOtherProfile{
+		ID:        user.ID,
+		Name:      user.Name,
+		AvatarURL: user.AvatarURL,
+		Telegram:  user.Telegram,
+		BIO:       user.BIO,
 	}
 }
-func mapMyMentor(mentor *models.PairWithGIDs) *respGetMyMentor {
-	return &respGetMyMentor{
+func MapProfile(user *models.User) *ResGetProfile {
+	roles := make([]*Role, 0, len(user.Roles))
+	for _, role := range user.Roles {
+		roles = append(roles, MapRole(role))
+	}
+	return &ResGetProfile{
+		ID:        user.ID,
+		Name:      user.Name,
+		AvatarUrl: user.AvatarURL,
+		Telegram:  user.Telegram,
+		BIO:       user.BIO,
+		Roles:     roles,
+	}
+}
+
+func MapMyMentor(mentor *models.Pair) *RespGetMyMentor {
+	return &RespGetMyMentor{
 		MentorID:  mentor.Mentor.ID,
 		AvatarUrl: mentor.Mentor.AvatarURL,
-		GroupIDs:  mentor.GroupIDs,
 		Name:      mentor.Mentor.Name,
 		Telegram:  mentor.Mentor.Telegram,
 		BIO:       mentor.Mentor.BIO,
 	}
 }
-func mapHelp(help *models.HelpRequestWithGIDs) *respGetHelp {
-	return &respGetHelp{
+func MapHelp(help *models.HelpRequest) *RespGetHelp {
+	return &RespGetHelp{
 		ID:         help.ID,
 		MentorID:   help.MentorID,
-		GroupIDs:   help.GroupIDs,
 		Status:     help.Status,
 		Goal:       help.Goal,
 		MentorName: help.Mentor.Name,
@@ -100,10 +132,9 @@ func mapHelp(help *models.HelpRequestWithGIDs) *respGetHelp {
 		BIO:        help.Mentor.BIO,
 	}
 }
-func mapMentor(mentor *models.RoleWithGIDs) *respGetMentor {
-	return &respGetMentor{
+func MapMentor(mentor *models.Role) *RespGetMentor {
+	return &RespGetMentor{
 		MentorID:  mentor.User.ID,
-		GroupIDs:  mentor.GroupIDs,
 		AvatarUrl: mentor.User.AvatarURL,
 		Name:      mentor.User.Name,
 		BIO:       mentor.User.BIO,
@@ -111,23 +142,10 @@ func mapMentor(mentor *models.RoleWithGIDs) *respGetMentor {
 	}
 }
 
-type RespGetGroupDto struct {
-	Name       string  `json:"name"`
-	ID         string  `json:"id"`
-	AvatarUrl  *string `json:"avatar_url,omitempty"`
-	InviteCode *string `json:"invite_code,omitempty"`
-	Role       string  `json:"role"`
-}
-
-func mapGroup(group *models.Group, role string) *RespGetGroupDto {
-	resp := &RespGetGroupDto{
-		Name:      group.Name,
-		ID:        group.ID.String(),
-		AvatarUrl: group.AvatarURL,
-		Role:      role,
-	}
-	if role == "owner" {
-		resp.InviteCode = group.InviteCode
+func MapRole(role *models.Role) *Role {
+	resp := &Role{
+		GroupID: role.GroupID,
+		Role:    role.Role,
 	}
 	return resp
 }

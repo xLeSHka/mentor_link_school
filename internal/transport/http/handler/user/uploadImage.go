@@ -2,7 +2,7 @@ package usersRoute
 
 import (
 	"fmt"
-	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
+	"github.com/xLeSHka/mentorLinkSchool/internal/utils/ws"
 	"net/http"
 	"path/filepath"
 
@@ -21,12 +21,14 @@ import (
 // @Accept multipart/form-data
 // @Produce json
 // @Param image formData file true "Изображение для загрузки"
-// @Router /api/user/uploadAvatar [post]
+// @Router /api/users/uploadAvatar [post]
 // @Param Authorization header string true "Bearer <token>"
-// @Success 200 {object} respUploadAvatarDto
+// @Success 200 {object} RespUploadAvatarDto
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
+// @Failure 403 {object} httpError.HTTPError "Пользователь заблокирован"
 // Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
+// @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
 func (h *Route) uploadAvatar(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {
@@ -72,50 +74,6 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	user, err := h.usersService.GetByID(c.Request.Context(), personId)
-	if err != nil {
-		err.(*httpError.HTTPError).SendError(c)
-		c.Abort()
-		return
-	}
-	if user.AvatarURL != nil {
-		avatarURL, err := h.minioRepository.GetImage(*user.AvatarURL)
-		if err != nil {
-			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-			c.Abort()
-			return
-		}
-		user.AvatarURL = &avatarURL
-	}
-	groups, err := h.usersService.GetGroups(c.Request.Context(), personId)
-	if err != nil {
-		err.(*httpError.HTTPError).SendError(c)
-		c.Abort()
-		return
-	}
-	resp := make([]*ws.RespGetGroupDto, 0, len(groups))
-	for _, group := range groups {
-		if group.Group.AvatarURL != nil {
-			groupAvatarURL, err := h.minioRepository.GetImage(*group.Group.AvatarURL)
-			if err != nil {
-				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-				c.Abort()
-				return
-			}
-			group.Group.AvatarURL = &groupAvatarURL
-		}
-		resp = append(resp, ws.MapGroup(group.Group, group.Role))
-	}
-	go h.producer.Send(&ws.Message{
-		Type:   "user",
-		UserID: personId,
-		User: &ws.User{
-			Name:      user.Name,
-			AvatarUrl: user.AvatarURL,
-			Telegram:  user.Telegram,
-			BIO:       user.BIO,
-			Groups:    resp,
-		},
-	})
-	c.JSON(http.StatusOK, respUploadAvatarDto{Url: imageURL})
+	go ws.SendUser(personId, h.producer, h.usersService, h.minioRepository)
+	c.JSON(http.StatusOK, RespUploadAvatarDto{Url: imageURL})
 }

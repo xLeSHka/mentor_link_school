@@ -4,10 +4,13 @@
 CREATE TABLE users (
                        id UUID PRIMARY KEY,
                        avatar_url VARCHAR DEFAULT NULL,
-                       name VARCHAR NOT NULL UNIQUE,
+                       name VARCHAR NOT NULL,
                        bio TEXT DEFAULT NULL,
-                       telegram VARCHAR NOT NULL
+                       telegram VARCHAR NOT NULL UNIQUE,
+                       password bytea,
+                       banned BOOLEAN DEFAULT FALSE
 );
+
 
 CREATE TABLE groups (
                         id UUID PRIMARY KEY,
@@ -17,9 +20,10 @@ CREATE TABLE groups (
 );
 
 CREATE TABLE roles (
-                       group_id UUID REFERENCES groups(id),
                        user_id UUID REFERENCES users(id),
-                       role VARCHAR NOT NULL
+                       group_id UUID REFERENCES groups(id),
+                       role VARCHAR NOT NULL,
+                       UNIQUE (user_id, group_id,role)
 );
 
 CREATE TABLE help_requests (
@@ -44,7 +48,8 @@ CREATE TABLE pairs (
                        user_id UUID REFERENCES users(id),
                        mentor_id UUID REFERENCES users(id),
                        group_id UUID REFERENCES groups(id),
-                       goal VARCHAR NOT NULL
+                       goal VARCHAR NOT NULL,
+                       UNIQUE (user_id,mentor_id,group_id)
 );
 
 

@@ -13,12 +13,13 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /api/user/requests [get]
+// @Router /api/users/requests [get]
 // @Param Authorization header string true "Bearer <token>"
-// @Success 200 {object} []respGetHelp
+// @Success 200 {object} []RespGetHelp
 // @Failure 400 {object} httpError.HTTPError "Невалидный запрос"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
+// @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
 func (h *Route) getRequests(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {
@@ -32,9 +33,9 @@ func (h *Route) getRequests(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	resp := make([]*respGetHelp, 0, len(mentors))
+	resp := make([]*RespGetHelp, 0, len(mentors))
 	for _, m := range mentors {
-		resp = append(resp, mapHelp(m))
+		resp = append(resp, MapHelp(m))
 	}
 
 	c.JSON(http.StatusOK, resp)

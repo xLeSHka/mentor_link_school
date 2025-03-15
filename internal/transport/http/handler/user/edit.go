@@ -1,12 +1,12 @@
 package usersRoute
 
 import (
-	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
+	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
+	"github.com/xLeSHka/mentorLinkSchool/internal/utils/ws"
+	"net/http"
 )
 
 // @Summary Редактирование профиля
@@ -14,13 +14,16 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /api/user/profile/edit [put]
+// @Router /api/users/profile/edit [patch]
 // @Param Authorization header string true "Bearer <token>"
-// @Param body body reqEditUser true "body"
+// @Param body body ReqEditUser true "body"
 // @Failure 400 {object} httpError.HTTPError
 // @Failure 401 {object} httpError.HTTPError
-// Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
-// @Success 200
+// @Failure 403 {object} httpError.HTTPError "Пользователь заблокирован"
+// @Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
+// @Failure 409 {object} httpError.HTTPError "Пользователь с таким email уже зарегистрирован"
+// @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
+// @Success 200 {object} RespProfile
 func (h *Route) edit(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {
@@ -28,64 +31,33 @@ func (h *Route) edit(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	var reqData reqEditUser
+	var reqData ReqEditUser
 	if err := h.validator.ShouldBindJSON(c, &reqData); err != nil {
 		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
 		return
 	}
-	toUpdate := make(map[string]any)
-	toUpdate["bio"] = reqData.BIO
-	toUpdate["telegram"] = reqData.Telegram
-	toUpdate["name"] = reqData.Name
-	err = h.usersService.Edit(c.Request.Context(), personID, toUpdate)
-	if err != nil {
-		err.(*httpError.HTTPError).SendError(c)
+	if reqData.BIO == nil && reqData.Name == nil && reqData.Telegram == nil {
+		httpError.New(http.StatusBadRequest, "you are not update user!").SendError(c)
+		c.Abort()
 		return
 	}
-	user, err := h.usersService.GetByID(c.Request.Context(), personID)
+	user := &models.User{}
+	if reqData.BIO != nil {
+		user.BIO = reqData.BIO
+	}
+	if reqData.Name != nil {
+		user.Name = *reqData.Name
+	}
+	if reqData.Telegram != nil {
+		user.Telegram = *reqData.Telegram
+	}
+
+	_, err = h.usersService.Edit(c.Request.Context(), personID, user)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()
 		return
 	}
-	if user.AvatarURL != nil {
-		avatarURL, err := h.minioRepository.GetImage(*user.AvatarURL)
-		if err != nil {
-			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-			c.Abort()
-			return
-		}
-		user.AvatarURL = &avatarURL
-	}
-	groups, err := h.usersService.GetGroups(c.Request.Context(), personID)
-	if err != nil {
-		err.(*httpError.HTTPError).SendError(c)
-		c.Abort()
-		return
-	}
-	resp := make([]*ws.RespGetGroupDto, 0, len(groups))
-	for _, group := range groups {
-		if group.Group.AvatarURL != nil {
-			groupAvatarURL, err := h.minioRepository.GetImage(*group.Group.AvatarURL)
-			if err != nil {
-				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-				c.Abort()
-				return
-			}
-			group.Group.AvatarURL = &groupAvatarURL
-		}
-		resp = append(resp, ws.MapGroup(group.Group, group.Role))
-	}
-	go h.producer.Send(&ws.Message{
-		Type:   "user",
-		UserID: personID,
-		User: &ws.User{
-			Name:      user.Name,
-			AvatarUrl: user.AvatarURL,
-			Telegram:  user.Telegram,
-			BIO:       user.BIO,
-			Groups:    resp,
-		},
-	})
+	go ws.SendUser(personID, h.producer, h.usersService, h.minioRepository)
 	c.Writer.WriteHeader(http.StatusOK)
 }

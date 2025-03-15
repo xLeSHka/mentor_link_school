@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/xLeSHka/mentorLinkSchool/internal/repository/cache"
 	repositoryGroup "github.com/xLeSHka/mentorLinkSchool/internal/repository/group"
 	repositoryMentor "github.com/xLeSHka/mentorLinkSchool/internal/repository/mentor"
 	repositoryMinio "github.com/xLeSHka/mentorLinkSchool/internal/repository/minio"
@@ -14,4 +15,5 @@ var Repositories = fx.Provide(
 	repositoryMentor.New,
 	repositoryGroup.New,
 	repositoryMinio.New,
+	cache.New,
 )

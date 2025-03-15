@@ -1,6 +1,7 @@
 package usersRoute
 
 import (
+	"github.com/xLeSHka/mentorLinkSchool/internal/utils/avatar"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,12 +14,13 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /api/user/mentors [get]
+// @Router /api/users/mentors [get]
 // @Param Authorization header string true "Bearer <token>"
-// @Success 200 {object} []respGetMyMentor
+// @Success 200 {object} []RespGetMyMentor
 // @Failure 400 {object} httpError.HTTPError "Невалидный запрос"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
+// @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
 func (h *Route) getMyMentors(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {
@@ -32,18 +34,14 @@ func (h *Route) getMyMentors(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	resp := make([]*respGetMyMentor, 0, len(mentors))
+	resp := make([]*RespGetMyMentor, 0, len(mentors))
 	for _, m := range mentors {
-		if m.Mentor.AvatarURL != nil {
-			avatarURL, err := h.minioRepository.GetImage(*m.Mentor.AvatarURL)
-			if err != nil {
-				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-				c.Abort()
-				return
-			}
-			m.Mentor.AvatarURL = &avatarURL
+		err = avatar.GetUserAvatar(m.Mentor, h.minioRepository)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			return
 		}
-		resp = append(resp, mapMyMentor(m))
+		resp = append(resp, MapMyMentor(m))
 	}
 
 	c.JSON(http.StatusOK, resp)

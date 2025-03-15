@@ -10,7 +10,7 @@ import (
 )
 
 // @Summary Получить статистику организации
-// @Tags Groups
+// @Tags Roles
 // @Accept  json
 // @Produce  json
 // @Param id path string true "Group ID"

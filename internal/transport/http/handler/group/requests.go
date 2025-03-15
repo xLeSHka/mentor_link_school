@@ -5,7 +5,7 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
-type reqEditGroup struct {
+type ReqEditGroup struct {
 	Name string `json:"name" binding:"required"`
 }
 type reqGetMentorDto struct {
@@ -14,22 +14,22 @@ type reqGetMentorDto struct {
 type GetGroupID struct {
 	ID string `uri:"groupId" binding:"required,uuid"`
 }
-type reqCreateGroupDto struct {
+type ReqCreateGroupDto struct {
 	Name string `json:"name" binding:"required,min=1,max=100"`
 }
-type reqUpdateRole struct {
+type ReqUpdateRole struct {
 	Role string `json:"role" binding:"required"`
 	ID   string `json:"id" binding:"required,uuid"`
 }
-type respGetMember struct {
+type GespGetMember struct {
 	UserID    uuid.UUID `json:"user_id" binding:"required"`
 	AvatarUrl *string   `json:"avatar_url,omitempty"`
 	Name      string    `json:"name" binding:"required"`
 	Role      string    `uri:"role" binding:"required"`
 }
 
-func mapMember(role *models.Role) *respGetMember {
-	return &respGetMember{
+func mapMember(role *models.Role) *GespGetMember {
+	return &GespGetMember{
 		UserID:    role.User.ID,
 		AvatarUrl: role.User.AvatarURL,
 		Name:      role.User.Name,

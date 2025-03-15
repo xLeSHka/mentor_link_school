@@ -2,6 +2,7 @@ package usersRoute
 
 import (
 	"fmt"
+	"github.com/xLeSHka/mentorLinkSchool/internal/utils/avatar"
 	"net/http"
 
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
@@ -15,12 +16,13 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /api/user/availableMentors [get]
+// @Router /api/users/availableMentors [get]
 // @Param Authorization header string true "Bearer <token>"
-// @Success 200 {object} []respGetMentor
+// @Success 200 {object} []RespGetMentor
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
+// @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
 func (h *Route) availableMentors(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {
@@ -35,18 +37,14 @@ func (h *Route) availableMentors(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	resp := make([]*respGetMentor, 0, len(mentors))
+	resp := make([]*RespGetMentor, 0, len(mentors))
 	for _, m := range mentors {
-		if m.User.AvatarURL != nil {
-			avatarURL, err := h.minioRepository.GetImage(*m.User.AvatarURL)
-			if err != nil {
-				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-				c.Abort()
-				return
-			}
-			m.User.AvatarURL = &avatarURL
+		err = avatar.GetUserAvatar(m.User, h.minioRepository)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			return
 		}
-		resp = append(resp, mapMentor(m))
+		resp = append(resp, MapMentor(m))
 	}
 
 	c.JSON(http.StatusOK, resp)

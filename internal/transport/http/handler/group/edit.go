@@ -12,13 +12,13 @@ import (
 
 // @Summary Редактирование организации
 // @Schemes
-// @Tags Groups
+// @Tags Roles
 // @Accept json
 // @Produce json
-// @Router /api/groups/{id}/edit [put]
+// @Router /api/groups/{id}/edit [patch]
 // @Param id path string true "Group ID"
 // @Param Authorization header string true "Bearer <token>"
-// @Param body body reqEditGroup true "body"
+// @Param body body ReqEditGroup true "body"
 // @Failure 400 {object} httpError.HTTPError
 // @Failure 401 {object} httpError.HTTPError
 // @Success 200
@@ -29,7 +29,7 @@ func (h *Route) edit(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	var reqData reqEditGroup
+	var reqData ReqEditGroup
 	if err := h.validator.ShouldBindJSON(c, &reqData); err != nil {
 		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
 		return
@@ -53,42 +53,44 @@ func (h *Route) edit(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	user, err := h.usersService.GetByID(c.Request.Context(), personID)
-	if err != nil {
-		err.(*httpError.HTTPError).SendError(c)
-		return
-	}
-	if user.AvatarURL != nil {
-		avatrUrl, err := h.minioRepository.GetImage(*user.AvatarURL)
+	if h.producer != nil {
+		user, err := h.usersService.GetByID(c.Request.Context(), personID)
 		if err != nil {
-			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-			c.Abort()
+			err.(*httpError.HTTPError).SendError(c)
 			return
 		}
-		user.AvatarURL = &avatrUrl
-	}
+		if user.AvatarURL != nil {
+			avatrUrl, err := h.minioRepository.GetImage(*user.AvatarURL)
+			if err != nil {
+				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
+				c.Abort()
+				return
+			}
+			user.AvatarURL = &avatrUrl
+		}
 
-	if group.AvatarURL != nil {
-		avatrUrl, err := h.minioRepository.GetImage(*group.AvatarURL)
-		if err != nil {
-			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-			c.Abort()
-			return
+		if group.AvatarURL != nil {
+			avatrUrl, err := h.minioRepository.GetImage(*group.AvatarURL)
+			if err != nil {
+				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
+				c.Abort()
+				return
+			}
+			group.AvatarURL = &avatrUrl
 		}
-		group.AvatarURL = &avatrUrl
+		role := "owner"
+		mes := &ws.Message{
+			Type:   "role",
+			UserID: personID,
+			Role: &ws.Role{
+				Role:       role,
+				GroupID:    groupID,
+				GroupUrl:   group.AvatarURL,
+				Name:       group.Name,
+				InviteCode: group.InviteCode,
+			},
+		}
+		go h.producer.Send(mes)
 	}
-	role := "owner"
-	mes := &ws.Message{
-		Type:   "role",
-		UserID: personID,
-		Role: &ws.Role{
-			Role:       role,
-			GroupID:    groupID,
-			GroupUrl:   group.AvatarURL,
-			Name:       group.Name,
-			InviteCode: group.InviteCode,
-		},
-	}
-	go h.producer.Send(mes)
 	c.Writer.WriteHeader(http.StatusOK)
 }

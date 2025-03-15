@@ -1,7 +1,7 @@
 package usersRoute
 
 import (
-	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
+	"github.com/xLeSHka/mentorLinkSchool/internal/utils/ws"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -16,14 +16,15 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /api/user/requests [post]
+// @Router /api/users/requests [post]
 // @Param Authorization header string true "Bearer <token>"
-// @Param body body reqCreateHelp true "body"
+// @Param body body ReqCreateHelp true "body"
 // @Success 200
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
 // Failure 409 {object} httpError.HTTPError "Запрос уже отправлен"
+// @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
 func (h *Route) createRequest(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {
@@ -31,7 +32,7 @@ func (h *Route) createRequest(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	var reqData reqCreateHelp
+	var reqData ReqCreateHelp
 	if err := h.validator.ShouldBindJSON(c, &reqData); err != nil {
 		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
 		return
@@ -56,60 +57,7 @@ func (h *Route) createRequest(c *gin.Context) {
 			err.(*httpError.HTTPError).SendError(c)
 			return
 		}
-		student, err := h.usersService.GetByID(c.Request.Context(), personId)
-		if err != nil {
-			err.(*httpError.HTTPError).SendError(c)
-			return
-		}
-		if student.AvatarURL != nil {
-			avatarUrl, err := h.minioRepository.GetImage(*student.AvatarURL)
-			if err != nil {
-				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-				c.Abort()
-				return
-			}
-			student.AvatarURL = &avatarUrl
-		}
-		mentor, err := h.usersService.GetByID(c.Request.Context(), r.MentorID)
-		if err != nil {
-			err.(*httpError.HTTPError).SendError(c)
-			return
-		}
-		if mentor.AvatarURL != nil {
-			avatrUrl, err := h.minioRepository.GetImage(*mentor.AvatarURL)
-			if err != nil {
-				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-				c.Abort()
-				return
-			}
-			mentor.AvatarURL = &avatrUrl
-		}
-		groupsIDs, err := h.usersService.GetCommonGroups(personId, r.MentorID)
-		if err != nil {
-			err.(*httpError.HTTPError).SendError(c)
-			return
-
-		}
-		go h.producer.Send(&ws.Message{
-			Type:   "request",
-			UserID: student.ID,
-			Request: &ws.Request{
-				ID:              request.ID,
-				StudentID:       student.ID,
-				MentorID:        mentor.ID,
-				MentorName:      mentor.Name,
-				StudentName:     student.Name,
-				MentorUrl:       mentor.AvatarURL,
-				StudentUrl:      student.AvatarURL,
-				StudentBio:      student.BIO,
-				MentorBio:       mentor.BIO,
-				StudentTelegram: student.Telegram,
-				MentorTelegram:  mentor.Telegram,
-				GroupIDs:        groupsIDs,
-				Goal:            request.Goal,
-				Status:          request.Status,
-			},
-		})
+		go ws.SendRequest(personId, r.MentorID, request.ID, h.producer, h.usersService, h.minioRepository)
 	}
 	c.Writer.WriteHeader(http.StatusOK)
 }

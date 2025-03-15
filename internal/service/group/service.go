@@ -11,6 +11,7 @@ type GroupsService struct {
 	groupRepository repository.GroupRepository
 	minioRepository repository.MinioRepository
 	userRepository  repository.UsersRepository
+	cacheRepository repository.CacheRepository
 }
 
 type FxOpts struct {
@@ -18,6 +19,7 @@ type FxOpts struct {
 	GroupRepository repository.GroupRepository
 	MinioRepository repository.MinioRepository
 	UserRepository  repository.UsersRepository
+	CacheRepository repository.CacheRepository
 }
 
 func New(opts FxOpts) service.GroupService {
@@ -25,5 +27,6 @@ func New(opts FxOpts) service.GroupService {
 		groupRepository: opts.GroupRepository,
 		minioRepository: opts.MinioRepository,
 		userRepository:  opts.UserRepository,
+		cacheRepository: opts.CacheRepository,
 	}
 }

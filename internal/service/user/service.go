@@ -19,6 +19,7 @@ type UsersService struct {
 	mentorRepository repository.MentorRepository
 	jwt              *jwt.JWT
 	cryptoKey        []byte
+	cache            repository.CacheRepository
 }
 
 type FxOpts struct {
@@ -27,8 +28,8 @@ type FxOpts struct {
 	JWT              *jwt.JWT
 	MentorRepository repository.MentorRepository
 	MinioRepository  repository.MinioRepository
-
-	Config config.Config
+	Cache            repository.CacheRepository
+	Config           config.Config
 }
 
 func New(opts FxOpts) service.UserService {
@@ -38,6 +39,7 @@ func New(opts FxOpts) service.UserService {
 		//rdb:             opts.RDB,
 		minioRepository:  opts.MinioRepository,
 		mentorRepository: opts.MentorRepository,
+		cache:            opts.Cache,
 		cryptoKey:        []byte(opts.Config.CryptoKey),
 	}
 }

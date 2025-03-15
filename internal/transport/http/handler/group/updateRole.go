@@ -1,22 +1,23 @@
 package groupsRoute
 
 import (
+	"github.com/xLeSHka/mentorLinkSchool/internal/models"
+	ws "github.com/xLeSHka/mentorLinkSchool/internal/utils/ws"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
-	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
 )
 
 // @Summary Обновить роль юзера
-// @Tags Groups
+// @Tags Roles
 // @Accept json
 // @Produce json
 // @Router /api/groups/{id}/members/role [post]
 // @Param id path string true "Group ID"
-// @Param body body reqUpdateRole true "body"
+// @Param body body ReqUpdateRole true "body"
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
@@ -24,8 +25,9 @@ import (
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // @Failure 403 {object} httpError.HTTPError "Нет прав доступа"
 // @Failure 404 {object} httpError.HTTPError "Нет такого юзера"
+// @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
 func (h *Route) updateRole(c *gin.Context) {
-	personID, err := jwt.Parse(c)
+	_, err := jwt.Parse(c)
 	if err != nil {
 		httpError.New(http.StatusUnauthorized, "Header not found").SendError(c)
 		c.Abort()
@@ -37,7 +39,7 @@ func (h *Route) updateRole(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	var req reqUpdateRole
+	var req ReqUpdateRole
 	if err := h.validator.ShouldBindJSON(c, &req); err != nil {
 		httpError.New(http.StatusBadRequest, "Bad request").SendError(c)
 		c.Abort()
@@ -55,55 +57,17 @@ func (h *Route) updateRole(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	err = h.groupService.UpdateRole(c.Request.Context(), personID, groupID, userID, req.Role)
+	role := &models.Role{
+		GroupID: groupID,
+		UserID:  userID,
+		Role:    req.Role,
+	}
+	err = h.groupService.AddRole(c.Request.Context(), role)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	user, err := h.usersService.GetByID(c.Request.Context(), userID)
-	if err != nil {
-		err.(*httpError.HTTPError).SendError(c)
-		c.Abort()
-		return
-	}
-	if user.AvatarURL != nil {
-		avatarURL, err := h.minioRepository.GetImage(*user.AvatarURL)
-		if err != nil {
-			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-			c.Abort()
-			return
-		}
-		user.AvatarURL = &avatarURL
-	}
-	groups, err := h.usersService.GetGroups(c.Request.Context(), userID)
-	if err != nil {
-		err.(*httpError.HTTPError).SendError(c)
-		c.Abort()
-		return
-	}
-	resp := make([]*ws.RespGetGroupDto, 0, len(groups))
-	for _, group := range groups {
-		if group.Group.AvatarURL != nil {
-			groupAvatarURL, err := h.minioRepository.GetImage(*group.Group.AvatarURL)
-			if err != nil {
-				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-				c.Abort()
-				return
-			}
-			group.Group.AvatarURL = &groupAvatarURL
-		}
-		resp = append(resp, ws.MapGroup(group.Group, group.Role))
-	}
-	go h.producer.Send(&ws.Message{
-		Type:   "user",
-		UserID: userID,
-		User: &ws.User{
-			Name:      user.Name,
-			AvatarUrl: user.AvatarURL,
-			Telegram:  user.Telegram,
-			BIO:       user.BIO,
-			Groups:    resp,
-		},
-	})
+	go ws.SendRole(userID, groupID, req.Role, h.producer, h.usersService, h.minioRepository, h.groupService)
+
 	c.Writer.WriteHeader(http.StatusOK)
 }

@@ -1,7 +1,7 @@
 package groupsRoute
 
 import (
-	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
+	"github.com/xLeSHka/mentorLinkSchool/internal/utils/ws"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +11,7 @@ import (
 )
 
 // @Summary Обновить код приглашения
-// @Tags Groups
+// @Tags Roles
 // @Accept  json
 // @Produce  json
 // @Param id path string true "Group ID"
@@ -22,6 +22,7 @@ import (
 // @Failure 403 {object} httpError.HTTPError "Нет прав доступа"
 // @Router /api/groups/{id}/inviteCode [post]
 // @Param Authorization header string true "Bearer <token>"
+// @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
 func (h *Route) updateInviteCode(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {
@@ -48,47 +49,7 @@ func (h *Route) updateInviteCode(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	user, err := h.usersService.GetByID(c.Request.Context(), personID)
-	if err != nil {
-		err.(*httpError.HTTPError).SendError(c)
-		return
-	}
-	if user.AvatarURL != nil {
-		avatrUrl, err := h.minioRepository.GetImage(*user.AvatarURL)
-		if err != nil {
-			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-			c.Abort()
-			return
-		}
-		user.AvatarURL = &avatrUrl
-	}
-	group, err := h.usersService.GetGroupByID(c.Request.Context(), groupID)
-	if err != nil {
-		err.(*httpError.HTTPError).SendError(c)
-		return
-	}
-	if group.AvatarURL != nil {
-		avatrUrl, err := h.minioRepository.GetImage(*group.AvatarURL)
-		if err != nil {
-			httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-			c.Abort()
-			return
-		}
-		group.AvatarURL = &avatrUrl
-	}
-	role := "owner"
-	mes := &ws.Message{
-		Type:   "role",
-		UserID: personID,
-		Role: &ws.Role{
-			Role:       role,
-			GroupID:    groupID,
-			GroupUrl:   group.AvatarURL,
-			Name:       group.Name,
-			InviteCode: group.InviteCode,
-		},
-	}
-	go h.producer.Send(mes)
+	go ws.SendRole(personID, groupID, "owner", h.producer, h.usersService, h.minioRepository, h.groupService)
 	c.JSON(http.StatusOK, respUpdateCode{
 		Code: code,
 	})

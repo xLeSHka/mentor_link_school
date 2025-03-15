@@ -2,8 +2,10 @@ package ApiRouters
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/redis/go-redis/v9"
 	middlewares "github.com/xLeSHka/mentorLinkSchool/internal/transport/http/middleware"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
+	"gorm.io/gorm"
 )
 
 type ApiRouters struct {
@@ -13,18 +15,18 @@ type ApiRouters struct {
 	GroupPrivate *gin.RouterGroup
 }
 
-func CreateApiRoutes(gin *gin.Engine, jwt *jwt.JWT) *ApiRouters {
+func CreateApiRoutes(gin *gin.Engine, jwt *jwt.JWT, rdb *redis.Client, db *gorm.DB) *ApiRouters {
 
 	publicRoute := gin.Group("/api")
 
-	groupRoute := publicRoute.Group("")
-	groupRoute.Use(middlewares.Auth(jwt))
+	groupRoute := publicRoute.Group("/groups")
+	groupRoute.Use(middlewares.Auth(jwt, rdb, db, "owner"))
 
-	mentorRoute := groupRoute.Group("")
-	mentorRoute.Use(middlewares.Auth(jwt))
+	mentorRoute := publicRoute.Group("/mentors")
+	mentorRoute.Use(middlewares.Auth(jwt, rdb, db, "mentor"))
 
-	userRoute := publicRoute.Group("")
-	userRoute.Use(middlewares.Auth(jwt))
+	userRoute := publicRoute.Group("/users")
+	userRoute.Use(middlewares.Auth(jwt, rdb, db, "student"))
 	return &ApiRouters{
 		Public:       publicRoute,
 		MentorRoute:  mentorRoute,
