@@ -145,7 +145,7 @@ services:
     networks:
       - backend-network
     healthcheck:
-      test: [ "CMD-SHELL", "kafka-topics --list --bootstrap-server kafka:29092" ]
+      test: [ "CMD-SHELL", "kafka-topics --list --bootstrap-server kafka:9092" ]
       interval: 10s
       timeout: 30s
       retries: 3
