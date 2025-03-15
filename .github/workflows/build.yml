@@ -45,12 +45,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push backend
         run: |
-          docker buildx build -f ./Dockerfile -t $IMAGE_NAME .
+          docker build -f ./Dockerfile -t $IMAGE_NAME .
           docker tag $IMAGE_NAME ghcr.io/xleshka/$IMAGE_NAME:latest
           docker push ghcr.io/xleshka/$IMAGE_NAME:latest
       - name: Build and push backend websocket
         run: |
-          docker buildx build -f ./DockerfileWs -t $IMAGE_NAME-ws .
+          docker build -f ./DockerfileWs -t $IMAGE_NAME-ws .
           docker tag $IMAGE_NAME-ws ghcr.io/xleshka/$IMAGE_NAME-ws:latest
           docker push ghcr.io/xleshka/$IMAGE_NAME-ws:latest
       - name: Cleanup
