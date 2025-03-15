@@ -156,15 +156,23 @@ services:
     image: nginx:latest
     container_name: nginx_container
     ports:
+      - "80:80"
       - "443:443"
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./nginx.conf:/etc/nginx/conf.d/:ro
+      - ./certbot/www:/var/www/certbot/:ro
+#      - ./certbot/conf/:/etc/nginx/ssl/:ro
     depends_on:
       - backend1
       - backend2
       - backendws
     networks:
       - backend-network
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+#      - ./certbot/conf/:/etc/letsencrypt/:rw
 networks:
  backend-network:
 volumes:
