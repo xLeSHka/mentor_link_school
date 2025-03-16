@@ -1,12 +1,11 @@
-package mentorService
+package studentService
 
 import (
-	"time"
-
 	"github.com/xLeSHka/mentorLinkSchool/internal/pkg/config"
 	"github.com/xLeSHka/mentorLinkSchool/internal/repository"
 	"github.com/xLeSHka/mentorLinkSchool/internal/service"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
+	"time"
 
 	"go.uber.org/fx"
 
@@ -14,36 +13,36 @@ import (
 	"github.com/google/uuid"
 )
 
-type MentorService struct {
+type StudentService struct {
 	usersRepository   repository.UsersRepository
 	minioRepository   repository.MinioRepository
 	mentorRepository  repository.MentorRepository
 	studentRepository repository.StudentRepository
 	jwt               *jwt.JWT
-	cache             repository.CacheRepository
 	cryptoKey         []byte
+	cache             repository.CacheRepository
 }
 
 type FxOpts struct {
 	fx.In
-	UsersRepository   repository.UsersRepository
-	JWT               *jwt.JWT
-	MinioRepository   repository.MinioRepository
-	MentorRepository  repository.MentorRepository
-	Cache             repository.CacheRepository
+	UsersRepository  repository.UsersRepository
+	JWT              *jwt.JWT
+	MentorRepository repository.MentorRepository
+	MinioRepository  repository.MinioRepository
+
 	StudentRepository repository.StudentRepository
+	Cache             repository.CacheRepository
 	Config            config.Config
 }
 
-func New(opts FxOpts) service.MentorService {
-	return &MentorService{
+func New(opts FxOpts) service.StudentService {
+	return &StudentService{
 		usersRepository: opts.UsersRepository,
 		jwt:             opts.JWT,
 		//rdb:             opts.RDB,
-		minioRepository: opts.MinioRepository,
-		//groupRepository:  opts.GroupRepository,
-		mentorRepository:  opts.MentorRepository,
 		studentRepository: opts.StudentRepository,
+		minioRepository:   opts.MinioRepository,
+		mentorRepository:  opts.MentorRepository,
 		cache:             opts.Cache,
 		cryptoKey:         []byte(opts.Config.CryptoKey),
 	}

@@ -11,18 +11,11 @@ import (
 	"gorm.io/gorm"
 )
 
-func (s *MentorService) GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequestWithGIDs, error) {
-	exist, err := s.usersRepository.CheckExists(ctx, userID)
-	if err != nil {
-		return nil, httpError.New(http.StatusInternalServerError, err.Error())
-	}
-	if !exist {
-		return nil, httpError.New(http.StatusNotFound, "User Not Found")
-	}
+func (s *MentorService) GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error) {
 	helps, err := s.mentorRepository.GetMyHelpers(ctx, userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return []*models.HelpRequestWithGIDs{}, nil
+			return []*models.HelpRequest{}, nil
 		}
 		return nil, httpError.New(http.StatusInternalServerError, err.Error())
 	}

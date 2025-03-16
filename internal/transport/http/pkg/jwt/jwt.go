@@ -3,6 +3,7 @@ package jwt
 import (
 	"errors"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"github.com/xLeSHka/mentorLinkSchool/internal/pkg/config"
 	"time"
 )
@@ -37,4 +38,9 @@ func (j JWT) VerifyToken(tokenString string) (jwt.MapClaims, error) {
 	}
 
 	return token.Claims.(jwt.MapClaims), nil
+}
+func (j JWT) GenerateAccessToken(id uuid.UUID) (string, error) {
+	return j.CreateToken(jwt.MapClaims{
+		"id": id,
+	}, time.Now().Add(time.Hour*24*7))
 }

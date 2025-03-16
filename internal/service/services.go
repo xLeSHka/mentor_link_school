@@ -28,11 +28,12 @@ type MentorService interface {
 }
 
 type StudentService interface {
-	GetMyMentors(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Pair, error)
-	GetMyHelps(ctx context.Context, userID, groupID uuid.UUID) ([]*models.HelpRequest, error)
 	CreateRequest(ctx context.Context, request *models.HelpRequest) error
 	GetMentors(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Role, error)
+	GetMyHelps(ctx context.Context, userID, groupID uuid.UUID) ([]*models.HelpRequest, error)
+	GetMyMentors(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Pair, error)
 	GetRequestByID(ctx context.Context, reqID, groupID uuid.UUID) (*models.HelpRequest, error)
+	//GetRequest(ctx context.Context, UserID, MentorID, GroupID uuid.UUID) (models.HelpRequest, error)
 }
 type UsersService interface {
 	Login(ctx context.Context, telegram, password string) (string, error)
@@ -40,7 +41,7 @@ type UsersService interface {
 	GetByID(ctx context.Context, id uuid.UUID) (person *models.User, err error)
 	UploadImage(ctx context.Context, file *models.File, personID uuid.UUID) (string, *httpError.HTTPError)
 	Edit(ctx context.Context, userID uuid.UUID, user *models.User) (*models.User, error)
-	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Role, error)
+	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Roles, error)
 	GetGroupByInviteCode(ctx context.Context, inviteCode string) (*models.Group, error)
 	Invite(ctx context.Context, inviteCode string, userID uuid.UUID) (bool, error)
 }

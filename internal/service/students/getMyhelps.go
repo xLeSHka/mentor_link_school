@@ -1,23 +1,22 @@
-package userService
+package studentService
 
 import (
 	"context"
 	"errors"
+	"github.com/google/uuid"
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 	"gorm.io/gorm"
 	"net/http"
-
-	"github.com/google/uuid"
 )
 
-func (s *UsersService) GetByID(ctx context.Context, id uuid.UUID) (person *models.User, err error) {
-	user, err := s.usersRepository.GetByID(ctx, id)
+func (s *StudentService) GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error) {
+	requests, err := s.studentRepository.GetMyRequests(ctx, userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, httpError.New(http.StatusNotFound, err.Error())
+			return []*models.HelpRequest{}, nil
 		}
 		return nil, httpError.New(http.StatusInternalServerError, err.Error())
 	}
-	return user, nil
+	return requests, nil
 }

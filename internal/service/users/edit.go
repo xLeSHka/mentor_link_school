@@ -1,19 +1,18 @@
-package groupService
+package usersService
 
 import (
 	"context"
-	"net/http"
-
 	"github.com/google/uuid"
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
+	"net/http"
 )
 
-func (s *GroupsService) GetStat(ctx context.Context, ownerID, groupID uuid.UUID) (*models.GroupStat, error) {
+func (s *UserService) Edit(ctx context.Context, userID uuid.UUID, user *models.User) (*models.User, error) {
 
-	stat, err := s.groupRepository.GetStat(ctx, groupID)
+	updated, err := s.usersRepository.EditUser(ctx, userID, user)
 	if err != nil {
 		return nil, httpError.New(http.StatusInternalServerError, err.Error())
 	}
-	return stat, nil
+	return updated, nil
 }

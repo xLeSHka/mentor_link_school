@@ -1,21 +1,22 @@
-package userService
+package studentService
 
 import (
 	"context"
 	"errors"
+	"github.com/google/uuid"
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 	"gorm.io/gorm"
 	"net/http"
 )
 
-func (s *UsersService) GetGroupByInviteCode(ctx context.Context, inviteCode string) (*models.Group, error) {
-	group, err := s.usersRepository.GetGroupByInviteCode(ctx, inviteCode)
+func (s *StudentService) GetMyMentors(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error) {
+	mentors, err := s.studentRepository.GetMyMentors(ctx, userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, httpError.New(http.StatusNotFound, err.Error())
+			return []*models.Pair{}, nil
 		}
 		return nil, httpError.New(http.StatusInternalServerError, err.Error())
 	}
-	return group, nil
+	return mentors, nil
 }

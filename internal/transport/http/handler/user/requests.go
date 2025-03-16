@@ -27,7 +27,7 @@ type ReqOtherProfileDto struct {
 type ResGetGroup struct {
 	GroupID    uuid.UUID `json:"group_id"`
 	Name       string    `json:"name"`
-	Role       string    `json:"role"`
+	Roles      []string  `json:"roles"`
 	AvatarURL  *string   `json:"avatar_url"`
 	InviteCode *string   `json:"invite_code"`
 }
@@ -76,15 +76,17 @@ func MapProfile(user *models.User) *ResGetProfile {
 	}
 }
 
-func MapGroup(role *models.Role) *ResGetGroup {
+func MapGroup(roles *models.Roles) *ResGetGroup {
 	resp := &ResGetGroup{
-		GroupID:   role.GroupID,
-		Name:      role.Group.Name,
-		Role:      role.Role,
-		AvatarURL: role.Group.AvatarURL,
+		GroupID:   roles.GroupID,
+		Name:      roles.Group.Name,
+		Roles:     roles.Roles,
+		AvatarURL: roles.Group.AvatarURL,
 	}
-	if role.Role == "owner" {
-		resp.InviteCode = role.Group.InviteCode
+	for _, role := range roles.Roles {
+		if role == "owner" {
+			resp.InviteCode = roles.Group.InviteCode
+		}
 	}
 	return resp
 }

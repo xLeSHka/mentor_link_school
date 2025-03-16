@@ -11,14 +11,7 @@ import (
 )
 
 func (s *MentorService) UpdateRequest(ctx context.Context, request *models.HelpRequest) error {
-	own, err := s.mentorRepository.CheckRequest(ctx, request.ID, request.MentorID)
-	if err != nil {
-		return httpError.New(http.StatusInternalServerError, err.Error())
-	}
-	if !own {
-		return httpError.New(http.StatusNotFound, "Request not found")
-	}
-	err = s.mentorRepository.UpdateRequest(ctx, request)
+	err := s.mentorRepository.UpdateRequest(ctx, request)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return httpError.New(http.StatusNotFound, err.Error())
@@ -26,7 +19,7 @@ func (s *MentorService) UpdateRequest(ctx context.Context, request *models.HelpR
 		return httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	if request.Status == "accepted" {
-		req, err := s.usersRepository.GetRequestByID(ctx, request.ID)
+		req, err := s.studentRepository.GetRequestByID(ctx, request.ID)
 		if err != nil {
 			return httpError.New(http.StatusInternalServerError, err.Error())
 		}
@@ -37,6 +30,9 @@ func (s *MentorService) UpdateRequest(ctx context.Context, request *models.HelpR
 			Goal:     req.Goal,
 		})
 		if err != nil {
+			if errors.Is(err, gorm.ErrDuplicatedKey) {
+				return httpError.New(http.StatusConflict, "You already have this student")
+			}
 			return httpError.New(http.StatusInternalServerError, err.Error())
 		}
 	}

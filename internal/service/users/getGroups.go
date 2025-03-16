@@ -1,22 +1,24 @@
-package groupService
+package usersService
 
 import (
 	"context"
 	"errors"
+	"net/http"
+
 	"github.com/google/uuid"
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 	"gorm.io/gorm"
-	"net/http"
 )
 
-func (s *GroupsService) GetMembers(ctx context.Context, groupID uuid.UUID) ([]*models.User, error) {
-	members, err := s.groupRepository.GetMembers(ctx, groupID)
+func (r *UserService) GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Roles, error) {
+	gr, err := r.usersRepository.GetGroups(ctx, userID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return []*models.User{}, nil
+
+			return []*models.Roles{}, nil
 		}
 		return nil, httpError.New(http.StatusInternalServerError, err.Error())
 	}
-	return members, nil
+	return gr, nil
 }

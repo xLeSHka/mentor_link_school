@@ -12,16 +12,9 @@ import (
 )
 
 func (s *GroupsService) UpdateInviteCode(ctx context.Context, groupID uuid.UUID, ownerID uuid.UUID) (string, error) {
-	exists, err := s.groupRepository.CheckGroupExists(ctx, ownerID, groupID)
-	if err != nil {
-		return "", httpError.New(http.StatusInternalServerError, err.Error())
-	}
-	if !exists {
-		return "", httpError.New(http.StatusForbidden, "group does not exist")
-	}
 	inviteCode, _ := generateInviteCode(5)
 
-	err = s.groupRepository.UpdateInviteCode(ctx, groupID, inviteCode)
+	err := s.groupRepository.UpdateInviteCode(ctx, groupID, inviteCode)
 	if err != nil {
 		return "", httpError.New(http.StatusInternalServerError, err.Error())
 	}

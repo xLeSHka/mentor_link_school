@@ -33,7 +33,7 @@ CREATE TABLE help_requests (
                                goal VARCHAR NOT NULL,
                                bio TEXT DEFAULT NULL,
                                status VARCHAR NOT NULL,
-                               UNIQUE (user_id, group_id,mentor_id)
+                               UNIQUE (user_id, group_id,mentor_id,goal)
 );
 
 CREATE TABLE fast_helps (

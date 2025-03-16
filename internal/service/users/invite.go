@@ -1,4 +1,4 @@
-package userService
+package usersService
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func (s *UsersService) Invite(ctx context.Context, inviteCode string, userID uuid.UUID) (bool, error) {
+func (s *UserService) Invite(ctx context.Context, inviteCode string, userID uuid.UUID) (bool, error) {
 	group, err := s.usersRepository.GetGroupByInviteCode(ctx, inviteCode)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -19,7 +19,7 @@ func (s *UsersService) Invite(ctx context.Context, inviteCode string, userID uui
 		}
 		return false, err
 	}
-	err = s.usersRepository.AddRole(ctx, &models.Role{
+	err = s.groupRepository.AddRole(ctx, &models.Role{
 		UserID:  userID,
 		GroupID: group.ID,
 		Role:    "student",

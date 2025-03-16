@@ -1,4 +1,4 @@
-package userService
+package studentService
 
 import (
 	"context"
@@ -10,8 +10,8 @@ import (
 	"net/http"
 )
 
-func (r *UsersService) GetRequestByID(ctx context.Context, reqID uuid.UUID) (models.HelpRequest, error) {
-	req, err := r.usersRepository.GetRequestByID(ctx, reqID)
+func (r *StudentService) GetRequestByID(ctx context.Context, reqID uuid.UUID) (models.HelpRequest, error) {
+	req, err := r.studentRepository.GetRequestByID(ctx, reqID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return models.HelpRequest{}, httpError.New(http.StatusNotFound, err.Error())

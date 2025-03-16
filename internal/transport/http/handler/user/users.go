@@ -31,7 +31,7 @@ type FxOpts struct {
 	Config          config.Config
 }
 
-func StudentsRoute(opts FxOpts) *Route {
+func UsersRoute(opts FxOpts) *Route {
 	router := &Route{
 		routers:         opts.ApiRouter,
 		validator:       opts.Validator,
