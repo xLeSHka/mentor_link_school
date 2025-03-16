@@ -40,7 +40,7 @@ func CORSMiddleware() gin.HandlerFunc {
 // @in header
 // @name Authorization
 
-// @host prod-team-14-mkg8u20m.final.prodcontest.ru
+// @host localhost
 // @BasePath /
 
 func New(config config.Config, lc fx.Lifecycle) *gin.Engine {
