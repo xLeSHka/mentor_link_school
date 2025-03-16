@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/Validators"
+	"github.com/xLeSHka/mentorLinkSchool/internal/connetions/broker"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ApiRouters"
 	"go.uber.org/fx"
 	"net/http"
@@ -36,6 +37,7 @@ type Route struct {
 	routers   *ApiRouters.ApiRouters
 	validator *Validators.Validator
 	wsconn    *WebSocket
+	consumer  *broker.Consumer
 }
 
 type FxOpts struct {
@@ -43,6 +45,7 @@ type FxOpts struct {
 	ApiRouter *ApiRouters.ApiRouters
 	Validator *Validators.Validator
 	Wsconn    *WebSocket
+	Consumer  *broker.Consumer
 }
 
 func WsRoute(opts FxOpts) *Route {
@@ -50,6 +53,7 @@ func WsRoute(opts FxOpts) *Route {
 		routers:   opts.ApiRouter,
 		validator: opts.Validator,
 		wsconn:    opts.Wsconn,
+		consumer:  opts.Consumer,
 	}
 	opts.ApiRouter.UserRoute.GET("/ws", router.wsconn.wsHandler)
 	go opts.Wsconn.Echo()
