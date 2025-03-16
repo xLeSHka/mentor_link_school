@@ -8,10 +8,10 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-func (r *UsersRepository) EditUser(ctx context.Context, userID uuid.UUID, updates map[string]any) (*models.User, error) {
-	user := models.User{}
-	err := r.DB.Model(&user).WithContext(ctx).Clauses(clause.Returning{}).Where("id = ?", userID).Updates(updates).Error
-	return &user, err
+func (r *UsersRepository) EditUser(ctx context.Context, userID uuid.UUID, user *models.User) (*models.User, error) {
+	usr := models.User{}
+	err := r.DB.Model(&usr).WithContext(ctx).Clauses(clause.Returning{}).Where("id = ?", userID).Updates(&user).Error
+	return &usr, err
 }
 
 //

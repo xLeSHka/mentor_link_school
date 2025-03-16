@@ -12,9 +12,10 @@ import (
 // 	return groups, err
 // }
 
-func (r *UsersRepository) GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Role, error) {
-	var groups []*models.Role
+func (r *UsersRepository) GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Roles, error) {
+	var groups []*models.Roles
 	err := r.DB.WithContext(ctx).Table("roles").
+		Select("user_id,group_id,array_agg(role) AS roles").Group("group_id").Group("user_id").
 		Preload("Group").
 		Where("user_id = ?", userID).
 		Find(&groups).Error

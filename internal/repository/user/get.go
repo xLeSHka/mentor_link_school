@@ -12,9 +12,3 @@ func (r *UsersRepository) GetByID(ctx context.Context, id uuid.UUID) (person *mo
 	err = r.DB.WithContext(ctx).First(&person, &models.User{ID: id}).Error
 	return
 }
-
-func (r *UsersRepository) GetByName(ctx context.Context, name string) (*models.User, error) {
-	var person models.User
-	err := r.DB.WithContext(ctx).First(&person, &models.User{Name: name}).Error
-	return &person, err
-}

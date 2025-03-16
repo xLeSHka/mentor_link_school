@@ -1,4 +1,4 @@
-package repositoryUser
+package repositoryStudent
 
 import (
 	"context"
@@ -6,12 +6,12 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
-func (r *UsersRepository) GetRequestByID(ctx context.Context, reqID uuid.UUID) (models.HelpRequest, error) {
+func (r *StudentRepository) GetRequestByID(ctx context.Context, reqID, groupID uuid.UUID) (*models.HelpRequest, error) {
 	var res models.HelpRequest
 	err := r.DB.Model(models.HelpRequest{}).
 		WithContext(ctx).
-		Where("id = ?", reqID).
+		Where("id = ? AND group_id = ?", reqID, groupID).
 		First(&res).Error
 
-	return res, err
+	return &res, err
 }

@@ -1,4 +1,4 @@
-package repositoryUser
+package repositoryStudent
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
-func (r *UsersRepository) GetRequest(ctx context.Context, UserID, MentorID, GroupID uuid.UUID) (models.HelpRequest, error) {
+func (r *StudentRepository) GetRequest(ctx context.Context, UserID, MentorID, GroupID uuid.UUID) (models.HelpRequest, error) {
 	var res models.HelpRequest
 	err := r.DB.Model(models.HelpRequest{}).
 		WithContext(ctx).

@@ -10,13 +10,13 @@ import (
 	"net/http"
 )
 
-func (r *StudentService) GetRequestByID(ctx context.Context, reqID uuid.UUID) (models.HelpRequest, error) {
-	req, err := r.studentRepository.GetRequestByID(ctx, reqID)
+func (r *StudentService) GetRequestByID(ctx context.Context, reqID, groupID uuid.UUID) (*models.HelpRequest, error) {
+	req, err := r.studentRepository.GetRequestByID(ctx, reqID, groupID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return models.HelpRequest{}, httpError.New(http.StatusNotFound, err.Error())
+			return &models.HelpRequest{}, httpError.New(http.StatusNotFound, "That request does not exists in this group")
 		}
-		return models.HelpRequest{}, httpError.New(http.StatusInternalServerError, err.Error())
+		return &models.HelpRequest{}, httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	return req, err
 }

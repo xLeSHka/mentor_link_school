@@ -37,7 +37,7 @@ type MentorRepository interface {
 	GetRequest(ctx context.Context, UserID, MentorID, GroupID uuid.UUID) (models.HelpRequest, error)
 }
 type UsersRepository interface {
-	Login(ctx context.Context, telegram, password string) (*models.User, error)
+	Login(ctx context.Context, telegram string) (*models.User, error)
 	Register(ctx context.Context, person *models.User) (*models.User, error)
 	GetByID(ctx context.Context, id uuid.UUID) (person *models.User, err error)
 	EditUser(ctx context.Context, userID uuid.UUID, user *models.User) (*models.User, error)
@@ -51,9 +51,9 @@ type MinioRepository interface {
 	DeleteImage(image string) error
 }
 type StudentRepository interface {
-	GetMyMentors(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error)
-	GetMentors(ctx context.Context, userID uuid.UUID) ([]*models.Role, error)
-	GetMyRequests(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)
+	GetMyMentors(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Pair, error)
+	GetMentors(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Role, error)
+	GetMyRequests(ctx context.Context, userID, groupID uuid.UUID) ([]*models.HelpRequest, error)
 	CreateRequest(ctx context.Context, request *models.HelpRequest) error
-	GetRequestByID(ctx context.Context, reqID uuid.UUID) (models.HelpRequest, error)
+	GetRequestByID(ctx context.Context, reqID, groupID uuid.UUID) (*models.HelpRequest, error)
 }
