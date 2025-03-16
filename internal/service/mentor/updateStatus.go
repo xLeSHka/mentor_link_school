@@ -14,13 +14,16 @@ func (s *MentorService) UpdateRequest(ctx context.Context, request *models.HelpR
 	err := s.mentorRepository.UpdateRequest(ctx, request)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return httpError.New(http.StatusNotFound, err.Error())
+			return httpError.New(http.StatusNotFound, "request not found")
 		}
 		return httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	if request.Status == "accepted" {
 		req, err := s.studentRepository.GetRequestByID(ctx, request.ID, request.GroupID)
 		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return httpError.New(http.StatusNotFound, "request not found")
+			}
 			return httpError.New(http.StatusInternalServerError, err.Error())
 		}
 		err = s.mentorRepository.CreatePair(ctx, &models.Pair{
