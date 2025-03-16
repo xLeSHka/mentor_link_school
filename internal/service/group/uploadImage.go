@@ -10,7 +10,7 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
-func (s *GroupsService) UploadImage(ctx context.Context, file *models.File, groupID, personID uuid.UUID) (string, *httpError.HTTPError) {
+func (s *GroupsService) UploadImage(ctx context.Context, file *models.File, groupID uuid.UUID) (string, *httpError.HTTPError) {
 
 	url, err := s.minioRepository.UploadImage(file)
 	if err != nil {

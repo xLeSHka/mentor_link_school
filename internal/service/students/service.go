@@ -5,12 +5,7 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/repository"
 	"github.com/xLeSHka/mentorLinkSchool/internal/service"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
-	"time"
-
 	"go.uber.org/fx"
-
-	jwtlib "github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 )
 
 type StudentService struct {
