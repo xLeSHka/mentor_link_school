@@ -27,7 +27,7 @@ func New() *Validator {
 }
 func validateRole(field validator.FieldLevel) bool {
 	role := field.Field().String()
-	if role != "user" {
+	if role != "student" && role != "owner" && role != "mentor" {
 		return false
 	}
 	return true
