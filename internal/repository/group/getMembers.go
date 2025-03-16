@@ -9,7 +9,7 @@ import (
 func (r *GroupRepository) GetMembers(ctx context.Context, groupID uuid.UUID) ([]*models.User, error) {
 	var members []*models.User
 	err := r.DB.Model(&models.User{}).Where("EXISTS (SELECT 1 FROM roles WHERE group_id = ? AND user_id = users.id)", groupID).
-		Preload("Roles").
+		Preload("Roles", "WHERE roles.group_id = ? ", groupID).
 		Find(&members).Error
 	if err != nil {
 		return nil, err
