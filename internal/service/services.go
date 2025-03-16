@@ -10,7 +10,7 @@ import (
 )
 
 type GroupService interface {
-	Create(ctx context.Context, group *models.Group, userID uuid.UUID) error
+	Create(ctx context.Context, group *models.Group, userID uuid.UUID) (string, error)
 	AddRole(ctx context.Context, role *models.Role) error
 	RemoveRole(ctx context.Context, role *models.Role) error
 	UpdateInviteCode(ctx context.Context, groupID uuid.UUID) (string, error)

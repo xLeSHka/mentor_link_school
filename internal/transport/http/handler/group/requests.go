@@ -54,7 +54,8 @@ type RespStat struct {
 	Conversion           float64 `json:"conversion"`
 }
 type RespCreateGroup struct {
-	GroupID uuid.UUID `json:"group_id"`
+	GroupID    uuid.UUID `json:"group_id"`
+	InviteCode string    `json:"invite_code"`
 }
 
 //type respGetGroupDto struct {

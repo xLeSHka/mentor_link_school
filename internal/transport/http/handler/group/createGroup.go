@@ -42,13 +42,14 @@ func (h *Route) createGroup(c *gin.Context) {
 		Name: reqData.Name,
 	}
 
-	err = h.groupService.Create(c.Request.Context(), group, personId)
+	inviteCode, err := h.groupService.Create(c.Request.Context(), group, personId)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
 	go ws.SendRole(personId, group.ID, "owner", h.producer, h.minioRepository, h.groupService)
 	c.JSON(http.StatusOK, RespCreateGroup{
-		GroupID: group.ID,
+		GroupID:    group.ID,
+		InviteCode: inviteCode,
 	})
 }
