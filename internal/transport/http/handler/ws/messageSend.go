@@ -9,6 +9,7 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
 	"log"
 	"net/http"
+	"time"
 )
 
 func (p *WebSocket) WriteMessage(message *Message) {
@@ -67,5 +68,18 @@ func (p *WebSocket) wsHandler(c *gin.Context) {
 	log.Println("Client connected")
 	// register client
 	p.Clients[personID] = ws
+	go func() {
+		ticker := time.NewTicker(30 * time.Second)
+		defer ticker.Stop()
+		for range ticker.C {
+			err := ws.WriteMessage(websocket.PingMessage, []byte("hello"))
+			if err != nil {
+				log.Println(err)
+				ws.Close()
+				delete(p.Clients, personID)
+				return
+			}
+		}
 
+	}()
 }
