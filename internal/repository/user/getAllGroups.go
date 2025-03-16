@@ -1,4 +1,4 @@
-package group
+package repositoryUser
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 // 	return groups, err
 // }
 
-func (r *GroupRepository) GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Roles, error) {
+func (r *UsersRepository) GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Roles, error) {
 	var groups []*models.Roles
 	err := r.DB.WithContext(ctx).Table("roles").
 		Select("user_id,group_id,array_agg(role) AS roles").Group("group_id").Group("user_id").

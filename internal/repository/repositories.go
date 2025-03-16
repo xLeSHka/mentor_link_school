@@ -24,7 +24,7 @@ type GroupRepository interface {
 	Edit(ctx context.Context, group *models.Group) (*models.Group, error)
 	GetGroupByID(ctx context.Context, ID uuid.UUID) (*models.Group, error)
 	GetStat(ctx context.Context, groupID uuid.UUID) (*models.GroupStat, error)
-	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Role, error)
+
 	GetRoles(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Role, error)
 }
 type MentorRepository interface {
