@@ -11,7 +11,7 @@ import (
 )
 
 // @Summary Добавить роль юзеру
-// @Tags Roles
+// @Tags Groups
 // @Accept json
 // @Produce json
 // @Router /api/groups/{groupID}/members/{userID}/role [post]

@@ -10,7 +10,7 @@ import (
 )
 
 // @Summary Удалить роль юзеру
-// @Tags Roles
+// @Tags Groups
 // @Accept json
 // @Produce json
 // @Router /api/groups/{groupID}/members/{userID}/role [delete]

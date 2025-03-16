@@ -14,7 +14,7 @@ import (
 
 // @Summary Создание организации
 // @Schemes
-// @Tags Roles
+// @Tags Groups
 // @Accept json
 // @Produce json
 // @Param Authorization header string true "Bearer <token>"

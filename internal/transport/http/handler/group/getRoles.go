@@ -9,7 +9,7 @@ import (
 )
 
 // @Summary получить роли юзера
-// @Tags Roles
+// @Tags Groups
 // @Accept json
 // @Produce json
 // @Router /api/groups/{groupID}/members/{userID} [get]

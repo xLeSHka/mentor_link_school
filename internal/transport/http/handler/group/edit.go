@@ -12,7 +12,7 @@ import (
 
 // @Summary Редактирование организации
 // @Schemes
-// @Tags Roles
+// @Tags Groups
 // @Accept json
 // @Produce json
 // @Router /api/groups/{groupID}/edit [patch]

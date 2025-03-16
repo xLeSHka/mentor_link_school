@@ -10,7 +10,7 @@ import (
 )
 
 // @Summary Обновить код приглашения
-// @Tags Roles
+// @Tags Groups
 // @Accept  json
 // @Produce  json
 // @Param groupID path string true "Group ID"

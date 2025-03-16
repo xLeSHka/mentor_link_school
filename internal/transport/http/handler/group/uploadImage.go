@@ -16,7 +16,7 @@ import (
 // @Summary Загрузка аватарки
 // @Schemes
 // @Description Загрузка аватарки. Возвращает ссылку на аватарку, которая действует 7 дней
-// @Tags Roles
+// @Tags Groups
 // @Accept multipart/form-data
 // @Param image formData file true "Изображение для загрузки"
 // @Produce json
