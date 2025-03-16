@@ -80,10 +80,10 @@ func MapGroup(roles *models.Roles) *ResGetGroup {
 	resp := &ResGetGroup{
 		GroupID:   roles.GroupID,
 		Name:      roles.Group.Name,
-		Roles:     roles.Roles,
+		Roles:     roles.Rls,
 		AvatarURL: roles.Group.AvatarURL,
 	}
-	for _, role := range roles.Roles {
+	for _, role := range roles.Rls {
 		if role == "owner" {
 			resp.InviteCode = roles.Group.InviteCode
 		}

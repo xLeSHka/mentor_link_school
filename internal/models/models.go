@@ -72,7 +72,7 @@ type Role struct {
 type Roles struct {
 	UserID  uuid.UUID `gorm:"type:uuid;not null"`
 	GroupID uuid.UUID `gorm:"type:uuid;not null"`
-	Roles   []string  `gorm:"not null"`
+	Rls     []string  `gorm:"not null"`
 	User    *User     `gorm:"foreignKey:user_id"`
 	Group   *Group    `gorm:"foreignKey:group_id"`
 }
