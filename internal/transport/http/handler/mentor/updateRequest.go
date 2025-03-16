@@ -64,6 +64,6 @@ func (h *Route) updateRequest(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	go ws.SendRequest(request.UserID, request.MentorID, request.ID, h.producer, h.usersService, h.minioRepository, h.studentsService)
+	go ws.SendRequest(request.UserID, request.MentorID, request.ID, groupId, h.producer, h.usersService, h.minioRepository, h.studentsService)
 	c.Writer.WriteHeader(http.StatusOK)
 }

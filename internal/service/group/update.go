@@ -11,7 +11,7 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 )
 
-func (s *GroupsService) UpdateInviteCode(ctx context.Context, groupID uuid.UUID, ownerID uuid.UUID) (string, error) {
+func (s *GroupsService) UpdateInviteCode(ctx context.Context, groupID uuid.UUID) (string, error) {
 	inviteCode, _ := generateInviteCode(5)
 
 	err := s.groupRepository.UpdateInviteCode(ctx, groupID, inviteCode)

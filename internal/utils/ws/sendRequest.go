@@ -11,7 +11,7 @@ import (
 	"log"
 )
 
-func SendRequest(personId, mentorId, requestId uuid.UUID, producer *broker.Producer, usersService service.UsersService, minioRepository repository.MinioRepository, studentService service.StudentService) {
+func SendRequest(personId, mentorId, requestId, groupId uuid.UUID, producer *broker.Producer, usersService service.UsersService, minioRepository repository.MinioRepository, studentService service.StudentService) {
 	if producer != nil {
 		user, err := usersService.GetByID(context.Background(), personId)
 		if err != nil {
@@ -33,7 +33,7 @@ func SendRequest(personId, mentorId, requestId uuid.UUID, producer *broker.Produ
 			log.Println(err)
 			return
 		}
-		request, err := studentService.GetRequestByID(context.Background(), requestId)
+		request, err := studentService.GetRequestByID(context.Background(), requestId, groupId)
 		if err != nil {
 			log.Println(err)
 			return

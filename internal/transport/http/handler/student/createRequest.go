@@ -53,7 +53,7 @@ func (h *Route) createRequest(c *gin.Context) {
 		UserID:   personId,
 		MentorID: reqData.MentorID,
 		GroupID:  groupId,
-		Goal:     reqData.Goal,
+		Goal:     reqData.Goal,1
 		Status:   "pending",
 		BIO:      user.BIO,
 	}
@@ -62,7 +62,7 @@ func (h *Route) createRequest(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	go ws.SendRequest(personId, reqData.MentorID, request.ID, h.producer, h.usersService, h.minioRepository, h.studentsService)
+	go ws.SendRequest(personId, reqData.MentorID, request.ID, groupId, h.producer, h.usersService, h.minioRepository, h.studentsService)
 
 	c.Writer.WriteHeader(http.StatusOK)
 }
