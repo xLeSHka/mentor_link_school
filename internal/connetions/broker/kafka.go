@@ -52,9 +52,10 @@ func (p *Producer) Send(message *ws.Message) error {
 		return err
 	}
 	p.producer.Input() <- &sarama.ProducerMessage{
-		Topic: p.topic,
-		Key:   sarama.StringEncoder(p.group),
-		Value: sarama.ByteEncoder(jsonData),
+		Topic:     p.topic,
+		Key:       sarama.StringEncoder(p.group),
+		Value:     sarama.ByteEncoder(jsonData),
+		Partition: 0,
 	}
 	log.Println("Success send message to ", p.topic, p.group, "mes", string(jsonData))
 	return nil
@@ -113,6 +114,7 @@ func NewConsumer(opts FxOpts, lc fx.Lifecycle) (*Consumer, error) {
 		mu:           &sync.RWMutex{},
 		wsconn:       opts.Wsconn,
 	}
+	log.Println("Start consuming messages from ", opts.Config.KafkaAddress, opts.Config.KafkaTopic)
 	cons.Run()
 	lc.Append(fx.Hook{
 		OnStop: func(ctx context.Context) error {
