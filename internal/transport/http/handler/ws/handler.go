@@ -37,9 +37,9 @@ func (p *WebSocket) WsHandler(c *gin.Context) {
 			err := ws.WriteMessage(websocket.PingMessage, []byte("hello"))
 			if err != nil {
 				log.Println(err)
-				ws.Close()
-				delete(p.Clients, personID)
-				return
+				//ws.Close()
+				//delete(p.Clients, personID)
+				//return
 			}
 		}
 
