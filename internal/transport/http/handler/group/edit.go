@@ -16,7 +16,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/groups/{groupID}/edit [patch]
-// @Param id path string true "Group ID"
+// @Param groupID path string true "Group ID"
 // @Param Authorization header string true "Bearer <token>"
 // @Param body body ReqEditGroup true "body"
 // @Failure 400 {object} httpError.HTTPError

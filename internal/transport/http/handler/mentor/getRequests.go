@@ -15,6 +15,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/groups/{groupID}/mentors/requests [get]
+// @Param groupID path string true "Group ID"
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} []RespGetRequest
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"

@@ -13,7 +13,7 @@ import (
 // @Tags Roles
 // @Accept  json
 // @Produce  json
-// @Param id path string true "Group ID"
+// @Param groupID path string true "Group ID"
 // @Success 200 {object} RespUpdateCode
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 403 {object} httpError.HTTPError "Ошибка доступа"

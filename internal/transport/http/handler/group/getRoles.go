@@ -13,7 +13,8 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/groups/{groupID}/members/{userID} [get]
-// @Param id path string true "Group ID"
+// @Param groupID path string true "Group ID"
+// @Param userID path string true "User ID"
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} RespGetRoles
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"

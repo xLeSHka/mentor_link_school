@@ -10,10 +10,11 @@ import (
 
 // @Summary Получить список моих запросов
 // @Schemes
-// @Tags Users
+// @Tags Students
 // @Accept json
 // @Produce json
 // @Router /api/groups/{groupID}/students/requests [get]
+// @Param groupID path string true "Group ID"
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} []RespGetHelp
 // @Failure 400 {object} httpError.HTTPError "Невалидный запрос"

@@ -17,6 +17,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/groups/{groupID}/mentors/requests [post]
+// @Param groupID path string true "Group ID"
 // @Param Authorization header string true "Bearer <token>"
 // @Param body body ReqUpdateRequest true "body"
 // @Success 200

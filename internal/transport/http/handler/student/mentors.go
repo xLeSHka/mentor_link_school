@@ -11,10 +11,11 @@ import (
 
 // @Summary Получение моих менторов
 // @Schemes
-// @Tags Users
+// @Tags Students
 // @Accept json
 // @Produce json
 // @Router /api/groups/{groupID}/students/mentors [get]
+// @Param groupID path string true "Group ID"
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} []RespGetMyMentor
 // @Failure 400 {object} httpError.HTTPError "Невалидный запрос"

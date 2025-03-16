@@ -13,10 +13,11 @@ import (
 
 // @Summary Получение доступных менторов
 // @Schemes
-// @Tags Users
+// @Tags Students
 // @Accept json
 // @Produce json
 // @Router /api/groups/{groupID}/students/availableMentors [get]
+// @Param groupID path string true "Group ID"
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} []RespGetMentor
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"

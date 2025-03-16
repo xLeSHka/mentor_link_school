@@ -14,7 +14,7 @@ import (
 // @Tags Roles
 // @Accept json
 // @Produce json
-// @Param id path string true "Group ID"
+// @Param groupID path string true "Group ID"
 // @Router /api/groups/{groupID}/members [get]
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} []RespGetMember

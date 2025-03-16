@@ -21,7 +21,7 @@ import (
 // @Param image formData file true "Изображение для загрузки"
 // @Produce json
 // @Router /api/groups/{groupID}/uploadAvatar [post]
-// @Param id path string true "Group ID"
+// @Param groupID path string true "Group ID"
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} RespUploadAvatarDto
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"

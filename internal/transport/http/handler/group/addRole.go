@@ -15,7 +15,8 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/groups/{groupID}/members/{userID}/role [post]
-// @Param id path string true "Group ID"
+// @Param groupID path string true "Group ID"
+// @Param userID path string true "User ID"
 // @Param body body ReqUpdateRole true "body"
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200

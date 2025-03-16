@@ -17,6 +17,7 @@ import (
 // @Accept json
 // @Produce json
 // @Router /api/users/profile/{profileID} [get]
+// @Param profileID path string true "Profile ID"
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} RespOtherProfile
 // @Failure 400 {object} httpError.HTTPError "Невалидный запрос"
