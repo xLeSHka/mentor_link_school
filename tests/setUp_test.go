@@ -48,7 +48,7 @@ var UserRepository repository.UsersRepository
 var MinioRepository repository.MinioRepository
 var GroupRepository repository.GroupRepository
 var validator *Validators.Validator
-var UserService service.UserService
+var UserService service.StudentService
 var MentorRepository repository.MentorRepository
 var GroupService service.GroupService
 var MentorService service.MentorService
@@ -128,7 +128,7 @@ func init() {
 		ApiRouter:       routers,
 		Validator:       validator,
 		MinioRepository: MinioRepository,
-		UsersService:    UserService,
+		StudentsService: UserService,
 		MentorService:   MentorService,
 		Ws:              wsconn,
 	})
@@ -136,7 +136,7 @@ func init() {
 		ApiRouter:       routers,
 		Validator:       validator,
 		MinioRepository: MinioRepository,
-		UsersService:    UserService,
+		StudentsService: UserService,
 		GroupService:    GroupService,
 		Ws:              wsconn,
 	})

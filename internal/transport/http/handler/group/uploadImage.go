@@ -2,7 +2,6 @@ package groupsRoute
 
 import (
 	"fmt"
-	"github.com/google/uuid"
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
@@ -21,10 +20,10 @@ import (
 // @Accept multipart/form-data
 // @Param image formData file true "Изображение для загрузки"
 // @Produce json
-// @Router /api/groups/{id}/uploadAvatar [post]
+// @Router /api/groups/{groupID}/uploadAvatar [post]
 // @Param id path string true "Group ID"
 // @Param Authorization header string true "Bearer <token>"
-// @Success 200 {object} respUploadAvatarDto
+// @Success 200 {object} RespUploadAvatarDto
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 403 {object} httpError.HTTPError "Ошибка доступа"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
@@ -33,19 +32,13 @@ import (
 func (h *Route) uploadAvatar(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {
-		httpError.New(http.StatusUnauthorized, "Bad id").SendError(c)
+		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()
 		return
 	}
-	groupid := c.Param("id")
-	if groupid == "" {
-		httpError.New(http.StatusUnauthorized, "Header not found").SendError(c)
-		c.Abort()
-		return
-	}
-	groupID, err := uuid.Parse(groupid)
+	groupId, err := jwt.ParseGroupID(c)
 	if err != nil {
-		httpError.New(http.StatusUnauthorized, "Header not found").SendError(c)
+		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()
 		return
 	}
@@ -81,12 +74,12 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 		File:     temp,
 		Mimetype: mimetype,
 	}
-	imageURL, hErr := h.groupService.UploadImage(c.Request.Context(), f, groupID, personId)
+	imageURL, hErr := h.groupService.UploadImage(c.Request.Context(), f, groupId)
 	if hErr != nil {
 		hErr.SendError(c)
 		c.Abort()
 		return
 	}
-	go ws.SendRole(personId, groupID, h.producer, h.usersService, h.minioRepository, h.groupService)
-	c.JSON(http.StatusOK, respUploadAvatarDto{Url: imageURL})
+	go ws.SendRole(personId, groupId, "owner", h.producer, h.minioRepository, h.groupService)
+	c.JSON(http.StatusOK, RespUploadAvatarDto{Url: imageURL})
 }

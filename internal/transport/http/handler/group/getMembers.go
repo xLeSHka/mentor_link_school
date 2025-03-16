@@ -1,10 +1,10 @@
 package groupsRoute
 
 import (
+	"github.com/xLeSHka/mentorLinkSchool/internal/utils/avatar"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
 )
@@ -15,48 +15,40 @@ import (
 // @Accept json
 // @Produce json
 // @Param id path string true "Group ID"
-// @Router /api/groups/{id}/members [get]
+// @Router /api/groups/{groupID}/members [get]
 // @Param Authorization header string true "Bearer <token>"
-// @Success 200 {object} []GespGetMember
+// @Success 200 {object} []RespGetMember
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 403 {object} httpError.HTTPError "Ошибка доступа"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // @Failure 403 {object} httpError.HTTPError "Нет прав доступа"
+// @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
 func (h *Route) getMembers(c *gin.Context) {
-	personID, err := jwt.Parse(c)
-	if err != nil {
-		httpError.New(http.StatusUnauthorized, "Header not found").SendError(c)
-		c.Abort()
-		return
-	}
-	groupid := c.Param("id")
-	if groupid == "" {
-		httpError.New(http.StatusUnauthorized, "Header not found").SendError(c)
-		c.Abort()
-		return
-	}
-	groupID, err := uuid.Parse(groupid)
-	if err != nil {
-		httpError.New(http.StatusUnauthorized, "Header not found").SendError(c)
-		c.Abort()
-		return
-	}
-	members, err := h.groupService.GetMembers(c.Request.Context(), personID, groupID)
+	_, err := jwt.Parse(c)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()
 		return
 	}
-	resp := make([]*GespGetMember, 0, len(members))
+	groupID, err := jwt.ParseGroupID(c)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		c.Abort()
+		return
+	}
+	members, err := h.groupService.GetMembers(c.Request.Context(), groupID)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		c.Abort()
+		return
+	}
+	resp := make([]*RespGetMember, 0, len(members))
 	for _, m := range members {
-		if m.User.AvatarURL != nil {
-			avatarURL, err := h.minioRepository.GetImage(*m.User.AvatarURL)
-			if err != nil {
-				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-				c.Abort()
-				return
-			}
-			m.User.AvatarURL = &avatarURL
+		err = avatar.GetUserAvatar(m, h.minioRepository)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			c.Abort()
+			return
 		}
 		resp = append(resp, mapMember(m))
 	}

@@ -19,7 +19,6 @@ import (
 // @Param body body ReqEditUser true "body"
 // @Failure 400 {object} httpError.HTTPError
 // @Failure 401 {object} httpError.HTTPError
-// @Failure 403 {object} httpError.HTTPError "Пользователь заблокирован"
 // @Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
 // @Failure 409 {object} httpError.HTTPError "Пользователь с таким email уже зарегистрирован"
 // @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
@@ -27,7 +26,7 @@ import (
 func (h *Route) edit(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {
-		httpError.New(http.StatusUnauthorized, "Header not found").SendError(c)
+		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()
 		return
 	}

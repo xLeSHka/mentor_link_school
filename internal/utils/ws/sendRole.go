@@ -11,7 +11,7 @@ import (
 	"log"
 )
 
-func SendRole(personId, groupID uuid.UUID, role string, producer *broker.Producer, usersService service.UserService, minioRepository repository.MinioRepository, groupService service.GroupService) {
+func SendRole(personId, groupID uuid.UUID, role string, producer *broker.Producer, minioRepository repository.MinioRepository, groupService service.GroupService) {
 	if producer != nil {
 		group, err := groupService.GetGroupByID(context.Background(), groupID)
 		if err != nil {

@@ -16,7 +16,7 @@ import (
 // @Tags Mentors
 // @Accept json
 // @Produce json
-// @Router /api/mentors/students [get]
+// @Router /api/groups/{groupID}/mentors/students [get]
 // @Param Authorization header string true "Bearer <token>"
 // @Success 200 {object} []RespGetMyStudent
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
@@ -27,12 +27,17 @@ import (
 func (h *Route) students(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {
-		httpError.New(http.StatusUnauthorized, "Bad id").SendError(c)
+		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()
 		return
 	}
-
-	students, err := h.mentorService.GetStudents(c.Request.Context(), personId)
+	groupId, err := jwt.ParseGroupID(c)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		c.Abort()
+		return
+	}
+	students, err := h.mentorService.GetStudents(c.Request.Context(), personId, groupId)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return

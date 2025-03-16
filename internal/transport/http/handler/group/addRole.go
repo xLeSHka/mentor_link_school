@@ -6,16 +6,15 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
 )
 
-// @Summary Обновить роль юзера
+// @Summary Добавить роль юзеру
 // @Tags Roles
 // @Accept json
 // @Produce json
-// @Router /api/groups/{id}/members/role [post]
+// @Router /api/groups/{groupID}/members/{userID}/role [post]
 // @Param id path string true "Group ID"
 // @Param body body ReqUpdateRole true "body"
 // @Param Authorization header string true "Bearer <token>"
@@ -26,16 +25,22 @@ import (
 // @Failure 403 {object} httpError.HTTPError "Нет прав доступа"
 // @Failure 404 {object} httpError.HTTPError "Нет такого юзера"
 // @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
-func (h *Route) updateRole(c *gin.Context) {
+func (h *Route) addRole(c *gin.Context) {
 	_, err := jwt.Parse(c)
 	if err != nil {
-		httpError.New(http.StatusUnauthorized, "Header not found").SendError(c)
+		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()
 		return
 	}
-	groupid := c.Param("id")
-	if groupid == "" {
-		httpError.New(http.StatusUnauthorized, "Header not found").SendError(c)
+	groupID, err := jwt.ParseGroupID(c)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		c.Abort()
+		return
+	}
+	userID, err := jwt.ParseUserID(c)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()
 		return
 	}
@@ -45,18 +50,7 @@ func (h *Route) updateRole(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	groupID, err := uuid.Parse(groupid)
-	if err != nil {
-		httpError.New(http.StatusUnauthorized, "Header not found").SendError(c)
-		c.Abort()
-		return
-	}
-	userID, err := uuid.Parse(req.ID)
-	if err != nil {
-		httpError.New(http.StatusUnauthorized, "Header not found").SendError(c)
-		c.Abort()
-		return
-	}
+
 	role := &models.Role{
 		GroupID: groupID,
 		UserID:  userID,
@@ -67,7 +61,7 @@ func (h *Route) updateRole(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	go ws.SendRole(userID, groupID, req.Role, h.producer, h.usersService, h.minioRepository, h.groupService)
+	go ws.SendRole(userID, groupID, req.Role, h.producer, h.minioRepository, h.groupService)
 
 	c.Writer.WriteHeader(http.StatusOK)
 }

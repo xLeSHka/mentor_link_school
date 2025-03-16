@@ -1,4 +1,4 @@
-package usersRoute
+package studentsRoute
 
 import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/utils/ws"
@@ -16,7 +16,7 @@ import (
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /api/users/requests [post]
+// @Router /api/groups/{groupID}/students/requests [post]
 // @Param Authorization header string true "Bearer <token>"
 // @Param body body ReqCreateHelp true "body"
 // @Success 200
@@ -28,7 +28,7 @@ import (
 func (h *Route) createRequest(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {
-		httpError.New(http.StatusUnauthorized, "Bad id").SendError(c)
+		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()
 		return
 	}
@@ -37,27 +37,32 @@ func (h *Route) createRequest(c *gin.Context) {
 		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
 		return
 	}
+	groupId, err := jwt.ParseGroupID(c)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		c.Abort()
+		return
+	}
 	user, err := h.usersService.GetByID(c.Request.Context(), personId)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	for _, r := range reqData.Requests {
-		request := &models.HelpRequest{
-			ID:       uuid.New(),
-			UserID:   personId,
-			MentorID: r.MentorID,
-			GroupID:  r.GroupId,
-			Goal:     reqData.Goal,
-			Status:   "pending",
-			BIO:      user.BIO,
-		}
-		err := h.usersService.CreateRequest(c.Request.Context(), request)
-		if err != nil {
-			err.(*httpError.HTTPError).SendError(c)
-			return
-		}
-		go ws.SendRequest(personId, r.MentorID, request.ID, h.producer, h.usersService, h.minioRepository)
+	request := &models.HelpRequest{
+		ID:       uuid.New(),
+		UserID:   personId,
+		MentorID: reqData.MentorID,
+		GroupID:  groupId,
+		Goal:     reqData.Goal,
+		Status:   "pending",
+		BIO:      user.BIO,
 	}
+	err = h.studentsService.CreateRequest(c.Request.Context(), request)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		return
+	}
+	go ws.SendRequest(personId, reqData.MentorID, request.ID, h.producer, h.usersService, h.minioRepository, h.studentsService)
+
 	c.Writer.WriteHeader(http.StatusOK)
 }

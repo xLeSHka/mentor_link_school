@@ -1,4 +1,4 @@
-package groupsRoute
+package studentsRoute
 
 import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/Validators"
@@ -13,46 +13,45 @@ import (
 type Route struct {
 	routers         *ApiRouters.ApiRouters
 	validator       *Validators.Validator
-	groupService    service.GroupService
 	studentsService service.StudentService
 	usersService    service.UsersService
+	groupService    service.GroupService
 	minioRepository repository.MinioRepository
-	producer        *broker.Producer
-	cryptoKey       []byte
+
+	producer  *broker.Producer
+	cryptoKey []byte
 }
 
 type FxOpts struct {
 	fx.In
 	ApiRouter       *ApiRouters.ApiRouters
 	Validator       *Validators.Validator
-	GroupService    service.GroupService
 	StudentsService service.StudentService
-	UsersService    service.UsersService
+	GroupService    service.GroupService
 	MinioRepository repository.MinioRepository
+	UserService     service.UsersService
 	Producer        *broker.Producer
 	Config          config.Config
 }
 
-func GroupsRoutes(opts FxOpts) *Route {
+func StudentsRoute(opts FxOpts) *Route {
 	router := &Route{
 		routers:         opts.ApiRouter,
 		validator:       opts.Validator,
-		groupService:    opts.GroupService,
 		studentsService: opts.StudentsService,
 		minioRepository: opts.MinioRepository,
-		usersService:    opts.UsersService,
+		groupService:    opts.GroupService,
+		usersService:    opts.UserService,
 		producer:        opts.Producer,
 		cryptoKey:       []byte(opts.Config.CryptoKey),
 	}
 
-	opts.ApiRouter.GroupPrivate.POST("/inviteCode", router.updateInviteCode)
-	opts.ApiRouter.GroupPrivate.POST("/members/{userID}/role", router.addRole)
-	opts.ApiRouter.GroupPrivate.DELETE("/members/{userID}/role", router.removeRole)
-	opts.ApiRouter.GroupPrivate.GET("/members/{userID}", router.getRoles)
-	opts.ApiRouter.GroupPrivate.POST("/uploadAvatar", router.uploadAvatar)
-	opts.ApiRouter.UserRoute.POST("/create", router.createGroup)
-	opts.ApiRouter.GroupPrivate.GET("/members", router.getMembers)
-	opts.ApiRouter.GroupPrivate.GET("/stat", router.getStat)
-	opts.ApiRouter.GroupPrivate.PATCH("/edit", router.edit)
+	opts.ApiRouter.StudentRoute.GET("/availableMentors", router.availableMentors)
+	opts.ApiRouter.StudentRoute.POST("/requests", router.createRequest)
+	opts.ApiRouter.StudentRoute.GET("/requests", router.getRequests)
+	opts.ApiRouter.StudentRoute.GET("/mentors", router.getMyMentors)
+
+	//opts.ApiRouter.StudentRoute.POST("/user/invite", router.acceptedInvite)
+
 	return router
 }

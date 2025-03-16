@@ -24,7 +24,6 @@ type User struct {
 	BIO       *string
 	Telegram  string  `gorm:"not null"`
 	Password  []byte  `gorm:"not null"`
-	Banned    bool    `gorm:"not null"`
 	Roles     []*Role `gorm:"foreignKey:user_id"`
 }
 

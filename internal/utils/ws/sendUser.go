@@ -11,7 +11,7 @@ import (
 	"log"
 )
 
-func SendUser(personId uuid.UUID, producer *broker.Producer, usersService service.UserService, minioRepository repository.MinioRepository) {
+func SendUser(personId uuid.UUID, producer *broker.Producer, usersService service.UsersService, minioRepository repository.MinioRepository) {
 	if producer != nil {
 		user, err := usersService.GetByID(context.Background(), personId)
 		if err != nil {

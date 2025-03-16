@@ -13,7 +13,7 @@ import (
 type Route struct {
 	routers         *ApiRouters.ApiRouters
 	validator       *Validators.Validator
-	usersService    service.UserService
+	usersService    service.UsersService
 	groupService    service.GroupService
 	minioRepository repository.MinioRepository
 	producer        *broker.Producer
@@ -24,14 +24,14 @@ type FxOpts struct {
 	fx.In
 	ApiRouter       *ApiRouters.ApiRouters
 	Validator       *Validators.Validator
-	UsersService    service.UserService
+	UsersService    service.UsersService
 	GroupService    service.GroupService
 	MinioRepository repository.MinioRepository
 	Producer        *broker.Producer
 	Config          config.Config
 }
 
-func UsersRoute(opts FxOpts) *Route {
+func StudentsRoute(opts FxOpts) *Route {
 	router := &Route{
 		routers:         opts.ApiRouter,
 		validator:       opts.Validator,
@@ -42,18 +42,16 @@ func UsersRoute(opts FxOpts) *Route {
 		cryptoKey:       []byte(opts.Config.CryptoKey),
 	}
 
-	opts.ApiRouter.UserPrivate.GET("/availableMentors", router.availableMentors)
-	opts.ApiRouter.UserPrivate.POST("/requests", router.createRequest)
-	opts.ApiRouter.UserPrivate.PATCH("/profile/edit", router.edit)
-	opts.ApiRouter.UserPrivate.GET("/requests", router.getRequests)
 	opts.ApiRouter.Public.POST("/users/auth/login", router.login)
-	opts.ApiRouter.UserPrivate.GET("/mentors", router.getMyMentors)
-	opts.ApiRouter.UserPrivate.GET("/profile", router.profile)
-	opts.ApiRouter.UserPrivate.GET("/profile/:id", router.profileOther)
 	opts.ApiRouter.Public.POST("/users/auth/register", router.register)
-	opts.ApiRouter.UserPrivate.POST("/uploadAvatar", router.uploadAvatar)
+	opts.ApiRouter.UserRoute.GET("/profile", router.profile)
+	opts.ApiRouter.UserRoute.PATCH("/profile/edit", router.edit)
+	opts.ApiRouter.UserRoute.POST("/uploadAvatar", router.uploadAvatar)
+	opts.ApiRouter.UserRoute.GET("/groups", router.getGroups)
+	opts.ApiRouter.UserRoute.GET("/profile/:id", router.profileOther)
+	opts.ApiRouter.UserRoute.POST("/join/:code", router.acceptedInvite)
 
-	//opts.ApiRouter.UserPrivate.POST("/user/invite", router.acceptedInvite)
+	//opts.ApiRouter.StudentRoute.POST("/user/invite", router.acceptedInvite)
 
 	return router
 }

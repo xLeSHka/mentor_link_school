@@ -7,8 +7,7 @@ CREATE TABLE users (
                        name VARCHAR NOT NULL,
                        bio TEXT DEFAULT NULL,
                        telegram VARCHAR NOT NULL UNIQUE,
-                       password bytea,
-                       banned BOOLEAN DEFAULT FALSE
+                       password bytea
 );
 
 
@@ -27,13 +26,14 @@ CREATE TABLE roles (
 );
 
 CREATE TABLE help_requests (
-                               id UUID PRIMARY KEY ,
+                               id UUID PRIMARY KEY,
                                user_id UUID  REFERENCES users(id),
                                mentor_id UUID REFERENCES users(id),
                                group_id UUID REFERENCES groups(id),
                                goal VARCHAR NOT NULL,
                                bio TEXT DEFAULT NULL,
-                               status VARCHAR NOT NULL
+                               status VARCHAR NOT NULL,
+                               UNIQUE (user_id, group_id,mentor_id)
 );
 
 CREATE TABLE fast_helps (

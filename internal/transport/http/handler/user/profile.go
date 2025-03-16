@@ -22,7 +22,6 @@ import (
 // @Success 200 {object} ResGetProfile
 // @Failure 400 {object} httpError.HTTPError "Невалидный запрос"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
-// @Failure 403 {object} httpError.HTTPError "Пользователь заблокирован"
 // Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
 // @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
 func (h *Route) profile(c *gin.Context) {
@@ -35,11 +34,6 @@ func (h *Route) profile(c *gin.Context) {
 	user, err := h.usersService.GetByID(c.Request.Context(), personID)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
-		c.Abort()
-		return
-	}
-	if user.Banned {
-		httpError.New(http.StatusForbidden, "user is banned").SendError(c)
 		c.Abort()
 		return
 	}

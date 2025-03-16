@@ -26,13 +26,12 @@ import (
 // @Success 200 {object} RespUploadAvatarDto
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
-// @Failure 403 {object} httpError.HTTPError "Пользователь заблокирован"
 // Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
 // @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
 func (h *Route) uploadAvatar(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {
-		httpError.New(http.StatusUnauthorized, "Bad id").SendError(c)
+		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()
 		return
 	}

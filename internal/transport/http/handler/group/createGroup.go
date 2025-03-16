@@ -1,7 +1,7 @@
 package groupsRoute
 
 import (
-	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
+	"github.com/xLeSHka/mentorLinkSchool/internal/utils/ws"
 	"net/http"
 
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
@@ -19,14 +19,15 @@ import (
 // @Produce json
 // @Param Authorization header string true "Bearer <token>"
 // @Param body body ReqCreateGroupDto true "body"
-// @Success 200 {object} respCreateGroup
+// @Success 200 {object} RespCreateGroup
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // @Router /api/groups/create [post]
+// @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
 func (h *Route) createGroup(c *gin.Context) {
 	personId, err := jwt.Parse(c)
 	if err != nil {
-		httpError.New(http.StatusUnauthorized, "Bad id")
+		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()
 		return
 	}
@@ -46,50 +47,8 @@ func (h *Route) createGroup(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	if h.producer != nil {
-		user, err := h.usersService.GetByID(c.Request.Context(), personId)
-		if err != nil {
-			err.(*httpError.HTTPError).SendError(c)
-			c.Abort()
-			return
-		}
-		if user.AvatarURL != nil {
-			avatarURL, err := h.minioRepository.GetImage(*user.AvatarURL)
-			if err != nil {
-				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-				c.Abort()
-				return
-			}
-			user.AvatarURL = &avatarURL
-		}
-		group, err = h.usersService.GetGroupByID(c.Request.Context(), group.ID)
-		if err != nil {
-			err.(*httpError.HTTPError).SendError(c)
-			c.Abort()
-			return
-		}
-		if group.AvatarURL != nil {
-			groupAvatarURL, err := h.minioRepository.GetImage(*group.AvatarURL)
-			if err != nil {
-				httpError.New(http.StatusInternalServerError, err.Error()).SendError(c)
-				c.Abort()
-				return
-			}
-			group.AvatarURL = &groupAvatarURL
-		}
-		go h.producer.Send(&ws.Message{
-			Type:   "role",
-			UserID: personId,
-			Role: &ws.Role{
-				Role:       "owner",
-				Name:       user.Name,
-				GroupID:    group.ID,
-				GroupUrl:   group.AvatarURL,
-				InviteCode: group.InviteCode,
-			},
-		})
-	}
-	c.JSON(http.StatusOK, respCreateGroup{
+	go ws.SendRole(personId, group.ID, "owner", h.producer, h.minioRepository, h.groupService)
+	c.JSON(http.StatusOK, RespCreateGroup{
 		GroupID: group.ID,
 	})
 }

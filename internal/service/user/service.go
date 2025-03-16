@@ -32,7 +32,7 @@ type FxOpts struct {
 	Config           config.Config
 }
 
-func New(opts FxOpts) service.UserService {
+func New(opts FxOpts) service.StudentService {
 	return &UsersService{
 		usersRepository: opts.UsersRepository,
 		jwt:             opts.JWT,

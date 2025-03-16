@@ -17,35 +17,35 @@ type GetGroupID struct {
 type ReqCreateGroupDto struct {
 	Name string `json:"name" binding:"required,min=1,max=100"`
 }
+
 type ReqUpdateRole struct {
 	Role string `json:"role" binding:"required"`
-	ID   string `json:"id" binding:"required,uuid"`
 }
-type GespGetMember struct {
+type RespGetMember struct {
 	UserID    uuid.UUID `json:"user_id" binding:"required"`
 	AvatarUrl *string   `json:"avatar_url,omitempty"`
 	Name      string    `json:"name" binding:"required"`
-	Role      string    `uri:"role" binding:"required"`
+	Roles     []string  `json:"roles" binding:"required"`
 }
 
-func mapMember(role *models.Role) *GespGetMember {
-	return &GespGetMember{
-		UserID:    role.User.ID,
-		AvatarUrl: role.User.AvatarURL,
-		Name:      role.User.Name,
-		Role:      role.Role,
+func mapMember(role *models.User) *RespGetMember {
+	roles := []string{}
+	for _, role := range role.Roles {
+		roles = append(roles, role.Role)
+	}
+	return &RespGetMember{
+		UserID:    role.ID,
+		AvatarUrl: role.AvatarURL,
+		Name:      role.Name,
+		Roles:     roles,
 	}
 }
 
-type respUploadAvatarDto struct {
+type RespUploadAvatarDto struct {
 	Url string `json:"url"`
 }
 
-type respJoinGroup struct {
-	Status string `json:"status"`
-}
-
-type respStat struct {
+type RespStat struct {
 	StudentsCount        int64   `json:"students_count"`
 	MentorsCount         int64   `json:"mentors_count"`
 	HelpRequestCount     int64   `json:"help_request_count"`
@@ -53,24 +53,25 @@ type respStat struct {
 	RejectedRequestCount int64   `json:"rejected_request_count"`
 	Conversion           float64 `json:"conversion"`
 }
-type respCreateGroup struct {
+type RespCreateGroup struct {
 	GroupID uuid.UUID `json:"group_id"`
 }
-type respGetGroupDto struct {
-	Name       string  `json:"name"`
-	ID         string  `json:"id"`
-	AvatarUrl  *string `json:"avatar_url,omitempty"`
-	InviteCode *string `json:"invite_code,omitempty"`
-}
 
-func mapGroup(group *models.Group) *respGetGroupDto {
-	return &respGetGroupDto{
-		Name:       group.Name,
-		ID:         group.ID.String(),
-		AvatarUrl:  group.AvatarURL,
-		InviteCode: group.InviteCode,
-	}
-}
+//type respGetGroupDto struct {
+//	Name       string  `json:"name"`
+//	ID         string  `json:"id"`
+//	AvatarUrl  *string `json:"avatar_url,omitempty"`
+//	InviteCode *string `json:"invite_code,omitempty"`
+//}
+//
+//func MapGroup(group *models.Group) *respGetGroupDto {
+//	return &respGetGroupDto{
+//		Name:       group.Name,
+//		ID:         group.ID.String(),
+//		AvatarUrl:  group.AvatarURL,
+//		InviteCode: group.InviteCode,
+//	}
+//}
 
 //type resGetMember struct {
 //	Name      string  `json:"name"`
@@ -79,11 +80,17 @@ func mapGroup(group *models.Group) *respGetGroupDto {
 //	Role      string  `json:"role"`
 //}
 
-type reqUpdateRoleDto struct {
-	MemberID uuid.UUID `json:"member_id" binding:"required"`
-	Roles    string    `json:"roles" binding:"required"`
+type RespUpdateCode struct {
+	Code string `json:"code"`
+}
+type RespGetRoles struct {
+	Roles []string `json:"roles"`
 }
 
-type respUpdateCode struct {
-	Code string `json:"code"`
+func MapRoles(roles []*models.Role) *RespGetRoles {
+	resp := []string{}
+	for _, role := range roles {
+		resp = append(resp, role.Role)
+	}
+	return &RespGetRoles{Roles: resp}
 }

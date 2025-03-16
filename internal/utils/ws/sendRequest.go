@@ -11,14 +11,14 @@ import (
 	"log"
 )
 
-func SendRequest(personId, mentorId, requestId uuid.UUID, producer *broker.Producer, usersService service.UserService, minioRepository repository.MinioRepository) {
+func SendRequest(personId, mentorId, requestId uuid.UUID, producer *broker.Producer, usersService service.UsersService, minioRepository repository.MinioRepository, studentService service.StudentService) {
 	if producer != nil {
 		user, err := usersService.GetByID(context.Background(), personId)
 		if err != nil {
 			log.Println(err)
 			return
 		}
-		err = avatar.GetUserAvatar(user, h.minioRepository)
+		err = avatar.GetUserAvatar(user, minioRepository)
 		if err != nil {
 			log.Println(err)
 			return
@@ -33,12 +33,12 @@ func SendRequest(personId, mentorId, requestId uuid.UUID, producer *broker.Produ
 			log.Println(err)
 			return
 		}
-		request, err := usersService.GetRequestByID(context.Background(), requestId)
+		request, err := studentService.GetRequestByID(context.Background(), requestId)
 		if err != nil {
 			log.Println(err)
 			return
 		}
-		producer.Send(&ws.Message{
+		err = producer.Send(&ws.Message{
 			Type:   "request",
 			UserID: personId,
 			Request: &ws.Request{
@@ -57,5 +57,9 @@ func SendRequest(personId, mentorId, requestId uuid.UUID, producer *broker.Produ
 				Status:          request.Status,
 			},
 		})
+		if err != nil {
+			log.Println(err)
+			return
+		}
 	}
 }

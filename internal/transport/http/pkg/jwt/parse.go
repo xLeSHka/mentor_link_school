@@ -19,3 +19,25 @@ func Parse(c *gin.Context) (uuid.UUID, error) {
 	}
 	return uid, nil
 }
+func ParseGroupID(c *gin.Context) (uuid.UUID, error) {
+	groupid := c.Param("groupID")
+	if groupid == "" {
+		return uuid.UUID{}, httpError.New(http.StatusUnauthorized, "Bad uuid")
+	}
+	groupID, err := uuid.Parse(groupid)
+	if err != nil {
+		return uuid.UUID{}, httpError.New(http.StatusUnauthorized, "Bad uuid")
+	}
+	return groupID, nil
+}
+func ParseUserID(c *gin.Context) (uuid.UUID, error) {
+	userid := c.Param("userID")
+	if userid == "" {
+		return uuid.UUID{}, httpError.New(http.StatusUnauthorized, "Bad uuid")
+	}
+	userID, err := uuid.Parse(userid)
+	if err != nil {
+		return uuid.UUID{}, httpError.New(http.StatusUnauthorized, "Bad uuid")
+	}
+	return userID, nil
+}

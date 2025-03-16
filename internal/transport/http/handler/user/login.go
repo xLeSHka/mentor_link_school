@@ -19,7 +19,6 @@ import (
 // @Success 200 {object} RespLoginDto
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
-// @Failure 403 {object} httpError.HTTPError "Пользователь заблокирован"
 // @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
 func (h *Route) login(c *gin.Context) {
 	var reqData ReqLoginDto

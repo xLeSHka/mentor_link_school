@@ -51,7 +51,7 @@ func WsRoute(opts FxOpts) *Route {
 		validator: opts.Validator,
 		wsconn:    opts.Wsconn,
 	}
-	opts.ApiRouter.UserPrivate.GET("/ws", router.wsconn.wsHandler)
+	opts.ApiRouter.StudentRoute.GET("/ws", router.wsconn.wsHandler)
 	go opts.Wsconn.Echo()
 	return router
 }

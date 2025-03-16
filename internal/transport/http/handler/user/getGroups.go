@@ -1,41 +1,48 @@
 package usersRoute
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
+	"github.com/xLeSHka/mentorLinkSchool/internal/utils/avatar"
+	"net/http"
 )
 
-// @Summary Получить список моих запросов
+// @Summary Получение организаций пользователя
 // @Schemes
+// @Description
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Router /api/users/requests [get]
+// @Router /api/users/groups/ [get]
 // @Param Authorization header string true "Bearer <token>"
-// @Success 200 {object} []RespGetHelp
+// @Success 200 {object} []ResGetGroup
 // @Failure 400 {object} httpError.HTTPError "Невалидный запрос"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
 // Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
 // @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
-func (h *Route) getRequests(c *gin.Context) {
-	personId, err := jwt.Parse(c)
+func (h *Route) getGroups(c *gin.Context) {
+	personID, err := jwt.Parse(c)
 	if err != nil {
-		httpError.New(http.StatusUnauthorized, "Bad id").SendError(c)
+		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()
 		return
 	}
-
-	mentors, err := h.usersService.GetMyHelps(c.Request.Context(), personId)
+	groups, err := h.usersService.GetGroups(c.Request.Context(), personID)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
+		c.Abort()
 		return
 	}
-	resp := make([]*RespGetHelp, 0, len(mentors))
-	for _, m := range mentors {
-		resp = append(resp, MapHelp(m))
+	resp := make([]*ResGetGroup, 0, len(groups))
+	for _, group := range groups {
+		err = avatar.GetGroupAvatar(group.Group, h.minioRepository)
+		if err != nil {
+			err.(*httpError.HTTPError).SendError(c)
+			c.Abort()
+			return
+		}
+		resp = append(resp, MapGroup(group))
 	}
 
 	c.JSON(http.StatusOK, resp)
