@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/redis/go-redis/v9"
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
+	"github.com/xLeSHka/mentorLinkSchool/internal/repository"
 	"time"
 )
 
@@ -12,10 +13,10 @@ type RedisRepository struct {
 	rdb *redis.Client
 }
 
-func New(rdb *redis.Client) *RedisRepository {
+func New(rdb *redis.Client) repository.CacheRepository {
 	return &RedisRepository{rdb: rdb}
 }
-func (c *RedisRepository) AddRole(ctx context.Context, roles []*models.Role) error {
+func (c *RedisRepository) AddRoles(ctx context.Context, roles []*models.Role) error {
 	for _, role := range roles {
 		err := c.rdb.SAdd(ctx, "roles:"+uuid.New().String(), role).Err()
 		if err != nil {
