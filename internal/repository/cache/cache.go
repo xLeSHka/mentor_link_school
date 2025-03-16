@@ -18,7 +18,7 @@ func New(rdb *redis.Client) repository.CacheRepository {
 }
 func (c *RedisRepository) AddRoles(ctx context.Context, roles []*models.Role) error {
 	for _, role := range roles {
-		err := c.rdb.SAdd(ctx, "roles:"+uuid.New().String(), role).Err()
+		err := c.rdb.SAdd(ctx, "roles:"+role.UserID.String()+"_"+role.GroupID.String(), role.Role).Err()
 		if err != nil {
 			return err
 		}
@@ -27,7 +27,7 @@ func (c *RedisRepository) AddRoles(ctx context.Context, roles []*models.Role) er
 }
 func (c *RedisRepository) RemoveRoles(ctx context.Context, roles []*models.Role) error {
 	for _, role := range roles {
-		err := c.rdb.SRem(ctx, "roles:"+uuid.New().String(), role).Err()
+		err := c.rdb.SRem(ctx, "roles:"+role.UserID.String()+"_"+role.GroupID.String(), role.Role).Err()
 		if err != nil {
 			return err
 		}

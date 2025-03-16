@@ -19,7 +19,7 @@ type ReqCreateGroupDto struct {
 }
 
 type ReqUpdateRole struct {
-	Role string `json:"role" binding:"required"`
+	Role string `json:"role" binding:"required" validate:"c-role"`
 }
 type RespGetMember struct {
 	UserID    uuid.UUID `json:"user_id" binding:"required"`
