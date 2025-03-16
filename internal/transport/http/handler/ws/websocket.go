@@ -14,6 +14,7 @@ type WebSocket struct {
 	Conn      *websocket.Conn
 	Clients   map[uuid.UUID]*websocket.Conn
 	Broadcast chan *Message
+	Consumer  *broker.Consumer
 }
 
 func New() *WebSocket {

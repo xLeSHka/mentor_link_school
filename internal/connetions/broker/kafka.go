@@ -75,7 +75,7 @@ type Consumer struct {
 	group        string
 	r            bool
 	mu           *sync.RWMutex
-	wsconn       *ws.WebSocket
+	Messages     chan []byte
 }
 
 func (c *Consumer) R() bool {
@@ -92,7 +92,6 @@ func (c *Consumer) SetR(r bool) {
 type FxOpts struct {
 	fx.In
 	Config config.Config
-	Wsconn *ws.WebSocket
 }
 
 func NewConsumer(opts FxOpts, lc fx.Lifecycle) (*Consumer, error) {
@@ -112,7 +111,7 @@ func NewConsumer(opts FxOpts, lc fx.Lifecycle) (*Consumer, error) {
 		group:        opts.Config.KafkaGroupId,
 		r:            true,
 		mu:           &sync.RWMutex{},
-		wsconn:       opts.Wsconn,
+		Messages:     make(chan []byte, 100),
 	}
 	log.Println("Start consuming messages from ", opts.Config.KafkaAddress, opts.Config.KafkaTopic)
 	cons.Run()
@@ -132,15 +131,7 @@ func (c *Consumer) Run() {
 					log.Println("Consumer closed the message")
 					return
 				}
-				var m ws.Message
-				err := json.Unmarshal(msg.Value, &m)
-				if err != nil {
-					log.Printf("Error unmarshalling message: %v\n", err)
-					continue
-				}
-				log.Println("Received message:", string(msg.Value))
-				c.wsconn.WriteMessage(&m)
-
+				c.messages <- msg.Value
 			}
 		}
 	}()
@@ -154,5 +145,6 @@ func (c *Consumer) Close() error {
 		log.Println(err)
 		return err
 	}
+	close(c.messages)
 	return nil
 }
