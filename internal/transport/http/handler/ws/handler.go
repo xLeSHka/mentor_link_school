@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func (p *WebSocket) wsHandler(c *gin.Context) {
+func (p *WebSocket) WsHandler(c *gin.Context) {
 	//c.Writer.Header().Set("Connection", "Upgrade")
 	//c.Writer.Header().Set("Upgrade", "websocket")
 	println("wsHandler")

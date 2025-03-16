@@ -31,8 +31,8 @@ var WSHandler = fx.Module("wsHandler",
 	fx.Provide(
 		ApiRouters.CreateApiRoutes,
 		Validators.New,
-		ws.New,
 		broker.NewConsumer,
+		ws.New,
 		fx.Private),
 	fx.Invoke(
 		ws.WsRoute,

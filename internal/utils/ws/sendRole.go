@@ -2,6 +2,7 @@ package ws
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/google/uuid"
 	"github.com/xLeSHka/mentorLinkSchool/internal/connetions/broker"
 	"github.com/xLeSHka/mentorLinkSchool/internal/repository"
@@ -38,7 +39,12 @@ func SendRole(personId, groupID uuid.UUID, role string, producer *broker.Produce
 		if role == "owner" {
 			mes.Role.InviteCode = group.InviteCode
 		}
-		err = producer.Send(mes)
+		jsonData, err := json.Marshal(mes)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		err = producer.Send(jsonData)
 		if err != nil {
 			log.Println(err)
 			return

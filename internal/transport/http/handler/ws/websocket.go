@@ -16,8 +16,12 @@ type WebSocket struct {
 	Broadcast chan *Message
 	Consumer  *broker.Consumer
 }
+type WsFxOpts struct {
+	fx.In
+	Consumer *broker.Consumer
+}
 
-func New() *WebSocket {
+func New(opts WsFxOpts) *WebSocket {
 	var clients = make(map[uuid.UUID]*websocket.Conn)
 	var broadcast = make(chan *Message)
 
@@ -25,6 +29,7 @@ func New() *WebSocket {
 		Conn:      nil,
 		Clients:   clients,
 		Broadcast: broadcast,
+		Consumer:  opts.Consumer,
 	}
 }
 
@@ -38,7 +43,6 @@ type Route struct {
 	routers   *ApiRouters.ApiRouters
 	validator *Validators.Validator
 	wsconn    *WebSocket
-	consumer  *broker.Consumer
 }
 
 type FxOpts struct {
@@ -46,7 +50,6 @@ type FxOpts struct {
 	ApiRouter *ApiRouters.ApiRouters
 	Validator *Validators.Validator
 	Wsconn    *WebSocket
-	Consumer  *broker.Consumer
 }
 
 func WsRoute(opts FxOpts) *Route {
@@ -54,9 +57,9 @@ func WsRoute(opts FxOpts) *Route {
 		routers:   opts.ApiRouter,
 		validator: opts.Validator,
 		wsconn:    opts.Wsconn,
-		consumer:  opts.Consumer,
 	}
-	opts.ApiRouter.UserRoute.GET("/ws", router.wsconn.wsHandler)
+	opts.ApiRouter.UserRoute.GET("/ws", router.wsconn.WsHandler)
 	go opts.Wsconn.Echo()
+	go opts.Wsconn.WriteMessage()
 	return router
 }

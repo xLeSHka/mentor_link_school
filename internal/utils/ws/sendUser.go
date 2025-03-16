@@ -2,6 +2,7 @@ package ws
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/google/uuid"
 	"github.com/xLeSHka/mentorLinkSchool/internal/connetions/broker"
 	"github.com/xLeSHka/mentorLinkSchool/internal/repository"
@@ -18,14 +19,12 @@ func SendUser(personId uuid.UUID, producer *broker.Producer, usersService servic
 			log.Println(err)
 			return
 		}
-
 		err = avatar.GetUserAvatar(user, minioRepository)
 		if err != nil {
 			log.Println(err)
 			return
 		}
-
-		err = producer.Send(&ws.Message{
+		msg := &ws.Message{
 			Type:   "user",
 			UserID: personId,
 			User: &ws.User{
@@ -34,7 +33,14 @@ func SendUser(personId uuid.UUID, producer *broker.Producer, usersService servic
 				Telegram:  user.Telegram,
 				BIO:       user.BIO,
 			},
-		})
+		}
+		jsonData, err := json.Marshal(msg)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		err = producer.Send(jsonData)
 		if err != nil {
 			log.Println(err)
 			return

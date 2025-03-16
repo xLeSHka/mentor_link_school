@@ -2,10 +2,8 @@ package broker
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/IBM/sarama"
 	"github.com/xLeSHka/mentorLinkSchool/internal/pkg/config"
-	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ws"
 	"go.uber.org/fx"
 	"log"
 	"sync"
@@ -46,18 +44,15 @@ func NewProducer(config config.Config, lc fx.Lifecycle) (*Producer, error) {
 	return prod, nil
 }
 
-func (p *Producer) Send(message *ws.Message) error {
-	jsonData, err := json.Marshal(message)
-	if err != nil {
-		return err
-	}
+func (p *Producer) Send(message []byte) error {
+
 	p.producer.Input() <- &sarama.ProducerMessage{
 		Topic:     p.topic,
 		Key:       sarama.StringEncoder(p.group),
-		Value:     sarama.ByteEncoder(jsonData),
+		Value:     sarama.ByteEncoder(message),
 		Partition: 0,
 	}
-	log.Println("Success send message to ", p.topic, p.group, "mes", string(jsonData))
+	log.Println("Success send message to ", p.topic, p.group, "mes", string(message))
 	return nil
 }
 func (p *Producer) Close() error {
@@ -131,7 +126,7 @@ func (c *Consumer) Run() {
 					log.Println("Consumer closed the message")
 					return
 				}
-				c.messages <- msg.Value
+				c.Messages <- msg.Value
 			}
 		}
 	}()
@@ -145,6 +140,6 @@ func (c *Consumer) Close() error {
 		log.Println(err)
 		return err
 	}
-	close(c.messages)
+	close(c.Messages)
 	return nil
 }
