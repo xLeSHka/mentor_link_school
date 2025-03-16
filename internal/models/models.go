@@ -70,18 +70,18 @@ type Role struct {
 	User    *User     `gorm:"foreignKey:user_id"`
 	Group   *Group    `gorm:"foreignKey:group_id"`
 }
-type Roles struct {
+type GroupWithRoles struct {
 	UserID  uuid.UUID      `gorm:"type:uuid;not null"`
 	GroupID uuid.UUID      `gorm:"type:uuid;not null"`
-	MyRoles pq.StringArray `gorm:"not null"`
+	MyRoles pq.StringArray `gorm:"type:varchar[];not null"`
 	User    *User          `gorm:"foreignKey:user_id"`
 	Group   *Group         `gorm:"foreignKey:group_id"`
 }
 
-func (_ *Roles) TableName() string {
+func (_ *GroupWithRoles) TableName() string {
 	return "roles"
 }
-func (_ *Roles) BeforeCreate(tx *gorm.DB) (err error) {
+func (_ *GroupWithRoles) BeforeCreate(tx *gorm.DB) (err error) {
 	tx.Statement.AddClause(clause.OnConflict{DoNothing: true})
 	return nil
 }

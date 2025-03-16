@@ -41,7 +41,7 @@ type UsersRepository interface {
 	Register(ctx context.Context, person *models.User) (*models.User, error)
 	GetByID(ctx context.Context, id uuid.UUID) (person *models.User, err error)
 	EditUser(ctx context.Context, userID uuid.UUID, user *models.User) (*models.User, error)
-	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Roles, error)
+	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.GroupWithRoles, error)
 	GetGroupByInviteCode(ctx context.Context, inviteCode string) (*models.Group, error)
 }
 

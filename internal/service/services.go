@@ -41,7 +41,7 @@ type UsersService interface {
 	GetByID(ctx context.Context, id uuid.UUID) (person *models.User, err error)
 	UploadImage(ctx context.Context, file *models.File, personID uuid.UUID) (string, *httpError.HTTPError)
 	Edit(ctx context.Context, userID uuid.UUID, user *models.User) (*models.User, error)
-	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Roles, error)
+	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.GroupWithRoles, error)
 	GetGroupByInviteCode(ctx context.Context, inviteCode string) (*models.Group, error)
 	Invite(ctx context.Context, inviteCode string, userID uuid.UUID) (bool, error)
 }

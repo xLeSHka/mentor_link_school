@@ -76,7 +76,7 @@ func MapProfile(user *models.User) *ResGetProfile {
 	}
 }
 
-func MapGroup(roles *models.Roles) *ResGetGroup {
+func MapGroup(roles *models.GroupWithRoles) *ResGetGroup {
 	resp := &ResGetGroup{
 		GroupID:   roles.GroupID,
 		Name:      roles.Group.Name,
