@@ -56,7 +56,8 @@ func (p *Producer) Send(message *ws.Message) error {
 		Key:   sarama.StringEncoder(p.group),
 		Value: sarama.ByteEncoder(jsonData),
 	}
-	return err
+	log.Println("Success send message to ", p.topic, p.group, "mes", string(jsonData))
+	return nil
 }
 func (p *Producer) Close() error {
 	if err := p.producer.Close(); err != nil {
@@ -135,6 +136,7 @@ func (c *Consumer) Run() {
 					log.Printf("Error unmarshalling message: %v\n", err)
 					continue
 				}
+				log.Println("Received message:", string(msg.Value))
 				c.wsconn.WriteMessage(&m)
 
 			}

@@ -38,6 +38,7 @@ func SendRole(personId, groupID uuid.UUID, role string, producer *broker.Produce
 		if role == "owner" {
 			mes.Role.InviteCode = group.InviteCode
 		}
+		log.Printf("Sending message %#v", mes)
 		err = producer.Send(mes)
 		if err != nil {
 			log.Println(err)
