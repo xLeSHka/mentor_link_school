@@ -2,16 +2,15 @@ package group
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 
 	"gorm.io/gorm/clause"
 )
 
-func (r *GroupRepository) Edit(ctx context.Context, groupID uuid.UUID, updates map[string]any) (*models.Group, error) {
-	group := models.Group{}
-	err := r.DB.Model(&group).WithContext(ctx).Clauses(clause.Returning{}).Where("id = ?", groupID).Updates(updates).Error
-	return &group, err
+func (r *GroupRepository) Edit(ctx context.Context, group *models.Group) (*models.Group, error) {
+	g := models.Group{}
+	err := r.DB.Model(&g).WithContext(ctx).Clauses(clause.Returning{}).Where("id = ?", group.ID).Updates(group).Error
+	return &g, err
 }
 
 //

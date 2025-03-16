@@ -6,8 +6,8 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
-func (r *MentorRepository) GetStudents(ctx context.Context, userID uuid.UUID) ([]*models.PairWithGIDs, error) {
-	var resp []*models.PairWithGIDs
-	err := r.DB.Table("pairs").Preload("Student").Select("user_id,mentor_id,array_agg(group_id) as group_ids").Where("mentor_id = ?", userID).Group("mentor_id").Group("user_id").Find(&resp).Error
+func (r *MentorRepository) GetStudents(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Pair, error) {
+	var resp []*models.Pair
+	err := r.DB.Model(&models.Pair{}).Preload("Student").Where("mentor_id = ? AND group_id = ?", userID, groupID).Find(&resp).Error
 	return resp, err
 }

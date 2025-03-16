@@ -11,8 +11,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func (s *MentorService) GetStudents(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error) {
-	students, err := s.mentorRepository.GetStudents(ctx, userID)
+func (s *MentorService) GetStudents(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Pair, error) {
+	students, err := s.mentorRepository.GetStudents(ctx, userID, groupID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return []*models.Pair{}, nil

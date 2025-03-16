@@ -20,21 +20,21 @@ type GroupRepository interface {
 	Create(ctx context.Context, group *models.Group, userID uuid.UUID) error
 	UpdateInviteCode(ctx context.Context, groupID uuid.UUID, inviteCode string) error
 	GetMembers(ctx context.Context, groupID uuid.UUID) ([]*models.User, error)
-	CheckGroupExists(ctx context.Context, userID, groupID uuid.UUID) (bool, error)
-	GetStat(ctx context.Context, groupID uuid.UUID) (*models.GroupStat, error)
+	//CheckGroupExists(ctx context.Context, userID, groupID uuid.UUID) (bool, error)
 	Edit(ctx context.Context, group *models.Group) (*models.Group, error)
+	GetGroupByID(ctx context.Context, ID uuid.UUID) (*models.Group, error)
+	GetStat(ctx context.Context, groupID uuid.UUID) (*models.GroupStat, error)
 	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.Role, error)
 	GetRoles(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Role, error)
-	GetGroupByID(ctx context.Context, ID uuid.UUID) (*models.Group, error)
 }
 type MentorRepository interface {
-	GetMyHelpers(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error)
 	UpdateRequest(ctx context.Context, request *models.HelpRequest) error
-	GetStudents(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error)
-	CheckIsMentor(ctx context.Context, userID, groupID uuid.UUID) (bool, error)
-	CheckRequest(ctx context.Context, id, mentorID uuid.UUID) (bool, error)
+	GetStudents(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Pair, error)
+	GetMyHelpers(ctx context.Context, userID, groupID uuid.UUID) ([]*models.HelpRequest, error)
 	CreatePair(ctx context.Context, pair *models.Pair) error
-	GetRequest(ctx context.Context, UserID, MentorID, GroupID uuid.UUID) (models.HelpRequest, error)
+	CheckIsMentor(ctx context.Context, userID, groupID uuid.UUID) (bool, error)
+	//CheckRequest(ctx context.Context, id, mentorID uuid.UUID) (bool, error)
+	//GetRequest(ctx context.Context, UserID, MentorID, GroupID uuid.UUID) (models.HelpRequest, error)
 }
 type UsersRepository interface {
 	Login(ctx context.Context, telegram string) (*models.User, error)

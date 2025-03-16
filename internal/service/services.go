@@ -15,8 +15,8 @@ type GroupService interface {
 	RemoveRole(ctx context.Context, role *models.Role) error
 	UpdateInviteCode(ctx context.Context, groupID uuid.UUID) (string, error)
 	GetMembers(ctx context.Context, groupID uuid.UUID) ([]*models.User, error)
-	GetStat(ctx context.Context, groupID uuid.UUID) (*models.GroupStat, error)
 	Edit(ctx context.Context, group *models.Group) (*models.Group, error)
+	GetStat(ctx context.Context, groupID uuid.UUID) (*models.GroupStat, error)
 	UploadImage(ctx context.Context, file *models.File, groupID uuid.UUID) (string, *httpError.HTTPError)
 	GetRoles(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Role, error)
 	GetGroupByID(ctx context.Context, groupID uuid.UUID) (*models.Group, error)

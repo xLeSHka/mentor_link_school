@@ -11,8 +11,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func (s *MentorService) GetMyHelps(ctx context.Context, userID uuid.UUID) ([]*models.HelpRequest, error) {
-	helps, err := s.mentorRepository.GetMyHelpers(ctx, userID)
+func (s *MentorService) GetMyHelps(ctx context.Context, userID, groupID uuid.UUID) ([]*models.HelpRequest, error) {
+	helps, err := s.mentorRepository.GetMyHelpers(ctx, userID, groupID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return []*models.HelpRequest{}, nil

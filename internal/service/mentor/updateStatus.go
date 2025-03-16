@@ -19,7 +19,7 @@ func (s *MentorService) UpdateRequest(ctx context.Context, request *models.HelpR
 		return httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	if request.Status == "accepted" {
-		req, err := s.studentRepository.GetRequestByID(ctx, request.ID)
+		req, err := s.studentRepository.GetRequestByID(ctx, request.ID, request.GroupID)
 		if err != nil {
 			return httpError.New(http.StatusInternalServerError, err.Error())
 		}
