@@ -53,7 +53,7 @@ func (h *Route) createRequest(c *gin.Context) {
 		UserID:   personId,
 		MentorID: reqData.MentorID,
 		GroupID:  groupId,
-		Goal:     reqData.Goal,1
+		Goal:     reqData.Goal,
 		Status:   "pending",
 		BIO:      user.BIO,
 	}
