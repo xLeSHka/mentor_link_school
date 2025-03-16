@@ -50,7 +50,7 @@ func StudentsRoute(opts FxOpts) *Route {
 	opts.ApiRouter.StudentRoute.POST("/requests", router.createRequest)
 	opts.ApiRouter.StudentRoute.GET("/requests", router.getRequests)
 	opts.ApiRouter.StudentRoute.GET("/mentors", router.getMyMentors)
-
+	opts.ApiRouter.StudentRoute.GET("/:userID/requests", router.getMyMentors)
 	//opts.ApiRouter.StudentRoute.POST("/user/invite", router.acceptedInvite)
 
 	return router
