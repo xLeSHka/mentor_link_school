@@ -3,6 +3,7 @@ package usersService
 import (
 	"context"
 	"errors"
+	"log"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -20,5 +21,6 @@ func (r *UserService) GetGroups(ctx context.Context, userID uuid.UUID) ([]*model
 		}
 		return nil, httpError.New(http.StatusInternalServerError, err.Error())
 	}
+	log.Println(gr)
 	return gr, nil
 }
