@@ -26,10 +26,10 @@ func CreateApiRoutes(gin *gin.Engine, jwt *jwt.JWT, rdb *redis.Client, db *gorm.
 	groupRoute := publicRoute.Group("/groups/:groupID")
 	groupRoute.Use(middlewares.RoleBasedAuth(jwt, rdb, db, "owner"))
 
-	mentorRoute := groupRoute.Group("/mentors")
+	mentorRoute := publicRoute.Group("/groups/:groupID/mentors")
 	mentorRoute.Use(middlewares.RoleBasedAuth(jwt, rdb, db, "mentor"))
 
-	studentsRoute := groupRoute.Group("/students")
+	studentsRoute := publicRoute.Group("/groups/:groupID/students")
 	studentsRoute.Use(middlewares.RoleBasedAuth(jwt, rdb, db, "student"))
 	return &ApiRouters{
 		Public:       publicRoute,
