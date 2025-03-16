@@ -9,7 +9,7 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
-func (s *GroupsService) GetStat(ctx context.Context, ownerID, groupID uuid.UUID) (*models.GroupStat, error) {
+func (s *GroupsService) GetStat(ctx context.Context, groupID uuid.UUID) (*models.GroupStat, error) {
 
 	stat, err := s.groupRepository.GetStat(ctx, groupID)
 	if err != nil {

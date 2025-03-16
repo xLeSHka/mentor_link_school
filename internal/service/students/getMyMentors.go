@@ -10,8 +10,8 @@ import (
 	"net/http"
 )
 
-func (s *StudentService) GetMyMentors(ctx context.Context, userID uuid.UUID) ([]*models.Pair, error) {
-	mentors, err := s.studentRepository.GetMyMentors(ctx, userID)
+func (s *StudentService) GetMyMentors(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Pair, error) {
+	mentors, err := s.studentRepository.GetMyMentors(ctx, userID, groupID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return []*models.Pair{}, nil

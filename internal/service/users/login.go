@@ -12,7 +12,7 @@ import (
 
 func (s *UserService) Login(ctx context.Context, telegram, pw string) (string, error) {
 
-	user, err := s.usersRepository.Login(ctx, telegram, pw)
+	user, err := s.usersRepository.Login(ctx, telegram)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return "", httpError.New(http.StatusNotFound, "User not found")
