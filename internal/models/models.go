@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/lib/pq"
 	"io"
 
 	"gorm.io/gorm"
@@ -70,11 +71,11 @@ type Role struct {
 	Group   *Group    `gorm:"foreignKey:group_id"`
 }
 type Roles struct {
-	UserID  uuid.UUID `gorm:"type:uuid;not null"`
-	GroupID uuid.UUID `gorm:"type:uuid;not null"`
-	Rls     []string  `gorm:"not null"`
-	User    *User     `gorm:"foreignKey:user_id"`
-	Group   *Group    `gorm:"foreignKey:group_id"`
+	UserID  uuid.UUID      `gorm:"type:uuid;not null"`
+	GroupID uuid.UUID      `gorm:"type:uuid;not null"`
+	MyRoles pq.StringArray `gorm:"not null"`
+	User    *User          `gorm:"foreignKey:user_id"`
+	Group   *Group         `gorm:"foreignKey:group_id"`
 }
 
 func (_ *Roles) TableName() string {
