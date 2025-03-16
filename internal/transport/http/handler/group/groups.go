@@ -50,7 +50,7 @@ func GroupsRoutes(opts FxOpts) *Route {
 	opts.ApiRouter.GroupPrivate.DELETE("/members/{userID}/role", router.removeRole)
 	opts.ApiRouter.GroupPrivate.GET("/members/{userID}", router.getRoles)
 	opts.ApiRouter.GroupPrivate.POST("/uploadAvatar", router.uploadAvatar)
-	opts.ApiRouter.UserRoute.POST("/create", router.createGroup)
+	opts.ApiRouter.UserRoute.POST("/groups/create", router.createGroup)
 	opts.ApiRouter.GroupPrivate.GET("/members", router.getMembers)
 	opts.ApiRouter.GroupPrivate.GET("/stat", router.getStat)
 	opts.ApiRouter.GroupPrivate.PATCH("/edit", router.edit)

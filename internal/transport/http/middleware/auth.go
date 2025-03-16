@@ -9,9 +9,7 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
 	"gorm.io/gorm"
 	"net/http"
-	"strconv"
 	"strings"
-	"time"
 )
 
 func RoleBasedAuth(jwt2 *jwt.JWT, rdb *redis.Client, db *gorm.DB, role string) gin.HandlerFunc {
@@ -42,22 +40,14 @@ func RoleBasedAuth(jwt2 *jwt.JWT, rdb *redis.Client, db *gorm.DB, role string) g
 		}
 
 		personId := data["id"].(string)
-		iat := int64(data["iat"].(float64))
 		val, err := rdb.Get(context.Background(), "jwt:"+personId).Result()
 		if err != nil {
 			httpError.New(http.StatusUnauthorized, err.Error()).SendError(c)
 			c.Abort()
 			return
 		} else {
-			resetTime, err := strconv.ParseInt(val, 10, 64)
-			if err != nil {
-				httpError.New(http.StatusUnauthorized, err.Error()).SendError(c)
-				c.Abort()
-				return
-			}
-			println(iat, resetTime)
-			if time.UnixMicro(iat).Before(time.UnixMicro(resetTime)) {
-				httpError.New(http.StatusUnauthorized, "Token invalid").SendError(c)
+			if val != splitToken[1] {
+				httpError.New(http.StatusUnauthorized, "Token expired").SendError(c)
 				c.Abort()
 				return
 			}
@@ -101,21 +91,14 @@ func Auth(jwt *jwt.JWT, rdb *redis.Client) gin.HandlerFunc {
 		}
 
 		personId := data["id"].(string)
-		iat := int64(data["iat"].(float64))
 		val, err := rdb.Get(context.Background(), "jwt:"+personId).Result()
 		if err != nil {
 			httpError.New(http.StatusUnauthorized, err.Error()).SendError(c)
 			c.Abort()
 			return
 		} else {
-			resetTime, err := strconv.ParseInt(val, 10, 64)
-			if err != nil {
-				httpError.New(http.StatusUnauthorized, err.Error()).SendError(c)
-				c.Abort()
-				return
-			}
-			if time.UnixMicro(iat).Before(time.UnixMicro(resetTime)) {
-				httpError.New(http.StatusUnauthorized, "Token invalid").SendError(c)
+			if val != splitToken[1] {
+				httpError.New(http.StatusUnauthorized, "Token expired").SendError(c)
 				c.Abort()
 				return
 			}

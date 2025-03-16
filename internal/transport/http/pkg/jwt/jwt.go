@@ -42,5 +42,5 @@ func (j JWT) VerifyToken(tokenString string) (jwt.MapClaims, error) {
 func (j JWT) GenerateAccessToken(id uuid.UUID) (string, error) {
 	return j.CreateToken(jwt.MapClaims{
 		"id": id,
-	}, time.Now().Add(time.Hour*24*7))
+	}, time.Now().Add(time.Hour*24))
 }

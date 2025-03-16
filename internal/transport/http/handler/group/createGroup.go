@@ -22,7 +22,7 @@ import (
 // @Success 200 {object} RespCreateGroup
 // @Failure 400 {object} httpError.HTTPError "Ошибка валидации"
 // @Failure 401 {object} httpError.HTTPError "Ошибка авторизации"
-// @Router /api/groups/create [post]
+// @Router /api/users/groups/create [post]
 // @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
 func (h *Route) createGroup(c *gin.Context) {
 	personId, err := jwt.Parse(c)
