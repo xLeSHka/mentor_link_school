@@ -8,6 +8,7 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
 	"gorm.io/gorm"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -52,6 +53,7 @@ func RoleBasedAuth(jwt2 *jwt.JWT, rdb *redis.Client, db *gorm.DB, role string) g
 				return
 			}
 			is, err := rdb.SIsMember(context.Background(), "roles:"+personId+"_"+groupID.String(), role).Result()
+			log.Println("Select role from redis for ", "roles:"+personId+"_"+groupID.String(), "role", role)
 			if err != nil || !is {
 				var r models.Role
 				err = db.Model(&models.Role{}).Where("user_id = ? AND role = ? AND group_id = ?", personId, role, groupID).Find(&r).Error
@@ -60,6 +62,7 @@ func RoleBasedAuth(jwt2 *jwt.JWT, rdb *redis.Client, db *gorm.DB, role string) g
 					c.Abort()
 					return
 				}
+				log.Println("Select role from postgres for ", "roles:"+personId+"_"+groupID.String(), "role", role)
 				rdb.SAdd(context.Background(), "roles:"+personId+"_"+groupID.String(), role)
 			}
 		}

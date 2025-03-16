@@ -21,7 +21,7 @@ import (
 func (r *StudentRepository) GetMentors(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Role, error) {
 	var role []*models.Role
 	err := r.DB.WithContext(ctx).Model(&models.Role{}).
-		Where("role = 'mentor' AND group_id = ?", userID, groupID).
+		Where("role = 'mentor' AND group_id = ?", groupID).
 		Where("NOT EXISTS (SELECT 1 FROM help_requests WHERE user_id = ? AND group_id = ? AND mentor_id = roles.user_id AND (status = 'pending' OR status = 'accepted'))", userID, groupID).
 		Preload("User").
 		Find(&role).Error

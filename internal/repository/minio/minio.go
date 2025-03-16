@@ -21,7 +21,7 @@ func (r *MinioRepository) UploadImage(file *models.File) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	newUrl := strings.Replace(url.String(), "http://minio:9000", "https://prod-team-14-mkg8u20m.final.prodcontest.ru", 1)
+	newUrl := strings.Replace(url.String(), "http://minio:9000", "https://localhost", 1)
 	return newUrl, nil
 }
 func (r *MinioRepository) GetImage(image string) (string, error) {
@@ -29,7 +29,7 @@ func (r *MinioRepository) GetImage(image string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	newUrl := strings.Replace(url.String(), "http://minio:9000", "https://prod-team-14-mkg8u20m.final.prodcontest.ru", 1)
+	newUrl := strings.Replace(url.String(), "http://minio:9000", "https://localhost", 1)
 	return newUrl, nil
 }
 func (r *MinioRepository) DeleteImage(filename string) error {

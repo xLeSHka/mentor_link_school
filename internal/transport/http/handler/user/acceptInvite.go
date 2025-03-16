@@ -10,7 +10,7 @@ import (
 )
 
 // @Summary Присоединиться к организации по коду
-// @Tags Roles
+// @Tags Users
 // @Accept json
 // @Produce json
 // @Router /api/users/join/{code} [post]
