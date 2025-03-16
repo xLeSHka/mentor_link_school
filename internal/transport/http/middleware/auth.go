@@ -53,11 +53,12 @@ func RoleBasedAuth(jwt2 *jwt.JWT, rdb *redis.Client, db *gorm.DB, role string) g
 				return
 			}
 			is, err := rdb.SIsMember(context.Background(), "roles:"+personId+"_"+groupID.String(), role).Result()
-			log.Println("Select role from redis for ", "roles:"+personId+"_"+groupID.String(), "role", role)
+			log.Println("Select role from redis for ", "roles:"+personId+"_"+groupID.String(), "role", role, "res", is)
 			if err != nil || !is {
 				var r models.Role
 				err = db.Model(&models.Role{}).Where("user_id = ? AND role = ? AND group_id = ?", personId, role, groupID).Find(&r).Error
 				if err != nil {
+					log.Println("Failed select role from postgres for ", "roles:"+personId+"_"+groupID.String(), "role", role)
 					httpError.New(http.StatusUnauthorized, err.Error()).SendError(c)
 					c.Abort()
 					return
