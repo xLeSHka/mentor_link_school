@@ -22,7 +22,7 @@ import (
 // @Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
 // @Failure 409 {object} httpError.HTTPError "Пользователь с таким email уже зарегистрирован"
 // @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
-// @Success 200 {object} RespProfile
+// @Success 200
 func (h *Route) edit(c *gin.Context) {
 	personID, err := jwt.Parse(c)
 	if err != nil {
