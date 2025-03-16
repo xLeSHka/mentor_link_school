@@ -100,7 +100,7 @@ func NewConsumer(opts FxOpts, lc fx.Lifecycle) (*Consumer, error) {
 		log.Fatalf("Failed to create consumer: %v", err)
 	}
 
-	partConsumer, err := consumer.ConsumePartition("ping", 0, sarama.OffsetNewest)
+	partConsumer, err := consumer.ConsumePartition(opts.Config.KafkaTopic, 0, sarama.OffsetNewest)
 	if err != nil {
 		log.Fatalf("Failed to consume partition: %v", err)
 	}
