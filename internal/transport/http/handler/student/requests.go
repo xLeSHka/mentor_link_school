@@ -34,8 +34,7 @@ type RespGetHelp struct {
 	BIO        *string   `json:"mentor_bio,omitempty"`
 }
 type ReqCreateHelp struct {
-	MentorID uuid.UUID `json:"mentor_id"`
-	Goal     string    `json:"goal" binding:"required"`
+	Goal string `json:"goal" binding:"required"`
 }
 
 func MapMyMentor(mentor *models.Pair) *RespGetMyMentor {

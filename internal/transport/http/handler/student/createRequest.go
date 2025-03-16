@@ -16,7 +16,7 @@ import (
 // @Tags Students
 // @Accept json
 // @Produce json
-// @Router /api/groups/{groupID}/students/requests [post]
+// @Router /api/groups/{groupID}/students/{userID}/requests [post]
 // @Param groupID path string true "Group ID"
 // @Param Authorization header string true "Bearer <token>"
 // @Param body body ReqCreateHelp true "body"
@@ -44,6 +44,12 @@ func (h *Route) createRequest(c *gin.Context) {
 		c.Abort()
 		return
 	}
+	mentorID, err := jwt.ParseUserID(c)
+	if err != nil {
+		err.(*httpError.HTTPError).SendError(c)
+		c.Abort()
+		return
+	}
 	user, err := h.usersService.GetByID(c.Request.Context(), personId)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
@@ -52,7 +58,7 @@ func (h *Route) createRequest(c *gin.Context) {
 	request := &models.HelpRequest{
 		ID:       uuid.New(),
 		UserID:   personId,
-		MentorID: reqData.MentorID,
+		MentorID: mentorID,
 		GroupID:  groupId,
 		Goal:     reqData.Goal,
 		Status:   "pending",
@@ -63,7 +69,7 @@ func (h *Route) createRequest(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	go ws.SendRequest(personId, reqData.MentorID, request.ID, groupId, h.producer, h.usersService, h.minioRepository, h.studentsService)
+	go ws.SendRequest(personId, mentorID, request.ID, groupId, h.producer, h.usersService, h.minioRepository, h.studentsService)
 
 	c.Writer.WriteHeader(http.StatusOK)
 }

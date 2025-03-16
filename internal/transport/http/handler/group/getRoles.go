@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
-	"github.com/xLeSHka/mentorLinkSchool/internal/utils/ws"
 	"net/http"
 )
 
@@ -42,19 +41,12 @@ func (h *Route) getRoles(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	var req ReqUpdateRole
-	if err := h.validator.ShouldBindJSON(c, &req); err != nil {
-		httpError.New(http.StatusBadRequest, "Bad request").SendError(c)
-		c.Abort()
-		return
-	}
 
 	roles, err := h.groupService.GetRoles(c.Request.Context(), userID, groupID)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	go ws.SendRole(userID, groupID, req.Role, h.producer, h.minioRepository, h.groupService)
-
+	
 	c.JSON(http.StatusOK, MapRoles(roles))
 }

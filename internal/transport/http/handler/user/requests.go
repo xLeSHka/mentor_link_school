@@ -28,7 +28,7 @@ type ResGetGroup struct {
 	GroupID    uuid.UUID `json:"group_id"`
 	Name       string    `json:"name"`
 	Roles      []string  `json:"roles"`
-	AvatarURL  *string   `json:"avatar_url"`
+	AvatarURL  *string   `json:"avatar_url, omitempty"`
 	InviteCode *string   `json:"invite_code"`
 }
 type ResGetProfile struct {

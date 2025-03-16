@@ -23,7 +23,7 @@ func (r *GroupRepository) RemoveRole(ctx context.Context, role *models.Role) err
 			return err
 		}
 	}
-	res := tx.WithContext(ctx).Table("roles").Where("user_id = ? AND group_id = ?", role.UserID, role.GroupID).Update("role", role)
+	res := tx.WithContext(ctx).Table("roles").Where("user_id = ? AND group_id = ?", role.UserID, role.GroupID).Delete("role", role.Role)
 	if res.Error != nil {
 		tx.Rollback()
 		return res.Error
