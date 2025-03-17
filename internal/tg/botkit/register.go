@@ -114,14 +114,16 @@ func RegisterPassword(stack CallStack) CallStack {
 						log.Println(err)
 						return ReturnOnParent(stack)
 					}
+					stack.Update = nil
 					return RegisterPassword(stack)
 				}
 				data.User.Password = encoded
 				_, err = stack.Bot.UsersService.Register(context.Background(), data.User)
 				if err != nil {
 					log.Println(err)
+					delete(userDatas, stack.ChatID)
 					if err.(*httpError.HTTPError).StatusCode == http.StatusConflict {
-						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("[Ошибка]\n\nНельзя регистрировать два аккаунта с одним телеграммом! 🚫")))
+						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("[Ошибка]\n\nНельзя регистрировать два аккаунта с одним телеграммом!🚫\nВведите /start чтобы начать с начала!")))
 						if err != nil {
 							log.Println(err)
 							return ReturnOnParent(stack)
@@ -133,18 +135,9 @@ func RegisterPassword(stack CallStack) CallStack {
 							return ReturnOnParent(stack)
 						}
 					}
-					return MainMenu(CallStack{
-						ChatID:  stack.ChatID,
-						Bot:     stack.Bot,
-						IsPrint: true,
-					})
+					return ReturnOnParent(stack)
 				}
-				return Chop(CallStack{
-					ChatID:  stack.ChatID,
-					Bot:     stack.Bot,
-					IsPrint: true,
-					Parent:  &stack,
-				})
+				return ReturnOnParent(stack)
 			}
 		}
 	}

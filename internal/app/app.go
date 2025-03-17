@@ -34,6 +34,8 @@ var WSApp = fx.Options(
 		db.New,
 		http.New,
 	),
+	Repositories,
+	Services,
 	httpHandlers.WSHandler,
 	tg.TGHandlers,
 )
