@@ -40,8 +40,9 @@ func SendRequest(personId, mentorId, requestId, groupId uuid.UUID, producer *bro
 			return
 		}
 		msg := &ws.Message{
-			Type:   "request",
-			UserID: personId,
+			Type:       "request",
+			UserID:     personId,
+			TelegramID: user.TelegramID,
 			Request: &ws.Request{
 				ID:              requestId,
 				StudentID:       personId,

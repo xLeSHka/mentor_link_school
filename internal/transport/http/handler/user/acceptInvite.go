@@ -50,6 +50,6 @@ func (h *Route) acceptedInvite(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	go ws.SendRole(personID, group.ID, "student", h.producer, h.minioRepository, h.groupService)
+	go ws.SendRole(personID, group.ID, "student", h.producer, h.minioRepository, h.groupService, h.usersService)
 	c.JSON(http.StatusOK, RespJoinGroup{Status: "ok"})
 }

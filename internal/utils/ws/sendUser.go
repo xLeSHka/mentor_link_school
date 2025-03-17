@@ -25,8 +25,9 @@ func SendUser(personId uuid.UUID, producer *broker.Producer, usersService servic
 			return
 		}
 		msg := &ws.Message{
-			Type:   "user",
-			UserID: personId,
+			Type:       "user",
+			UserID:     personId,
+			TelegramID: user.TelegramID,
 			User: &ws.User{
 				Name:      user.Name,
 				AvatarUrl: user.AvatarURL,

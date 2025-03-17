@@ -41,7 +41,7 @@ func (h *Route) updateInviteCode(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	go ws.SendRole(personID, groupID, "owner", h.producer, h.minioRepository, h.groupService)
+	go ws.SendRole(personID, groupID, "owner", h.producer, h.minioRepository, h.groupService, h.usersService)
 	c.JSON(http.StatusOK, RespUpdateCode{
 		Code: code,
 	})

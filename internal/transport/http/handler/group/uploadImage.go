@@ -80,6 +80,6 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	go ws.SendRole(personId, groupId, "owner", h.producer, h.minioRepository, h.groupService)
+	go ws.SendRole(personId, groupId, "owner", h.producer, h.minioRepository, h.groupService, h.usersService)
 	c.JSON(http.StatusOK, RespUploadAvatarDto{Url: imageURL})
 }

@@ -14,7 +14,7 @@ import (
 
 var backButton = tgbotapi.NewReplyKeyboard(
 	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("⬅️ Back"),
+		tgbotapi.NewKeyboardButton("⬅️ Назад"),
 	),
 )
 
@@ -23,16 +23,17 @@ func RegisterName(stack CallStack) CallStack {
 	stack.Action = RegisterName     // Set self as current Action
 	data := userDatas[stack.ChatID] // User data
 	data.User.ID = uuid.New()
-	data.User.Telegram = stack.Update.Message.From.UserName
+
 	if stack.IsPrint {
 		stack.IsPrint = false
 		// Print UI
-		msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("[Регистрационное меню]\n\nВы 🫵\nID: 🆔%s\nИмя: %s 🪪\nТелеграм: %s \nПароль: %s 🔑\n\nПожалуйста введите имя!", data.User.ID, "____", data.User.Telegram, "____"))
+		msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s\n\nПожалуйста введите имя!", RegisterMenuTemplate, RegisterMenuTextTemplate, data.User.ID, "____", "____", "____"))
 
 		msg.ReplyMarkup = backButton
 		_, err := stack.Bot.Api.Send(msg)
 		if err != nil {
 			log.Println(err)
+			userDatas[stack.ChatID].User = nil
 			return ReturnOnParent(stack)
 		}
 		// Remove previous Keyboard or set self
@@ -42,24 +43,28 @@ func RegisterName(stack CallStack) CallStack {
 		if stack.Update.Message != nil {
 			msgText := stack.Update.Message.Text
 			switch msgText {
-			case "⬅️ Back":
+			case "⬅️ Назад":
+				userDatas[stack.ChatID].User = nil
 				return ReturnOnParent(stack)
 			default:
 				if len(msgText) > 120 {
-					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("[Регистрационное меню]\n\nВы 🫵\nID: 🆔%s\nИмя: %s 🪪\nТелеграм: %s \nПароль: %s 🔑\n\nНевалидное имя!\nПожалуйста введите другое имя!", data.User.ID, "____", data.User.Telegram, "____")))
+					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s\n\nНевалидное имя!\nПожалуйста введите другое имя!", RegisterMenuTemplate, RegisterMenuTextTemplate, data.User.ID, "____", "____", "____")))
 					if err != nil {
 						log.Println(err)
+						userDatas[stack.ChatID].User = nil
 						return ReturnOnParent(stack)
 					}
 					stack.Update = nil
-					return RegisterName(stack)
+					return stack
 				}
 				data.User.Name = msgText
+				data.User.Telegram = stack.Update.Message.From.UserName
 				return RegisterPassword(CallStack{
 					ChatID:  stack.ChatID,
 					Bot:     stack.Bot,
 					IsPrint: true,
 					Parent:  &stack,
+					Data:    stack.Data,
 				})
 			}
 		}
@@ -77,7 +82,7 @@ func RegisterPassword(stack CallStack) CallStack {
 	if stack.IsPrint {
 		stack.IsPrint = false
 		// Print UI
-		msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("[Регистрационное меню]\n\nВы 🫵\nID: 🆔%s\nИмя: %s 🪪\nТелеграм: %s \nПароль: %s 🔑\n\nПожалуйста введите пароль!", data.User.ID, data.User.Name, data.User.Telegram, "____"))
+		msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s\n\nПожалуйста введите пароль!", RegisterMenuTemplate, RegisterMenuTextTemplate, data.User.ID, data.User.Name, data.User.Telegram, "____"))
 
 		msg.ReplyMarkup = backButton
 		_, err := stack.Bot.Api.Send(msg)
@@ -87,57 +92,79 @@ func RegisterPassword(stack CallStack) CallStack {
 		}
 		// Remove previous Keyboard or set self
 		return stack
-	} else {
+	}
+	if stack.Update != nil {
 		// Processing a message
 		if stack.Update.Message != nil {
 			msgText := stack.Update.Message.Text
 			switch msgText {
-			case "back":
+			case "⬅️ Назад":
 				{
 					return ReturnOnParent(stack)
 				}
 			default:
 				if len(msgText) > 60 || len(msgText) < 8 || !validatePassword(msgText) {
-					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("[Регистрационное меню]\n\nВы 🫵\nID: 🆔%s\nИмя: %s 🪪\nТелеграм: %s \nПароль: %s 🔑\n\nНевалидный пароль!\nПожалуйста введите другой пароль!", data.User.ID, data.User.Name, data.User.Telegram, "____")))
+					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s\n\nНевалидный пароль!\nПожалуйста введите другой пароль!", RegisterMenuTemplate, RegisterMenuTextTemplate, data.User.ID, data.User.Name, data.User.Telegram, "____")))
 					if err != nil {
 						log.Println(err)
 						return ReturnOnParent(stack)
 					}
 					stack.Update = nil
-					return RegisterPassword(stack)
+					return stack
 				}
 				encoded, err := password.Encrypt([]byte(msgText), stack.Bot.CryptoKey)
 				if err != nil {
 					log.Println(err)
-					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("[Ошибка]\n\nПриносим свои извинения, произошла непредвиденная ошибка! 🥺🙏")))
+					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 					if err != nil {
 						log.Println(err)
 						return ReturnOnParent(stack)
 					}
 					stack.Update = nil
-					return RegisterPassword(stack)
+					return stack
 				}
 				data.User.Password = encoded
+				data.User.TelegramID = &stack.ChatID
 				_, err = stack.Bot.UsersService.Register(context.Background(), data.User)
 				if err != nil {
 					log.Println(err)
-					delete(userDatas, stack.ChatID)
+					userDatas[stack.ChatID].User = nil
 					if err.(*httpError.HTTPError).StatusCode == http.StatusConflict {
-						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("[Ошибка]\n\nНельзя регистрировать два аккаунта с одним телеграммом!🚫\nВведите /start чтобы начать с начала!")))
+						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНельзя регистрировать два аккаунта с одним телеграммом!🚫", ErrorMenuTemplate)))
 						if err != nil {
 							log.Println(err)
-							return ReturnOnParent(stack)
+							ReturnOnParent(*stack.Parent)
 						}
 					} else {
-						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("[Ошибка]\n\nПриносим свои извинения, произошла непредвиденная ошибка! 🥺🙏")))
+						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 						if err != nil {
 							log.Println(err)
-							return ReturnOnParent(stack)
+							ReturnOnParent(*stack.Parent)
+						}
+					}
+					return ReturnOnParent(*stack.Parent)
+				}
+				user, err := stack.Bot.UsersService.GetByTelegram(context.Background(), stack.Data)
+				if err != nil {
+					log.Println(err)
+					userDatas[stack.ChatID].User = nil
+					if err.(*httpError.HTTPError).StatusCode == http.StatusNotFound {
+						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nПользователь с вашим телеграм не найден!🤨🔎", ErrorMenuTemplate)))
+						if err != nil {
+							log.Println(err)
+							ReturnOnParent(*stack.Parent)
+						}
+					} else {
+						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
+						if err != nil {
+							log.Println(err)
+							ReturnOnParent(*stack.Parent)
 						}
 					}
 					return ReturnOnParent(stack)
 				}
-				return ReturnOnParent(stack)
+				userDatas[stack.ChatID].User = user
+				return ReturnOnParent(*stack.Parent)
 			}
 		}
 	}

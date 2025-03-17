@@ -55,9 +55,10 @@ type Request struct {
 	Status          string    `json:"status"`
 }
 type Message struct {
-	Type    string    `json:"type"`
-	UserID  uuid.UUID `json:"user_id"`
-	Role    *Role     `json:"role,omitempty"`
-	User    *User     `json:"user,omitempty"`
-	Request *Request  `json:"request,omitempty"`
+	Type       string    `json:"type"`
+	UserID     uuid.UUID `json:"user_id"`
+	TelegramID *int64    `json:"telegram_id,omitempty"`
+	Role       *Role     `json:"role,omitempty"`
+	User       *User     `json:"user,omitempty"`
+	Request    *Request  `json:"request,omitempty"`
 }

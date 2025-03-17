@@ -7,6 +7,7 @@ CREATE TABLE users (
                        name VARCHAR NOT NULL,
                        bio TEXT DEFAULT NULL,
                        telegram VARCHAR NOT NULL UNIQUE,
+                       telegram_id BIGINT DEFAULT NULL,
                        password bytea
 );
 

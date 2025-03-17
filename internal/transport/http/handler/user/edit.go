@@ -20,7 +20,7 @@ import (
 // @Failure 400 {object} httpError.HTTPError
 // @Failure 401 {object} httpError.HTTPError
 // @Failure 404 {object} httpError.HTTPError "Нет такого пользователя"
-// @Failure 409 {object} httpError.HTTPError "Пользователь с таким email уже зарегистрирован"
+// @Failure 409 {object} httpError.HTTPError "Пользователь с таким telegram уже зарегистрирован"
 // @Failure 500 {object} httpError.HTTPError "Что-то пошло не так"
 // @Success 200
 func (h *Route) edit(c *gin.Context) {

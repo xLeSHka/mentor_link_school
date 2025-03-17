@@ -9,6 +9,7 @@ import (
 	"go.uber.org/fx"
 	"gorm.io/gorm"
 	"log"
+	"time"
 )
 
 type Run func(CallStack) CallStack
@@ -20,6 +21,7 @@ type CallStack struct {
 	IsPrint bool
 	Parent  *CallStack
 	Data    string
+	LastMes int
 }
 type Data struct {
 	User *models.User
@@ -82,12 +84,13 @@ func (b *Bot) Run() error {
 					userRuns[ID] = userRuns[ID].Action(stack)
 				} else {
 					if update.Message != nil {
-
+						userDatas[ID] = &Data{}
 						userRuns[ID] = MainMenu(CallStack{
 							ChatID:  ID,
 							Bot:     bot,
 							Update:  &update,
 							IsPrint: true,
+							Data:    update.Message.From.UserName,
 						})
 					}
 				}
@@ -99,6 +102,7 @@ func (b *Bot) Run() error {
 
 func Chop(stack CallStack) CallStack {
 	// Send "Work in progress"
+	time.Sleep(5 * time.Second)
 	msg := tgbotapi.NewMessage(stack.ChatID, "Work in progress")
 	_, err := stack.Bot.Api.Send(msg)
 	if err != nil {

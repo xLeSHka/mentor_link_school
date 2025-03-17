@@ -19,13 +19,14 @@ type GroupStat struct {
 	Conversion           float64
 }
 type User struct {
-	ID        uuid.UUID `gorm:"type:uuid;primaryKey" `
-	AvatarURL *string
-	Name      string `gorm:"unique;not null"`
-	BIO       *string
-	Telegram  string  `gorm:"not null"`
-	Password  []byte  `gorm:"not null"`
-	Roles     []*Role `gorm:"foreignKey:user_id"`
+	ID         uuid.UUID `gorm:"type:uuid;primaryKey" `
+	AvatarURL  *string
+	Name       string `gorm:"unique;not null"`
+	BIO        *string
+	Telegram   string `gorm:"not null"`
+	TelegramID *int64
+	Password   []byte  `gorm:"not null"`
+	Roles      []*Role `gorm:"foreignKey:user_id"`
 }
 
 func (_ *User) TableName() string {

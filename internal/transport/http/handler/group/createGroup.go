@@ -47,7 +47,7 @@ func (h *Route) createGroup(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	go ws.SendRole(personId, group.ID, "owner", h.producer, h.minioRepository, h.groupService)
+	go ws.SendRole(personId, group.ID, "owner", h.producer, h.minioRepository, h.groupService, h.usersService)
 	c.JSON(http.StatusOK, RespCreateGroup{
 		GroupID:    group.ID,
 		InviteCode: inviteCode,

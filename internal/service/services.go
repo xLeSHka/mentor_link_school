@@ -39,6 +39,7 @@ type UsersService interface {
 	Login(ctx context.Context, telegram, password string) (string, error)
 	Register(ctx context.Context, user *models.User) (string, error)
 	GetByID(ctx context.Context, id uuid.UUID) (person *models.User, err error)
+	GetByTelegram(ctx context.Context, telegram string) (person *models.User, err error)
 	UploadImage(ctx context.Context, file *models.File, personID uuid.UUID) (string, *httpError.HTTPError)
 	Edit(ctx context.Context, userID uuid.UUID, user *models.User) (*models.User, error)
 	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.GroupWithRoles, error)
