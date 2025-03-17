@@ -42,30 +42,30 @@ type Bot struct {
 }
 type FxOpts struct {
 	fx.In
-	db              *gorm.DB
-	api             *tgbotapi.BotAPI
-	cacheRepository repository.CacheRepository
-	minioRepository repository.MinioRepository
-	studentService  service.StudentService
-	usersService    service.UsersService
-	groupService    service.GroupService
-	mentorService   service.MentorService
-	config          config.Config
+	DB              *gorm.DB
+	Api             *tgbotapi.BotAPI
+	CacheRepository repository.CacheRepository
+	MinioRepository repository.MinioRepository
+	StudentService  service.StudentService
+	UsersService    service.UsersService
+	GroupService    service.GroupService
+	MentorService   service.MentorService
+	Config          config.Config
 }
 
 func New(
 	opts FxOpts,
 ) *Bot {
 	return &Bot{
-		DB:              opts.db,
-		Api:             opts.api,
-		MinioRepository: opts.minioRepository,
-		UsersService:    opts.usersService,
-		StudentService:  opts.studentService,
-		MentorService:   opts.mentorService,
-		GroupService:    opts.groupService,
-		CacheRepository: opts.cacheRepository,
-		CryptoKey:       []byte(opts.config.CryptoKey),
+		DB:              opts.DB,
+		Api:             opts.Api,
+		MinioRepository: opts.MinioRepository,
+		UsersService:    opts.UsersService,
+		StudentService:  opts.StudentService,
+		MentorService:   opts.MentorService,
+		GroupService:    opts.GroupService,
+		CacheRepository: opts.CacheRepository,
+		CryptoKey:       []byte(opts.Config.CryptoKey),
 	}
 }
 
