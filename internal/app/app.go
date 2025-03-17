@@ -30,6 +30,7 @@ var App = fx.Options(
 var WSApp = fx.Options(
 	fx.Provide(
 		jwt.New,
+		minio.New,
 		rdb.New,
 		db.New,
 		http.New,
