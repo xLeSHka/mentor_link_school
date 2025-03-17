@@ -15,8 +15,7 @@ func main() {
 		return
 	}
 
-	s, _ := prettyjson.Marshal(cfg)
-	fmt.Println(string(s))
+	_, _ = prettyjson.Marshal(cfg)
 
 	fx.New(
 		fx.Supply(cfg),

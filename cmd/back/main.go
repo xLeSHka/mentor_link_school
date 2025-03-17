@@ -16,8 +16,7 @@ func main() {
 		return
 	}
 
-	s, _ := prettyjson.Marshal(cfg)
-	fmt.Println(string(s))
+	_, _ = prettyjson.Marshal(cfg)
 
 	err = db.MigrationUp(cfg)
 	if err != nil {

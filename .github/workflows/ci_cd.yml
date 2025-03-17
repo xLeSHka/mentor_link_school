@@ -90,6 +90,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Run docker compose
+        env:
+          BOT_API_TOKEN: ${{  secrets.BOT_API_TOKEN }}
         run: |
           docker compose -f docker-compose.yml up -d
       - name: Cleanup

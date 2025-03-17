@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
 	"os"
@@ -19,7 +18,7 @@ type Config struct {
 	RedisPort            int32  `envconfig:"REDIS_PORT" default:"6379"`
 	RandomSecret         string `envconfig:"RANDOM_SECRET" default:"111"`
 	BaseURL              string `envconfig:"BASE_URL" default:"http://localhost:8080"`
-	TelegramBotToken     string `envconfig:"TELEGRAM_BOT_TOKEN" default:""`
+	BOT_API_TOKEN        string `envconfig:"BOT_API_TOKEN" default:""`
 	TelegramChatID       int64  `envconfig:"TELEGRAM_BOT_CHAT_ID" default:""`
 	TelegramAdmins       []int64
 	TelegramStringAdmins string `envconfig:"TELEGRAM_BOT_ADMINS" default:""`
@@ -53,8 +52,6 @@ func New() (Config, error) {
 		wd = filepath.Join(wd)
 		envPath = filepath.Join(wd, "dev.env")
 	}
-
-	fmt.Printf("Loading config from %s\n", envPath)
 
 	if _, err := os.Stat(envPath); os.IsNotExist(err) {
 		return cfg, err

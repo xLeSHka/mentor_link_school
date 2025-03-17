@@ -24,6 +24,8 @@ services:
     image: ghcr.io/xleshka/mentor_link_school-ws:latest
     env_file:
       - .env
+    environment:
+      BOT_API_TOKEN: ${BOT_API_TOKEN}
     container_name: backendws
     expose:
       - "8080"
