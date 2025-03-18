@@ -18,7 +18,7 @@ func LoginPassword(stack CallStack) CallStack {
 		// Print UI
 		msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nПожалуйста введите пароль!", LoginMenuTemplate))
 
-		msg.ReplyMarkup = backButton
+		msg.ReplyMarkup = backButton()
 		_, err := stack.Bot.Api.Send(msg)
 		if err != nil {
 			log.Println(err)
@@ -39,11 +39,11 @@ func LoginPassword(stack CallStack) CallStack {
 					return ReturnOnParent(stack)
 				}
 			default:
-				if len(msgText) > 60 || len(msgText) < 8 || !validatePassword(msgText) {
-					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНевалидный пароль!\nПожалуйста введите пароль!", LoginMenuTemplate)))
+				hasLower, hasUpper, hasDigit, hasSymbol := validatePassword(msgText)
+				if len(msgText) > 60 || len(msgText) < 8 || !(hasLower && hasUpper && hasDigit && hasSymbol) {
+					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s\n\nНевалидный пароль!\nПожалуйста введите другой пароль!", RegisterMenuTemplate, ValidatePasswordTemplate(len(msgText) >= 8, len(msgText) <= 60, hasLower, hasUpper, hasDigit, hasSymbol))))
 					if err != nil {
 						log.Println(err)
-						userDatas[stack.ChatID].User = nil
 						return ReturnOnParent(stack)
 					}
 					stack.Update = nil

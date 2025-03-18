@@ -14,6 +14,7 @@ func GetUserAvatar(user *models.User, minioRepository repository.MinioRepository
 		if err != nil {
 			return httpError.New(http.StatusInternalServerError, err.Error())
 		}
+		avatarURL = strings.Replace(avatarURL, "http://minio:9000", "https://localhost", 1)
 		avatarURL = strings.Split(avatarURL, "?X-Amz-Algorithm=AWS4-HMAC-SHA256")[0] + "?X-Amz-Algorithm=AWS4-HMAC-SHA256"
 		user.AvatarURL = &avatarURL
 	}
@@ -25,6 +26,7 @@ func GetGroupAvatar(group *models.Group, minioRepository repository.MinioReposit
 		if err != nil {
 			return httpError.New(http.StatusInternalServerError, err.Error())
 		}
+		avatarURL = strings.Replace(avatarURL, "http://minio:9000", "https://localhost", 1)
 		avatarURL = strings.Split(avatarURL, "?X-Amz-Algorithm=AWS4-HMAC-SHA256")[0] + "?X-Amz-Algorithm=AWS4-HMAC-SHA256"
 		group.AvatarURL = &avatarURL
 	}

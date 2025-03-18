@@ -16,6 +16,7 @@ func (s *UserService) UploadImage(ctx context.Context, file *models.File, person
 	if err != nil {
 		return "", httpError.New(http.StatusInternalServerError, err.Error())
 	}
+	url = strings.Replace(url, "http://minio:9000", "https://localhost", 1)
 	url = strings.Split(url, "?X-Amz-Algorithm=AWS4-HMAC-SHA256")[0] + "?X-Amz-Algorithm=AWS4-HMAC-SHA256"
 	_, err = s.usersRepository.EditUser(ctx, personID, &models.User{AvatarURL: &file.Filename})
 	if err != nil {

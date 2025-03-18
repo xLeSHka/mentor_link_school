@@ -9,7 +9,6 @@ import (
 	"go.uber.org/fx"
 	"gorm.io/gorm"
 	"log"
-	"time"
 )
 
 type Run func(CallStack) CallStack
@@ -24,7 +23,9 @@ type CallStack struct {
 	LastMes int
 }
 type Data struct {
-	User *models.User
+	User    *models.User
+	Group   *models.Group
+	Profile *models.User
 }
 
 // Данные на время жизни приложения
@@ -102,7 +103,6 @@ func (b *Bot) Run() error {
 
 func Chop(stack CallStack) CallStack {
 	// Send "Work in progress"
-	time.Sleep(5 * time.Second)
 	msg := tgbotapi.NewMessage(stack.ChatID, "Work in progress")
 	_, err := stack.Bot.Api.Send(msg)
 	if err != nil {
@@ -126,6 +126,15 @@ func GetChatID(update tgbotapi.Update) int64 {
 
 func ReturnOnParent(stack CallStack) CallStack {
 	if stack.Parent != nil {
+		if stack.Data == "Created" {
+			stack.Parent.Parent.IsPrint = true
+			stack.Parent.Parent.Update = nil
+			stack.Parent.Parent.LastMes = -1
+			return stack.Parent.Parent.Action(*stack.Parent.Parent)
+		}
+		if stack.Data == "Created1" {
+			stack.Parent.LastMes = -1
+		}
 		stack.Parent.IsPrint = true
 		stack.Parent.Update = nil
 		return stack.Parent.Action(*stack.Parent)

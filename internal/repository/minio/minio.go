@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/minio/minio-go/v7"
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
-	"strings"
 	"time"
 )
 
@@ -21,16 +20,16 @@ func (r *MinioRepository) UploadImage(file *models.File) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	newUrl := strings.Replace(url.String(), "http://minio:9000", "https://localhost", 1)
-	return newUrl, nil
+
+	return url.String(), nil
 }
 func (r *MinioRepository) GetImage(image string) (string, error) {
 	url, err := r.MC.PresignedGetObject(context.Background(), r.BN, image, time.Hour*24*7, nil)
 	if err != nil {
 		return "", err
 	}
-	newUrl := strings.Replace(url.String(), "http://minio:9000", "https://localhost", 1)
-	return newUrl, nil
+
+	return url.String(), nil
 }
 func (r *MinioRepository) DeleteImage(filename string) error {
 	err := r.MC.RemoveObject(context.Background(), r.BN, filename, minio.RemoveObjectOptions{})

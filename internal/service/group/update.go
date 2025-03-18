@@ -12,7 +12,7 @@ import (
 )
 
 func (s *GroupsService) UpdateInviteCode(ctx context.Context, groupID uuid.UUID) (string, error) {
-	inviteCode, _ := generateInviteCode(5)
+	inviteCode, _ := GenerateInviteCode(5)
 
 	err := s.groupRepository.UpdateInviteCode(ctx, groupID, inviteCode)
 	if err != nil {
@@ -21,7 +21,7 @@ func (s *GroupsService) UpdateInviteCode(ctx context.Context, groupID uuid.UUID)
 	return inviteCode, nil
 }
 
-func generateInviteCode(length int) (string, error) {
+func GenerateInviteCode(length int) (string, error) {
 	bytes := make([]byte, length)
 	_, err := rand.Read(bytes)
 	if err != nil {

@@ -85,6 +85,7 @@ func MainMenu(stack CallStack) CallStack {
 		IsPrint: true,
 		Parent:  &stack,
 		Update:  nil,
+		Data:    stack.Data,
 		LastMes: -1,
 	})
 }

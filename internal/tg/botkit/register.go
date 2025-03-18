@@ -12,12 +12,21 @@ import (
 	"unicode"
 )
 
-var backButton = tgbotapi.NewReplyKeyboard(
-	tgbotapi.NewKeyboardButtonRow(
-		tgbotapi.NewKeyboardButton("⬅️ Назад"),
-	),
-)
+func backButton() tgbotapi.ReplyKeyboardMarkup {
+	return tgbotapi.NewReplyKeyboard(
+		tgbotapi.NewKeyboardButtonRow(
+			tgbotapi.NewKeyboardButton("⬅️ Назад"),
+		),
+	)
+}
 
+func backInlineKeyboard() tgbotapi.InlineKeyboardMarkup {
+	return tgbotapi.NewInlineKeyboardMarkup(
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData("⬅️ Назад", "⬅️ Назад"),
+		),
+	)
+}
 func RegisterName(stack CallStack) CallStack {
 	//return Chop(stack)              // delete or comment out after finishing work
 	stack.Action = RegisterName     // Set self as current Action
@@ -27,9 +36,9 @@ func RegisterName(stack CallStack) CallStack {
 	if stack.IsPrint {
 		stack.IsPrint = false
 		// Print UI
-		msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s\n\nПожалуйста введите имя!", RegisterMenuTemplate, RegisterMenuTextTemplate, data.User.ID, "____", "____", "____"))
+		msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s\n\nПожалуйста введите имя!", RegisterMenuTemplate, RegisterMenuTextTemplate(data.User.ID, "____", "____", "____")))
 
-		msg.ReplyMarkup = backButton
+		msg.ReplyMarkup = backButton()
 		_, err := stack.Bot.Api.Send(msg)
 		if err != nil {
 			log.Println(err)
@@ -48,7 +57,7 @@ func RegisterName(stack CallStack) CallStack {
 				return ReturnOnParent(stack)
 			default:
 				if len(msgText) > 120 {
-					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s\n\nНевалидное имя!\nПожалуйста введите другое имя!", RegisterMenuTemplate, RegisterMenuTextTemplate, data.User.ID, "____", "____", "____")))
+					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s\n\nНевалидное имя!\nПожалуйста введите другое имя!", RegisterMenuTemplate, RegisterMenuTextTemplate(data.User.ID, "____", "____", "____"))))
 					if err != nil {
 						log.Println(err)
 						userDatas[stack.ChatID].User = nil
@@ -82,9 +91,9 @@ func RegisterPassword(stack CallStack) CallStack {
 	if stack.IsPrint {
 		stack.IsPrint = false
 		// Print UI
-		msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s\n\nПожалуйста введите пароль!", RegisterMenuTemplate, RegisterMenuTextTemplate, data.User.ID, data.User.Name, data.User.Telegram, "____"))
+		msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s\n\nПожалуйста введите пароль!", RegisterMenuTemplate, RegisterMenuTextTemplate(data.User.ID, data.User.Name, data.User.Telegram, "____")))
 
-		msg.ReplyMarkup = backButton
+		msg.ReplyMarkup = backButton()
 		_, err := stack.Bot.Api.Send(msg)
 		if err != nil {
 			log.Println(err)
@@ -103,8 +112,9 @@ func RegisterPassword(stack CallStack) CallStack {
 					return ReturnOnParent(stack)
 				}
 			default:
-				if len(msgText) > 60 || len(msgText) < 8 || !validatePassword(msgText) {
-					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s\n\nНевалидный пароль!\nПожалуйста введите другой пароль!", RegisterMenuTemplate, RegisterMenuTextTemplate, data.User.ID, data.User.Name, data.User.Telegram, "____")))
+				hasLower, hasUpper, hasDigit, hasSymbol := validatePassword(msgText)
+				if len(msgText) > 60 || len(msgText) < 8 || !(hasLower && hasUpper && hasDigit && hasSymbol) {
+					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s\n\nНевалидный пароль!\nПожалуйста введите другой пароль!", RegisterMenuTemplate, ValidatePasswordTemplate(len(msgText) >= 8, len(msgText) <= 60, hasLower, hasUpper, hasDigit, hasSymbol))))
 					if err != nil {
 						log.Println(err)
 						return ReturnOnParent(stack)
@@ -170,7 +180,7 @@ func RegisterPassword(stack CallStack) CallStack {
 	}
 	return stack
 }
-func validatePassword(password string) bool {
+func validatePassword(password string) (bool, bool, bool, bool) {
 	var hasLower, hasUpper, hasDigit, hasSpecial bool
 	for _, char := range password {
 		switch {
@@ -185,5 +195,5 @@ func validatePassword(password string) bool {
 		}
 	}
 
-	return hasLower && hasUpper && hasDigit && hasSpecial
+	return hasLower, hasUpper, hasDigit, hasSpecial
 }
