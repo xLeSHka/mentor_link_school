@@ -9,26 +9,25 @@ import (
 	"strings"
 )
 
-func AuthedMenuKeyboard(bot *Bot, telegram string) (tgbotapi.InlineKeyboardMarkup, error) {
+func EditUserKeyboard() tgbotapi.InlineKeyboardMarkup {
 	return tgbotapi.NewInlineKeyboardMarkup(
 		tgbotapi.NewInlineKeyboardRow(
-			tgbotapi.NewInlineKeyboardButtonData("Создать группу", "Создать группу"),
-			tgbotapi.NewInlineKeyboardButtonData("Мои группы", "Мои группы"),
+			tgbotapi.NewInlineKeyboardButtonData("Имя", "Имя"),
 		),
 		tgbotapi.NewInlineKeyboardRow(
-			tgbotapi.NewInlineKeyboardButtonData("Войти в группу", "Войти в группу"),
+			tgbotapi.NewInlineKeyboardButtonData("БИО", "БИО"),
 		),
 		tgbotapi.NewInlineKeyboardRow(
-			tgbotapi.NewInlineKeyboardButtonData("Редактировать профиль", "Редактировать профиль"),
+			tgbotapi.NewInlineKeyboardButtonData("Аватар", "Аватар"),
 		),
 		tgbotapi.NewInlineKeyboardRow(
-			tgbotapi.NewInlineKeyboardButtonData("Выйти 🚪", "Выйти 🚪"),
+			tgbotapi.NewInlineKeyboardButtonData("⬅️ Назад", "⬅️ Назад"),
 		),
-	), nil
+	)
 }
 
-func AuthedMenu(stack CallStack) CallStack {
-	stack.Action = AuthedMenu
+func EditUser(stack CallStack) CallStack {
+	stack.Action = EditUser
 	data := userDatas[stack.ChatID]
 	if stack.IsPrint {
 		stack.IsPrint = false
@@ -79,12 +78,8 @@ func AuthedMenu(stack CallStack) CallStack {
 				log.Println(err, 2)
 				return stack
 			}
-			keyboard, err := AuthedMenuKeyboard(stack.Bot, stack.Data)
-			if err != nil {
-				log.Println(err, 3)
-				return stack
-			}
-			text := fmt.Sprintf("%s\n\n%s", AuthedMenuTemplate, ProfileTextTemplate(data.User.ID, data.User.Name, *data.User.BIO))
+			keyboard := EditUserKeyboard()
+			text := fmt.Sprintf("%s\n\n%s", EditUserMenuTemplate, ProfileTextTemplate(data.User.ID, data.User.Name, *data.User.BIO))
 			msg = tgbotapi.NewMessage(stack.ChatID, text)
 			msg.ReplyMarkup = keyboard
 			sended, err = stack.Bot.Api.Send(msg)
@@ -94,15 +89,11 @@ func AuthedMenu(stack CallStack) CallStack {
 			}
 			stack.LastMes = sended.MessageID
 		} else {
-			keyboard, err := AuthedMenuKeyboard(stack.Bot, stack.Data)
-			if err != nil {
-				log.Println(err, 3)
-				return stack
-			}
-			text := fmt.Sprintf("%s\n\n%s", AuthedMenuTemplate, ProfileTextTemplate(data.User.ID, data.User.Name, *data.User.BIO))
+			keyboard := EditUserKeyboard()
+			text := fmt.Sprintf("%s\n\n%s\n\n%s", EditUserMenuTemplate, ProfileTextTemplate(data.User.ID, data.User.Name, *data.User.BIO), "Выберите что вы хотите отредактирвоать!")
 			msg := tgbotapi.NewEditMessageText(stack.ChatID, stack.LastMes, text)
 			msg.ReplyMarkup = &keyboard
-			_, err = stack.Bot.Api.Send(msg)
+			_, err := stack.Bot.Api.Send(msg)
 			if err != nil {
 				log.Println(err, 4)
 				return stack
@@ -114,20 +105,21 @@ func AuthedMenu(stack CallStack) CallStack {
 		if stack.Update.CallbackQuery != nil {
 			msgText := stack.Update.CallbackQuery.Data
 			switch msgText {
-			case "Создать группу":
+			case "Имя":
 				userDatas[stack.ChatID].Group = &models.Group{}
-				return CreateGroup(CallStack{
+				return Chop(CallStack{
 					ChatID:  stack.ChatID,
 					Bot:     stack.Bot,
 					IsPrint: true,
 					Parent:  &stack,
 					Update:  nil,
 					LastMes: stack.LastMes,
+					Data:    "Created1",
 				})
-			case "Мои группы":
+			case "БИО":
 				data.Size = 10
 				data.Page = 0
-				return Groups(CallStack{
+				return Chop(CallStack{
 					ChatID:  stack.ChatID,
 					Bot:     stack.Bot,
 					IsPrint: true,
@@ -136,9 +128,9 @@ func AuthedMenu(stack CallStack) CallStack {
 					LastMes: stack.LastMes,
 					Data:    "Created1",
 				})
-			case "Войти в группу":
+			case "Аватар":
 				userDatas[stack.ChatID].Group = &models.Group{}
-				return JoinToGroup(CallStack{
+				return Chop(CallStack{
 					ChatID:  stack.ChatID,
 					Bot:     stack.Bot,
 					IsPrint: true,
@@ -146,15 +138,6 @@ func AuthedMenu(stack CallStack) CallStack {
 					Update:  nil,
 					LastMes: stack.LastMes,
 					Data:    "Created1",
-				})
-			case "Редактировать профиль":
-				return EditUser(CallStack{
-					ChatID:  stack.ChatID,
-					Bot:     stack.Bot,
-					IsPrint: true,
-					Parent:  &stack,
-					Update:  nil,
-					LastMes: stack.LastMes,
 				})
 			case "Выйти 🚪":
 				userDatas[stack.ChatID].User = nil
