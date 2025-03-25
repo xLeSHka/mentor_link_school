@@ -1,6 +1,7 @@
 package groupsRoute
 
 import (
+	"fmt"
 	"github.com/xLeSHka/mentorLinkSchool/internal/utils/avatar"
 	"net/http"
 
@@ -36,7 +37,21 @@ func (h *Route) getMembers(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	members, err := h.groupService.GetMembers(c.Request.Context(), groupID)
+	var req OffsetRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
+		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
+		c.Abort()
+		return
+	}
+	size := 10
+	page := 0
+	if req.Page != 0 {
+		page = req.Page
+	}
+	if req.Size != 0 {
+		size = req.Size
+	}
+	members, total, err := h.groupService.GetMembers(c.Request.Context(), groupID, page, size)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()
@@ -52,5 +67,6 @@ func (h *Route) getMembers(c *gin.Context) {
 		}
 		resp = append(resp, mapMember(m))
 	}
+	c.Header("X-Total-Count", fmt.Sprintf("%d", total))
 	c.JSON(http.StatusOK, resp)
 }

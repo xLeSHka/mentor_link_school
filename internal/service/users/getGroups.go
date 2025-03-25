@@ -12,15 +12,15 @@ import (
 	"gorm.io/gorm"
 )
 
-func (r *UserService) GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.GroupWithRoles, error) {
-	gr, err := r.usersRepository.GetGroups(ctx, userID)
+func (r *UserService) GetGroups(ctx context.Context, userID uuid.UUID, page, size int) ([]*models.GroupWithRoles, int64, error) {
+	gr, total, err := r.usersRepository.GetGroups(ctx, userID, page, size)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 
-			return []*models.GroupWithRoles{}, nil
+			return []*models.GroupWithRoles{}, 0, nil
 		}
-		return nil, httpError.New(http.StatusInternalServerError, err.Error())
+		return nil, 0, httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	log.Println(gr)
-	return gr, nil
+	return gr, total, nil
 }

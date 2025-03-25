@@ -14,7 +14,7 @@ type GroupService interface {
 	AddRole(ctx context.Context, role *models.Role) error
 	RemoveRole(ctx context.Context, role *models.Role) error
 	UpdateInviteCode(ctx context.Context, groupID uuid.UUID) (string, error)
-	GetMembers(ctx context.Context, groupID uuid.UUID) ([]*models.User, error)
+	GetMembers(ctx context.Context, groupID uuid.UUID, page, size int) ([]*models.User, int64, error)
 	Edit(ctx context.Context, group *models.Group) (*models.Group, error)
 	GetStat(ctx context.Context, groupID uuid.UUID) (*models.GroupStat, error)
 	UploadImage(ctx context.Context, file *models.File, groupID uuid.UUID) (string, *httpError.HTTPError)
@@ -42,7 +42,7 @@ type UsersService interface {
 	GetByTelegram(ctx context.Context, telegram string) (person *models.User, err error)
 	UploadImage(ctx context.Context, file *models.File, personID uuid.UUID) (string, *httpError.HTTPError)
 	Edit(ctx context.Context, userID uuid.UUID, user *models.User) (*models.User, error)
-	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.GroupWithRoles, error)
+	GetGroups(ctx context.Context, userID uuid.UUID, page, size int) ([]*models.GroupWithRoles, int64, error)
 	GetGroupByInviteCode(ctx context.Context, inviteCode string) (*models.Group, error)
 	Invite(ctx context.Context, inviteCode string, userID uuid.UUID) (bool, error)
 }

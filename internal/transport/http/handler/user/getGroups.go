@@ -1,6 +1,7 @@
 package usersRoute
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
@@ -28,7 +29,21 @@ func (h *Route) getGroups(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	groups, err := h.usersService.GetGroups(c.Request.Context(), personID)
+	var req OffsetRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
+		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
+		c.Abort()
+		return
+	}
+	size := 10
+	page := 0
+	if req.Page != 0 {
+		page = req.Page
+	}
+	if req.Size != 0 {
+		size = req.Size
+	}
+	groups, total, err := h.usersService.GetGroups(c.Request.Context(), personID, page, size)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		c.Abort()
@@ -44,6 +59,6 @@ func (h *Route) getGroups(c *gin.Context) {
 		}
 		resp = append(resp, MapGroup(group))
 	}
-
+	c.Header("X-Total-Count", fmt.Sprintf("%d", total))
 	c.JSON(http.StatusOK, resp)
 }

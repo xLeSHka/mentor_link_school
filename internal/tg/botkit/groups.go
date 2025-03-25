@@ -5,17 +5,19 @@ import (
 	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/google/uuid"
+	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 	"log"
+	"net/http"
 	"strings"
 )
 
-func mapMember(role *models.User) (string, string) {
+func mapGroup(group *models.GroupWithRoles) (string, string) {
 	builder := strings.Builder{}
 
-	builder.WriteString(role.Name)
-	for _, role := range role.Roles {
-		switch role.Role {
+	builder.WriteString(group.Group.Name)
+	for _, role := range group.MyRoles {
+		switch role {
 		case "owner":
 			builder.WriteString("🧑‍💼")
 		case "mentor":
@@ -24,21 +26,22 @@ func mapMember(role *models.User) (string, string) {
 			builder.WriteString("👨‍🎓")
 		}
 	}
-	return builder.String(), role.ID.String()
+	return builder.String(), group.GroupID.String()
 }
-func MembersKeyboard(bot *Bot, groupID uuid.UUID, page, size int) (tgbotapi.InlineKeyboardMarkup, error) {
-	members, total, err := bot.GroupService.GetMembers(context.Background(), groupID, page, size)
+func GroupsKeyboard(bot *Bot, userID uuid.UUID, page, size int) (tgbotapi.InlineKeyboardMarkup, error) {
+	groups, total, err := bot.UsersService.GetGroups(context.Background(), userID, page, size)
 	if err != nil {
 		return tgbotapi.InlineKeyboardMarkup{}, err
 	}
-	rows := make([][]tgbotapi.InlineKeyboardButton, 0, len(members))
-	for _, member := range members {
+	rows := make([][]tgbotapi.InlineKeyboardButton, 0, len(groups))
+	for _, member := range groups {
 		rows = append(rows,
 			tgbotapi.NewInlineKeyboardRow(
-				tgbotapi.NewInlineKeyboardButtonData(mapMember(member)),
+				tgbotapi.NewInlineKeyboardButtonData(mapGroup(member)),
 			),
 		)
 	}
+	log.Println(total, page, size)
 	navigation := tgbotapi.NewInlineKeyboardRow()
 	if page > 0 {
 		navigation = append(navigation, tgbotapi.NewInlineKeyboardButtonData("⬅️", "Влево"))
@@ -47,7 +50,6 @@ func MembersKeyboard(bot *Bot, groupID uuid.UUID, page, size int) (tgbotapi.Inli
 		navigation = append(navigation, tgbotapi.NewInlineKeyboardButtonData("➡️", "Вправо"))
 	}
 	if len(navigation) > 0 {
-
 		rows = append(rows, navigation)
 	}
 	rows = append(rows,
@@ -57,19 +59,18 @@ func MembersKeyboard(bot *Bot, groupID uuid.UUID, page, size int) (tgbotapi.Inli
 	)
 	return tgbotapi.NewInlineKeyboardMarkup(rows...), nil
 }
-func Members(stack CallStack) CallStack {
+func Groups(stack CallStack) CallStack {
 	//return Chop(stack)              // delete or comment out after finishing work
-	stack.Action = Members // Set self as current Action
+	stack.Action = Groups // Set self as current Action
 	data := userDatas[stack.ChatID]
 	if stack.IsPrint {
 		if stack.LastMes != -1 {
-
 			stack.IsPrint = false
 			// Print UI
-			msg := tgbotapi.NewEditMessageText(stack.ChatID, stack.LastMes, fmt.Sprintf("%s\n\n%s", MembersMenuTemplate, MembersMenuTextTemplate()))
-			keyboard, err := MembersKeyboard(stack.Bot, data.Group.ID, data.Page, data.Size)
+			msg := tgbotapi.NewEditMessageText(stack.ChatID, stack.LastMes, fmt.Sprintf("%s\n\nПожалуйста выберите организацию!", GroupsMenuTemplate))
+			keyboard, err := GroupsKeyboard(stack.Bot, data.User.ID, data.Page, data.Size)
 			if err != nil {
-				data.Profile = nil
+				data.Group = nil
 				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 				if err != nil {
 					log.Println(err)
@@ -81,8 +82,8 @@ func Members(stack CallStack) CallStack {
 			msg.ReplyMarkup = &keyboard
 			_, err = stack.Bot.Api.Send(msg)
 			if err != nil {
-				log.Println(err)
-				data.Profile = nil
+				log.Println(err, 1)
+				userDatas[stack.ChatID].Group = nil
 				return ReturnOnParent(stack)
 			}
 			// Remove previous Keyboard or set self
@@ -90,10 +91,10 @@ func Members(stack CallStack) CallStack {
 		} else {
 			stack.IsPrint = false
 			// Print UI
-			msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", MembersMenuTemplate, MembersMenuTextTemplate()))
-			keyboard, err := MembersKeyboard(stack.Bot, data.Group.ID, data.Page, data.Size)
+			msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nПожалуйста выберите организацию!", GroupsMenuTemplate))
+			keyboard, err := GroupsKeyboard(stack.Bot, data.User.ID, data.Page, data.Size)
 			if err != nil {
-				data.Profile = nil
+				data.Group = nil
 				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 				if err != nil {
 					log.Println(err)
@@ -106,12 +107,11 @@ func Members(stack CallStack) CallStack {
 			sended, err := stack.Bot.Api.Send(msg)
 			if err != nil {
 				log.Println(err)
-				data.Profile = nil
+				userDatas[stack.ChatID].Group = nil
 				return ReturnOnParent(stack)
 			}
-			// Remove previous Keyboard or set self
 			stack.LastMes = sended.MessageID
-			stack.Parent.LastMes = sended.MessageID
+			// Remove previous Keyboard or set self
 			return stack
 		}
 	}
@@ -122,12 +122,13 @@ func Members(stack CallStack) CallStack {
 			case "Влево":
 				{
 					data.Page -= 1
-					keyboard, err := MembersKeyboard(stack.Bot, data.Group.ID, data.Page, data.Size)
+					keyboard, err := GroupsKeyboard(stack.Bot, data.User.ID, data.Page, data.Size)
 					if err != nil {
-						data.Profile = nil
+						data.Group = nil
 						_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 						if err != nil {
 							log.Println(err)
+
 							return ReturnOnParent(stack)
 						}
 
@@ -137,7 +138,7 @@ func Members(stack CallStack) CallStack {
 					_, err = stack.Bot.Api.Send(msg)
 					if err != nil {
 						log.Println(err)
-						data.Profile = nil
+						data.Group = nil
 						return ReturnOnParent(stack)
 					}
 					return stack
@@ -145,9 +146,9 @@ func Members(stack CallStack) CallStack {
 			case "Вправо":
 				{
 					data.Page += 1
-					keyboard, err := MembersKeyboard(stack.Bot, data.Group.ID, data.Page, data.Size)
+					keyboard, err := GroupsKeyboard(stack.Bot, data.User.ID, data.Page, data.Size)
 					if err != nil {
-						data.Profile = nil
+						data.Group = nil
 						_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 						if err != nil {
 							log.Println(err)
@@ -160,20 +161,50 @@ func Members(stack CallStack) CallStack {
 					_, err = stack.Bot.Api.Send(msg)
 					if err != nil {
 						log.Println(err)
-						data.Profile = nil
+						data.Group = nil
 						return ReturnOnParent(stack)
 					}
 					return stack
 				}
 			case "⬅️ Назад":
 				{
-					data.Profile = nil
+					userDatas[stack.ChatID].Group = nil
 					return ReturnOnParent(stack)
 				}
 			default:
-				id := uuid.MustParse(msgText)
-				data.Profile = &models.User{ID: id}
-				return Profile(CallStack{
+				groupID := uuid.MustParse(msgText)
+				group, err := stack.Bot.GroupService.GetGroupByID(context.Background(), groupID)
+				if err != nil {
+					log.Println(err)
+					userDatas[stack.ChatID].Group = nil
+					if err.(*httpError.HTTPError).StatusCode == http.StatusNotFound {
+						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nОрганизация не найдена!🤨🔎", ErrorMenuTemplate)))
+						if err != nil {
+							log.Println(err)
+							return ReturnOnParent(stack)
+						}
+						return stack
+					} else {
+						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
+						if err != nil {
+							log.Println(err)
+							return ReturnOnParent(stack)
+						}
+					}
+					return ReturnOnParent(stack)
+				}
+				roles, _ := stack.Bot.GroupService.GetRoles(context.Background(), data.User.ID, groupID)
+				isOwner := false
+				for _, role := range roles {
+					if role.Role == "owner" {
+						isOwner = true
+					}
+				}
+				if !isOwner {
+					group.InviteCode = nil
+				}
+				userDatas[stack.ChatID].Group = group
+				return Group(CallStack{
 					ChatID:  stack.ChatID,
 					Bot:     stack.Bot,
 					IsPrint: true,

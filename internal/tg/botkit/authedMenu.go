@@ -125,13 +125,27 @@ func AuthedMenu(stack CallStack) CallStack {
 					LastMes: stack.LastMes,
 				})
 			case "Мои группы":
-				return Chop(CallStack{
+				data.Size = 10
+				data.Page = 0
+				return Groups(CallStack{
 					ChatID:  stack.ChatID,
 					Bot:     stack.Bot,
 					IsPrint: true,
 					Parent:  &stack,
 					Update:  nil,
 					LastMes: stack.LastMes,
+					Data:    "Created1",
+				})
+			case "Войти в группу":
+				userDatas[stack.ChatID].Group = &models.Group{}
+				return JoinToGroup(CallStack{
+					ChatID:  stack.ChatID,
+					Bot:     stack.Bot,
+					IsPrint: true,
+					Parent:  &stack,
+					Update:  nil,
+					LastMes: stack.LastMes,
+					Data:    "Created1",
 				})
 			case "Выйти 🚪":
 				userDatas[stack.ChatID].User = nil

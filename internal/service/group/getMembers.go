@@ -10,13 +10,13 @@ import (
 	"net/http"
 )
 
-func (s *GroupsService) GetMembers(ctx context.Context, groupID uuid.UUID) ([]*models.User, error) {
-	members, err := s.groupRepository.GetMembers(ctx, groupID)
+func (s *GroupsService) GetMembers(ctx context.Context, groupID uuid.UUID, page, size int) ([]*models.User, int64, error) {
+	members, total, err := s.groupRepository.GetMembers(ctx, groupID, page, size)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return []*models.User{}, nil
+			return []*models.User{}, 0, nil
 		}
-		return nil, httpError.New(http.StatusInternalServerError, err.Error())
+		return nil, 0, httpError.New(http.StatusInternalServerError, err.Error())
 	}
-	return members, nil
+	return members, total, nil
 }

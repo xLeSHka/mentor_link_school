@@ -27,6 +27,10 @@ type RespGetMember struct {
 	Name      string    `json:"name" binding:"required"`
 	Roles     []string  `json:"roles" binding:"required"`
 }
+type OffsetRequest struct {
+	Page int `form:"page"`
+	Size int `form:"size"`
+}
 
 func mapMember(role *models.User) *RespGetMember {
 	roles := []string{}

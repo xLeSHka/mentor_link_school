@@ -93,4 +93,7 @@ var (
 		}
 		return builder.String()
 	}
+
+	JoinMenuTemplate   = "[Меню входа в организацию]"
+	GroupsMenuTemplate = "[Меню выбора организации]"
 )

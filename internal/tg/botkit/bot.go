@@ -26,6 +26,8 @@ type Data struct {
 	User    *models.User
 	Group   *models.Group
 	Profile *models.User
+	Size    int
+	Page    int
 }
 
 // Данные на время жизни приложения
@@ -42,6 +44,7 @@ type Bot struct {
 	MentorService   service.MentorService
 	GroupService    service.GroupService
 	CacheRepository repository.CacheRepository
+	UserRepository  repository.UsersRepository
 }
 type FxOpts struct {
 	fx.In
@@ -54,6 +57,7 @@ type FxOpts struct {
 	GroupService    service.GroupService
 	MentorService   service.MentorService
 	Config          config.Config
+	UserRepository  repository.UsersRepository
 }
 
 func New(
@@ -69,6 +73,7 @@ func New(
 		GroupService:    opts.GroupService,
 		CacheRepository: opts.CacheRepository,
 		CryptoKey:       []byte(opts.Config.CryptoKey),
+		UserRepository:  opts.UserRepository,
 	}
 }
 

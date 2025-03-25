@@ -5,6 +5,10 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
+type OffsetRequest struct {
+	Page int `form:"page"`
+	Size int `form:"size"`
+}
 type ReqRegisterDto struct {
 	Name     *string `form:"name" binding:"required,gte=1,lte=120"`
 	Telegram *string `json:"telegram" binding:"required,gte=1,lte=120"`

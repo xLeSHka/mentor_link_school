@@ -178,6 +178,8 @@ func Group(stack CallStack) CallStack {
 					return ReturnOnParent(stack)
 				}
 			case "Члены организации 👥":
+				data.Size = 10
+				data.Page = 0
 				return Members(CallStack{
 					ChatID:  stack.ChatID,
 					Bot:     stack.Bot,

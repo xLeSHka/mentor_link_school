@@ -19,7 +19,7 @@ type GroupRepository interface {
 	RemoveRole(ctx context.Context, role *models.Role) error
 	Create(ctx context.Context, group *models.Group, userID uuid.UUID) error
 	UpdateInviteCode(ctx context.Context, groupID uuid.UUID, inviteCode string) error
-	GetMembers(ctx context.Context, groupID uuid.UUID) ([]*models.User, error)
+	GetMembers(ctx context.Context, groupID uuid.UUID, page, size int) ([]*models.User, int64, error)
 	//CheckGroupExists(ctx context.Context, userID, groupID uuid.UUID) (bool, error)
 	Edit(ctx context.Context, group *models.Group) (*models.Group, error)
 	GetGroupByID(ctx context.Context, ID uuid.UUID) (*models.Group, error)
@@ -42,7 +42,7 @@ type UsersRepository interface {
 	GetByID(ctx context.Context, id uuid.UUID) (person *models.User, err error)
 	GetByTelegram(ctx context.Context, telegram string) (person *models.User, err error)
 	EditUser(ctx context.Context, userID uuid.UUID, user *models.User) (*models.User, error)
-	GetGroups(ctx context.Context, userID uuid.UUID) ([]*models.GroupWithRoles, error)
+	GetGroups(ctx context.Context, userID uuid.UUID, page, size int) ([]*models.GroupWithRoles, int64, error)
 	GetGroupByInviteCode(ctx context.Context, inviteCode string) (*models.Group, error)
 }
 
