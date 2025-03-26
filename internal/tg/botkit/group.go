@@ -187,6 +187,7 @@ func Group(stack CallStack) CallStack {
 					Parent:  &stack,
 					Update:  nil,
 					LastMes: stack.LastMes,
+					Data:    "Created1",
 				})
 			case "Редактировать организацию":
 				return EditGroup(CallStack{

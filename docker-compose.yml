@@ -30,14 +30,8 @@ services:
     expose:
       - "8080"
     depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      minio:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
+      - backend1
+      - backend2
     networks:
       - backend-network
   backend2:
