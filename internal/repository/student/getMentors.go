@@ -18,15 +18,20 @@ import (
 //
 //}
 
-func (r *StudentRepository) GetMentors(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Role, error) {
+func (r *StudentRepository) GetMentors(ctx context.Context, userID, groupID uuid.UUID, page, size int) ([]*models.Role, int64, error) {
 	var role []*models.Role
 	err := r.DB.WithContext(ctx).Model(&models.Role{}).
-		Where("role = 'mentor' AND group_id = ?", groupID).
+		Where("role = 'mentor' AND group_id = ? AND user_id != ?", groupID, userID).
 		Where("NOT EXISTS (SELECT 1 FROM help_requests WHERE user_id = ? AND group_id = ? AND mentor_id = roles.user_id AND (status = 'pending' OR status = 'accepted'))", userID, groupID).
 		Preload("User").
+		Offset(page * size).Limit(size).
 		Find(&role).Error
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
-	return role, err
+	var count int64
+	err = r.DB.Model(&models.Role{}).Where("role = 'mentor' AND group_id = ? AND user_id != ?", groupID, userID).
+		Where("NOT EXISTS (SELECT 1 FROM help_requests WHERE user_id = ? AND group_id = ? AND mentor_id = roles.user_id AND (status = 'pending' OR status = 'accepted'))", userID, groupID).
+		Count(&count).Error
+	return role, count, err
 }

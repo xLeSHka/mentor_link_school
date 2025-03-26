@@ -5,6 +5,7 @@ import (
 )
 
 type Role struct {
+	Action     string    `json:"action"`
 	Role       string    `json:"role"`
 	GroupID    uuid.UUID `json:"group_id"`
 	Name       string    `json:"name"`

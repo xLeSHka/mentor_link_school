@@ -289,6 +289,64 @@ func Group(stack CallStack) CallStack {
 					Parent:  &stack,
 					Update:  nil,
 				})
+			case "Статистика организации 📈":
+				return Stat(CallStack{
+					ChatID:  stack.ChatID,
+					Bot:     stack.Bot,
+					IsPrint: true,
+					Parent:  &stack,
+					Update:  nil,
+				})
+			case "Мои студенты 👨‍🎓":
+				data.Size = 10
+				data.Page = 0
+				return Students(CallStack{
+					ChatID:  stack.ChatID,
+					Bot:     stack.Bot,
+					IsPrint: true,
+					Parent:  &stack,
+					Update:  nil,
+				})
+			case "Мои менторы 🧑‍🏫":
+				data.Size = 10
+				data.Page = 0
+				return Mentors(CallStack{
+					ChatID:  stack.ChatID,
+					Bot:     stack.Bot,
+					IsPrint: true,
+					Parent:  &stack,
+					Update:  nil,
+				})
+			case "Доступные менторы":
+				data.Size = 10
+				data.Page = 0
+				return AvailableMentors(CallStack{
+					ChatID:  stack.ChatID,
+					Bot:     stack.Bot,
+					IsPrint: true,
+					Parent:  &stack,
+					Update:  nil,
+				})
+			case "Исходящие заявки 📤":
+				data.Size = 10
+				data.Page = 0
+				return SendedRequests(CallStack{
+					ChatID:  stack.ChatID,
+					Bot:     stack.Bot,
+					IsPrint: true,
+					Parent:  &stack,
+					Update:  nil,
+				})
+			case "Входящие заявки 📩":
+				data.Size = 10
+				data.Page = 0
+				return RecievedRequests(CallStack{
+					ChatID:  stack.ChatID,
+					Bot:     stack.Bot,
+					IsPrint: true,
+					Parent:  &stack,
+					Update:  nil,
+				})
 			default:
 				data.LastMes = -1
 				return stack

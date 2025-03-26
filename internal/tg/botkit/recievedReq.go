@@ -11,32 +11,16 @@ import (
 	"strings"
 )
 
-func mapMember(role *models.User) (string, string) {
-	builder := strings.Builder{}
-
-	builder.WriteString(role.Name)
-	for _, role := range role.Roles {
-		switch role.Role {
-		case "owner":
-			builder.WriteString("🧑‍💼")
-		case "mentor":
-			builder.WriteString("🧑‍🏫")
-		case "student":
-			builder.WriteString("👨‍🎓")
-		}
-	}
-	return builder.String(), role.ID.String()
-}
-func MembersKeyboard(bot *Bot, groupID uuid.UUID, page, size int) (tgbotapi.InlineKeyboardMarkup, error) {
-	members, total, err := bot.GroupService.GetMembers(context.Background(), groupID, page, size)
+func RecievedRequestsKeyboard(bot *Bot, userID, groupID uuid.UUID, page, size int) (tgbotapi.InlineKeyboardMarkup, error) {
+	requests, total, err := bot.MentorService.GetMyHelps(context.Background(), userID, groupID, page, size)
 	if err != nil {
 		return tgbotapi.InlineKeyboardMarkup{}, err
 	}
-	rows := make([][]tgbotapi.InlineKeyboardButton, 0, len(members))
-	for _, member := range members {
+	rows := make([][]tgbotapi.InlineKeyboardButton, 0, len(requests))
+	for _, request := range requests {
 		rows = append(rows,
 			tgbotapi.NewInlineKeyboardRow(
-				tgbotapi.NewInlineKeyboardButtonData(mapMember(member)),
+				tgbotapi.NewInlineKeyboardButtonData(request.Goal+" "+request.Student.Name, request.ID.String()),
 			),
 		)
 	}
@@ -58,17 +42,17 @@ func MembersKeyboard(bot *Bot, groupID uuid.UUID, page, size int) (tgbotapi.Inli
 	)
 	return tgbotapi.NewInlineKeyboardMarkup(rows...), nil
 }
-func Members(stack CallStack) CallStack {
+func RecievedRequests(stack CallStack) CallStack {
 	//return Chop(stack)              // delete or comment out after finishing work
-	stack.Action = Members // Set self as current Action
+	stack.Action = RecievedRequests // Set self as current Action
 	data := userDatas[stack.ChatID]
 	if stack.IsPrint {
 		stack.IsPrint = false
 		if data.LastMes != -1 {
-			keyboard, err := MembersKeyboard(stack.Bot, data.Group.ID, data.Page, data.Size)
+			keyboard, err := RecievedRequestsKeyboard(stack.Bot, data.User.ID, data.Group.ID, data.Page, data.Size)
 			if err != nil {
 				data.LastMes = -1
-				data.Profile = nil
+				data.Req = nil
 				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 				if err != nil {
 					log.Println(err)
@@ -78,7 +62,7 @@ func Members(stack CallStack) CallStack {
 				return ReturnOnParent(stack)
 			}
 			stack.IsPrint = false
-			text := fmt.Sprintf("%s\n\n%s", MembersMenuTemplate, MembersMenuTextTemplate())
+			text := fmt.Sprintf("%s\n\n%s", RecievedRequestsMenuTemplate, RecievedRequestsMenuTextTemplate())
 			if data.Group.AvatarURL != nil {
 				avatarURL, err := stack.Bot.MinioRepository.GetImage(*data.Group.AvatarURL)
 				if err != nil {
@@ -135,19 +119,19 @@ func Members(stack CallStack) CallStack {
 			_, err = stack.Bot.Api.Send(msg)
 			if err != nil {
 				log.Println(err)
-				data.Profile = nil
+				data.Req = nil
 				return ReturnOnParent(stack)
 			}
 			// Remove previous Keyboard or set self
 			return stack
 
 		} else {
-			text := fmt.Sprintf("%s\n\n%s", MembersMenuTemplate, MembersMenuTextTemplate())
+			text := fmt.Sprintf("%s\n\n%s", RecievedRequestsMenuTemplate, RecievedRequestsMenuTextTemplate())
 			stack.IsPrint = false
 			// Print UI
-			keyboard, err := MembersKeyboard(stack.Bot, data.Group.ID, data.Page, data.Size)
+			keyboard, err := RecievedRequestsKeyboard(stack.Bot, data.User.ID, data.Group.ID, data.Page, data.Size)
 			if err != nil {
-				data.Profile = nil
+				data.Req = nil
 				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 				if err != nil {
 					log.Println(err)
@@ -197,7 +181,7 @@ func Members(stack CallStack) CallStack {
 			sended, err := stack.Bot.Api.Send(msg)
 			if err != nil {
 				log.Println(err)
-				data.Profile = nil
+				data.Req = nil
 				return ReturnOnParent(stack)
 			}
 			// Remove previous Keyboard or set self
@@ -217,9 +201,9 @@ func Members(stack CallStack) CallStack {
 			case "Влево":
 				{
 					data.Page -= 1
-					keyboard, err := MembersKeyboard(stack.Bot, data.Group.ID, data.Page, data.Size)
+					keyboard, err := RecievedRequestsKeyboard(stack.Bot, data.User.ID, data.Group.ID, data.Page, data.Size)
 					if err != nil {
-						data.Profile = nil
+						data.Req = nil
 						_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 						if err != nil {
 							log.Println(err)
@@ -240,9 +224,9 @@ func Members(stack CallStack) CallStack {
 			case "Вправо":
 				{
 					data.Page += 1
-					keyboard, err := MembersKeyboard(stack.Bot, data.Group.ID, data.Page, data.Size)
+					keyboard, err := RecievedRequestsKeyboard(stack.Bot, data.User.ID, data.Group.ID, data.Page, data.Size)
 					if err != nil {
-						data.Profile = nil
+						data.Req = nil
 						_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 						if err != nil {
 							log.Println(err)
@@ -255,26 +239,26 @@ func Members(stack CallStack) CallStack {
 					_, err = stack.Bot.Api.Send(msg)
 					if err != nil {
 						log.Println(err)
-						data.Profile = nil
+						data.Req = nil
 						return ReturnOnParent(stack)
 					}
 					return stack
 				}
 			case "⬅️ Назад":
 				{
-					data.Profile = nil
+					data.Req = nil
 					return ReturnOnParent(stack)
 				}
 			default:
 				id := uuid.MustParse(msgText)
-				data.Profile = &models.User{ID: id}
-				return Profile(CallStack{
+				data.Req = &models.HelpRequest{ID: id}
+				return Request(CallStack{
 					ChatID:  stack.ChatID,
 					Bot:     stack.Bot,
 					IsPrint: true,
 					Parent:  &stack,
 					Update:  nil,
-					Data:    "owner",
+					Data:    "mentor",
 				})
 			}
 		}

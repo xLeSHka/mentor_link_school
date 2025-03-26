@@ -37,7 +37,21 @@ func (h *Route) availableMentors(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	mentors, err := h.studentsService.GetMentors(c.Request.Context(), personId, groupId)
+	var req OffsetRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
+		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
+		c.Abort()
+		return
+	}
+	size := 10
+	page := 0
+	if req.Page != 0 {
+		page = req.Page
+	}
+	if req.Size != 0 {
+		size = req.Size
+	}
+	mentors, total, err := h.studentsService.GetMentors(c.Request.Context(), personId, groupId, page, size)
 	if err != nil {
 		fmt.Println(err)
 		err.(*httpError.HTTPError).SendError(c)
@@ -52,6 +66,6 @@ func (h *Route) availableMentors(c *gin.Context) {
 		}
 		resp = append(resp, MapMentor(m))
 	}
-
+	c.Header("X-Total-Count", fmt.Sprintf("%d", total))
 	c.JSON(http.StatusOK, resp)
 }

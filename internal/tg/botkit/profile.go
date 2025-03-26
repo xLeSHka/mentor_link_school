@@ -12,17 +12,18 @@ import (
 	"strings"
 )
 
-func ProfileKeyboard(roles []*models.Role, userID uuid.UUID, bot *Bot) (tgbotapi.InlineKeyboardMarkup, error) {
+func ProfileKeyboard(roles []*models.Role, curRole string, isReq bool, userID uuid.UUID, bot *Bot) (tgbotapi.InlineKeyboardMarkup, error) {
 	rows := make([][]tgbotapi.InlineKeyboardButton, 0, 3)
 	userRoles, err := bot.GroupService.GetRoles(context.Background(), userID, roles[0].GroupID)
 	if err != nil {
 		return tgbotapi.InlineKeyboardMarkup{}, err
 	}
+	log.Println(len(userRoles))
 	for _, userRole := range userRoles {
+		log.Println(userRole.Role, curRole, isReq)
 		switch userRole.Role {
 
 		case "owner":
-
 			mentor, student := "Добавить роль 🧑‍🏫", "Добавить роль 👨‍🎓"
 			for _, role := range roles {
 				switch role.Role {
@@ -41,7 +42,16 @@ func ProfileKeyboard(roles []*models.Role, userID uuid.UUID, bot *Bot) (tgbotapi
 				),
 			)
 		case "mentor":
+
 		case "student":
+			for _, role := range roles {
+
+				if role.Role == "mentor" && !isReq {
+					rows = append(rows, tgbotapi.NewInlineKeyboardRow(
+						tgbotapi.NewInlineKeyboardButtonData("Отправить запрос", "Отправить запрос"),
+					))
+				}
+			}
 		}
 	}
 	rows = append(rows,
@@ -73,7 +83,7 @@ func Profile(stack CallStack) CallStack {
 				return ReturnOnParent(stack)
 			}
 		}
-
+		return ReturnOnParent(stack)
 	}
 	roles, err := stack.Bot.GroupService.GetRoles(context.Background(), data.Profile.ID, data.Group.ID)
 	if err != nil {
@@ -92,9 +102,42 @@ func Profile(stack CallStack) CallStack {
 				return ReturnOnParent(stack)
 			}
 		}
-
+		return ReturnOnParent(stack)
 	}
+	log.Println(len(roles))
 	data.Profile = profile
+	pair, err := stack.Bot.UsersService.GetPair(context.Background(), data.User.ID, data.Profile.ID, data.Group.ID)
+	if err != nil {
+		data.LastMes = -1
+		data.Profile = nil
+		_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
+		if err != nil {
+			log.Println(err)
+			return ReturnOnParent(stack)
+		}
+		return ReturnOnParent(stack)
+	}
+	isPair := false
+	if pair != nil {
+		isPair = true
+	}
+	isReq := false
+	if stack.Data == "student" {
+		req, err := stack.Bot.StudentService.GetRequest(context.Background(), data.User.ID, data.Profile.ID, data.Group.ID)
+		if err != nil {
+			data.LastMes = -1
+			data.Profile = nil
+			_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
+			if err != nil {
+				log.Println(err)
+				return ReturnOnParent(stack)
+			}
+			return ReturnOnParent(stack)
+		}
+		if req != nil {
+			isReq = true
+		}
+	}
 	if stack.IsPrint {
 		stack.IsPrint = false
 		if data.LastMes != -1 {
@@ -128,7 +171,7 @@ func Profile(stack CallStack) CallStack {
 					Media:     photoFileReader,
 					ParseMode: "markdown",
 				}
-				keyboard, err := ProfileKeyboard(roles, data.User.ID)
+				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, stack.Bot)
 				if err != nil {
 					data.LastMes = -1
 					data.Profile = nil
@@ -140,7 +183,7 @@ func Profile(stack CallStack) CallStack {
 
 					return ReturnOnParent(stack)
 				}
-				text := fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.BIO, roles))
+				text := fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.Telegram, stack.Data, isPair, profile.BIO, roles))
 				baseMedia.Caption = text
 				msg := tgbotapi.EditMessageMediaConfig{
 					BaseEdit: tgbotapi.BaseEdit{
@@ -162,8 +205,8 @@ func Profile(stack CallStack) CallStack {
 			}
 			stack.IsPrint = false
 			// Print UI
-			msg := tgbotapi.NewEditMessageText(stack.ChatID, data.LastMes, fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.BIO, roles)))
-			keyboard, err := ProfileKeyboard(roles, data.User.ID)
+			msg := tgbotapi.NewEditMessageText(stack.ChatID, data.LastMes, fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.Telegram, stack.Data, isPair, profile.BIO, roles)))
+			keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, stack.Bot)
 			if err != nil {
 				data.LastMes = -1
 				data.Profile = nil
@@ -211,7 +254,7 @@ func Profile(stack CallStack) CallStack {
 					Reader: response.Body,
 				}
 				msg := tgbotapi.NewPhoto(stack.ChatID, photoFileReader)
-				keyboard, err := ProfileKeyboard(roles, data.User.ID)
+				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, stack.Bot)
 				if err != nil {
 					data.Profile = nil
 					_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
@@ -223,7 +266,7 @@ func Profile(stack CallStack) CallStack {
 					return ReturnOnParent(stack)
 				}
 				msg.ReplyMarkup = &keyboard
-				text := fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.BIO, roles))
+				text := fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.Telegram, stack.Data, isPair, profile.BIO, roles))
 				msg.Caption = text
 				sended, err := stack.Bot.Api.Send(msg)
 				if err != nil {
@@ -233,8 +276,8 @@ func Profile(stack CallStack) CallStack {
 				data.LastMes = sended.MessageID
 				return stack
 			}
-			msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.BIO, roles)))
-			keyboard, err := ProfileKeyboard(roles, data.User.ID)
+			msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.Telegram, stack.Data, isPair, profile.BIO, roles)))
+			keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, stack.Bot)
 			if err != nil {
 				data.Profile = nil
 				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
@@ -296,7 +339,7 @@ func Profile(stack CallStack) CallStack {
 
 				}
 				roles, _ = stack.Bot.GroupService.GetRoles(context.Background(), data.Profile.ID, data.Group.ID)
-				keyboard, err := ProfileKeyboard(roles, data.User.ID)
+				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, stack.Bot)
 				if err != nil {
 					data.LastMes = -1
 					data.Profile = nil
@@ -308,7 +351,16 @@ func Profile(stack CallStack) CallStack {
 
 					return ReturnOnParent(stack)
 				}
-				text := fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.BIO, roles))
+				id, err := stack.Bot.UsersService.GetTelegramID(context.Background(), data.Profile.ID)
+				if err != nil {
+					log.Println(err)
+					return ReturnOnParent(stack)
+				}
+				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам добавили роль ментора в организации %s", data.Group.Name)))
+				if err != nil {
+					log.Println(err)
+				}
+				text := fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.Telegram, stack.Data, isPair, profile.BIO, roles))
 				if data.Profile.AvatarURL != nil {
 					msg := tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, text)
 
@@ -357,9 +409,9 @@ func Profile(stack CallStack) CallStack {
 					}
 				}
 				roles, _ = stack.Bot.GroupService.GetRoles(context.Background(), data.Profile.ID, data.Group.ID)
-				text := fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.BIO, roles))
+				text := fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.Telegram, stack.Data, isPair, profile.BIO, roles))
 
-				keyboard, err := ProfileKeyboard(roles, data.User.ID)
+				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, stack.Bot)
 				if err != nil {
 					data.Profile = nil
 					data.LastMes = -1
@@ -370,6 +422,15 @@ func Profile(stack CallStack) CallStack {
 					}
 
 					return ReturnOnParent(stack)
+				}
+				id, err := stack.Bot.UsersService.GetTelegramID(context.Background(), data.Profile.ID)
+				if err != nil {
+					log.Println(err)
+					return ReturnOnParent(stack)
+				}
+				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам удалили роль ментора в организации %s", data.Group.Name)))
+				if err != nil {
+					log.Println(err)
 				}
 				if data.Profile.AvatarURL != nil {
 					msg := tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, text)
@@ -419,7 +480,7 @@ func Profile(stack CallStack) CallStack {
 				}
 				roles, _ = stack.Bot.GroupService.GetRoles(context.Background(), data.Profile.ID, data.Group.ID)
 
-				keyboard, err := ProfileKeyboard(roles, data.User.ID)
+				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, stack.Bot)
 				if err != nil {
 					data.Profile = nil
 					data.LastMes = -1
@@ -431,7 +492,16 @@ func Profile(stack CallStack) CallStack {
 
 					return ReturnOnParent(stack)
 				}
-				text := fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.BIO, roles))
+				id, err := stack.Bot.UsersService.GetTelegramID(context.Background(), data.Profile.ID)
+				if err != nil {
+					log.Println(err)
+					return ReturnOnParent(stack)
+				}
+				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам добавили роль студента в организации %s", data.Group.Name)))
+				if err != nil {
+					log.Println(err)
+				}
+				text := fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.Telegram, stack.Data, isPair, profile.BIO, roles))
 				if data.Profile.AvatarURL != nil {
 					msg := tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, text)
 					msg.ReplyMarkup = &keyboard
@@ -479,7 +549,7 @@ func Profile(stack CallStack) CallStack {
 				}
 				roles, _ = stack.Bot.GroupService.GetRoles(context.Background(), data.Profile.ID, data.Group.ID)
 
-				keyboard, err := ProfileKeyboard(roles, data.User.ID)
+				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, stack.Bot)
 				if err != nil {
 					data.Profile = nil
 					data.LastMes = -1
@@ -491,7 +561,16 @@ func Profile(stack CallStack) CallStack {
 
 					return ReturnOnParent(stack)
 				}
-				text := fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.BIO, roles))
+				id, err := stack.Bot.UsersService.GetTelegramID(context.Background(), data.Profile.ID)
+				if err != nil {
+					log.Println(err)
+					return ReturnOnParent(stack)
+				}
+				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам удалили роль студента в организации %s", data.Group.Name)))
+				if err != nil {
+					log.Println(err)
+				}
+				text := fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.Telegram, stack.Data, isPair, profile.BIO, roles))
 				if data.Profile.AvatarURL != nil {
 					msg := tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, text)
 					msg.ReplyMarkup = &keyboard
@@ -513,7 +592,15 @@ func Profile(stack CallStack) CallStack {
 					}
 					return stack
 				}
-
+			case "Отправить запрос":
+				data.Req = &models.HelpRequest{}
+				return SendRequest(CallStack{
+					ChatID:  stack.ChatID,
+					Bot:     stack.Bot,
+					IsPrint: true,
+					Parent:  &stack,
+					Update:  nil,
+				})
 			default:
 				data.LastMes = -1
 				return stack

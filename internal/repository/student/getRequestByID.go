@@ -10,7 +10,7 @@ func (r *StudentRepository) GetRequestByID(ctx context.Context, reqID, groupID u
 	var res models.HelpRequest
 	err := r.DB.Model(models.HelpRequest{}).
 		WithContext(ctx).
-		Where("id = ? AND group_id = ?", reqID, groupID).
+		Where("id = ? AND group_id = ?", reqID, groupID).Preload("Student").Preload("Mentor").
 		First(&res).Error
 
 	return &res, err

@@ -10,13 +10,13 @@ import (
 	"net/http"
 )
 
-func (s *StudentService) GetMyHelps(ctx context.Context, userID, groupID uuid.UUID) ([]*models.HelpRequest, error) {
-	requests, err := s.studentRepository.GetMyRequests(ctx, userID, groupID)
+func (s *StudentService) GetMyHelps(ctx context.Context, userID, groupID uuid.UUID, page, size int) ([]*models.HelpRequest, int64, error) {
+	requests, total, err := s.studentRepository.GetMyRequests(ctx, userID, groupID, page, size)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return []*models.HelpRequest{}, nil
+			return []*models.HelpRequest{}, 0, nil
 		}
-		return nil, httpError.New(http.StatusInternalServerError, err.Error())
+		return nil, 0, httpError.New(http.StatusInternalServerError, err.Error())
 	}
-	return requests, nil
+	return requests, total, nil
 }

@@ -22,18 +22,19 @@ type GroupService interface {
 	GetGroupByID(ctx context.Context, groupID uuid.UUID) (*models.Group, error)
 }
 type MentorService interface {
-	GetMyHelps(ctx context.Context, userID, groupID uuid.UUID) ([]*models.HelpRequest, error)
+	GetMyHelps(ctx context.Context, userID, groupID uuid.UUID, page, size int) ([]*models.HelpRequest, int64, error)
 	UpdateRequest(ctx context.Context, request *models.HelpRequest) error
-	GetStudents(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Pair, error)
+	GetStudents(ctx context.Context, userID, groupID uuid.UUID, page, size int) ([]*models.Pair, int64, error)
 }
 
 type StudentService interface {
 	CreateRequest(ctx context.Context, request *models.HelpRequest) error
-	GetMentors(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Role, error)
-	GetMyHelps(ctx context.Context, userID, groupID uuid.UUID) ([]*models.HelpRequest, error)
-	GetMyMentors(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Pair, error)
+	GetMentors(ctx context.Context, userID, groupID uuid.UUID, page, size int) ([]*models.Role, int64, error)
+	GetMyHelps(ctx context.Context, userID, groupID uuid.UUID, page, size int) ([]*models.HelpRequest, int64, error)
+	GetMyMentors(ctx context.Context, userID, groupID uuid.UUID, page, size int) ([]*models.Pair, int64, error)
 	GetRequestByID(ctx context.Context, reqID, groupID uuid.UUID) (*models.HelpRequest, error)
 	//GetRequest(ctx context.Context, UserID, MentorID, GroupID uuid.UUID) (models.HelpRequest, error)
+	GetRequest(ctx context.Context, studentID, mentorID, groupID uuid.UUID) (*models.HelpRequest, error)
 }
 type UsersService interface {
 	Login(ctx context.Context, telegram, password string) (string, error)
@@ -45,4 +46,6 @@ type UsersService interface {
 	GetGroups(ctx context.Context, userID uuid.UUID, page, size int) ([]*models.GroupWithRoles, int64, error)
 	GetGroupByInviteCode(ctx context.Context, inviteCode string) (*models.Group, error)
 	Invite(ctx context.Context, inviteCode string, userID uuid.UUID) (bool, error)
+	GetPair(ctx context.Context, userID, userID2, groupID uuid.UUID) (*models.Pair, error)
+	GetTelegramID(ctx context.Context, userID uuid.UUID) (int64, error)
 }

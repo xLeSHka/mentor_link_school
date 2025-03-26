@@ -1,24 +1,30 @@
 package ws
 
 import (
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/Validators"
 	"github.com/xLeSHka/mentorLinkSchool/internal/connetions/broker"
+	"github.com/xLeSHka/mentorLinkSchool/internal/service"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/handler/ApiRouters"
 	"go.uber.org/fx"
 	"net/http"
 )
 
 type WebSocket struct {
-	Conn      *websocket.Conn
-	Clients   map[uuid.UUID]*websocket.Conn
-	Broadcast chan *Message
-	Consumer  *broker.Consumer
+	Conn         *websocket.Conn
+	Clients      map[uuid.UUID]*websocket.Conn
+	Broadcast    chan *Message
+	Consumer     *broker.Consumer
+	Api          *tgbotapi.BotAPI
+	UsersService service.UsersService
 }
 type WsFxOpts struct {
 	fx.In
-	Consumer *broker.Consumer
+	Consumer     *broker.Consumer
+	Api          *tgbotapi.BotAPI
+	UsersService service.UsersService
 }
 
 func New(opts WsFxOpts) *WebSocket {
@@ -26,10 +32,12 @@ func New(opts WsFxOpts) *WebSocket {
 	var broadcast = make(chan *Message)
 
 	return &WebSocket{
-		Conn:      nil,
-		Clients:   clients,
-		Broadcast: broadcast,
-		Consumer:  opts.Consumer,
+		Conn:         nil,
+		Clients:      clients,
+		Broadcast:    broadcast,
+		Consumer:     opts.Consumer,
+		Api:          opts.Api,
+		UsersService: opts.UsersService,
 	}
 }
 

@@ -95,7 +95,7 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 	f := &models.File{
 		Filename: imagename,
 		Size:     file.Size,
-		File:     temp,
+		File:     buff,
 		Mimetype: mimetype,
 	}
 	imageURL, hErr := h.groupService.UploadImage(c.Request.Context(), f, groupId)

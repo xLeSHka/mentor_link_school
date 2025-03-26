@@ -5,6 +5,10 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
+type OffsetRequest struct {
+	Page int `form:"page"`
+	Size int `form:"size"`
+}
 type ReqUpdateRequest struct {
 	ID     uuid.UUID `json:"id" binding:"required"`
 	Status *bool     `json:"status" binding:"required"`

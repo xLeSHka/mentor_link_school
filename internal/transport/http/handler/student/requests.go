@@ -5,6 +5,10 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
+type OffsetRequest struct {
+	Page int `form:"page"`
+	Size int `form:"size"`
+}
 type GetGroupID struct {
 	ID string `uri:"groupId" binding:"required,uuid"`
 }

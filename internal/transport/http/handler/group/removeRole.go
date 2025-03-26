@@ -61,7 +61,7 @@ func (h *Route) removeRole(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	go ws.SendRole(userID, groupID, req.Role, h.producer, h.minioRepository, h.groupService, h.usersService)
+	go ws.SendRole(userID, groupID, req.Role, "remove", h.producer, h.minioRepository, h.groupService, h.usersService)
 
 	c.Writer.WriteHeader(http.StatusOK)
 }

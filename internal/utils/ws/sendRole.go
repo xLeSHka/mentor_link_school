@@ -12,7 +12,7 @@ import (
 	"log"
 )
 
-func SendRole(personId, groupID uuid.UUID, role string, producer *broker.Producer, minioRepository repository.MinioRepository, groupService service.GroupService, userService service.UsersService) {
+func SendRole(personId, groupID uuid.UUID, role, action string, producer *broker.Producer, minioRepository repository.MinioRepository, groupService service.GroupService, userService service.UsersService) {
 	if producer != nil {
 		group, err := groupService.GetGroupByID(context.Background(), groupID)
 		if err != nil {
@@ -37,6 +37,7 @@ func SendRole(personId, groupID uuid.UUID, role string, producer *broker.Produce
 			UserID:     personId,
 			Role: &ws.Role{
 				Role:     role,
+				Action:   action,
 				GroupID:  groupID,
 				GroupUrl: group.AvatarURL,
 				Name:     group.Name,

@@ -25,6 +25,7 @@ type Data struct {
 	User    *models.User
 	Group   *models.Group
 	Profile *models.User
+	Req     *models.HelpRequest
 	Size    int
 	Page    int
 	LastMes int

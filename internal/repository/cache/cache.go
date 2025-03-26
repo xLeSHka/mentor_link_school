@@ -6,6 +6,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 	"github.com/xLeSHka/mentorLinkSchool/internal/repository"
+	"strconv"
 	"time"
 )
 
@@ -47,4 +48,18 @@ func (c *RedisRepository) DeleteToken(ctx context.Context, userID uuid.UUID) err
 		return err
 	}
 	return nil
+}
+func (c *RedisRepository) SaveID(ctx context.Context, userID uuid.UUID, id int64) error {
+	err := c.rdb.Set(ctx, "id:"+userID.String(), strconv.FormatInt(id, 10), time.Hour*24).Err()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (c *RedisRepository) GetID(ctx context.Context, userID uuid.UUID) (int64, error) {
+	res := c.rdb.Get(ctx, "id:"+userID.String())
+	if res.Err() != nil {
+		return 0, res.Err()
+	}
+	return strconv.ParseInt(res.Val(), 10, 64)
 }

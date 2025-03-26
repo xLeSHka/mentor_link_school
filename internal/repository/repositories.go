@@ -13,6 +13,8 @@ type CacheRepository interface {
 	RemoveRoles(ctx context.Context, roles []*models.Role) error
 	SaveToken(ctx context.Context, userID uuid.UUID, token string) error
 	DeleteToken(ctx context.Context, userID uuid.UUID) error
+	SaveID(ctx context.Context, userID uuid.UUID, id int64) error
+	GetID(ctx context.Context, userID uuid.UUID) (int64, error)
 }
 type GroupRepository interface {
 	AddRole(ctx context.Context, role *models.Role) error
@@ -29,8 +31,8 @@ type GroupRepository interface {
 }
 type MentorRepository interface {
 	UpdateRequest(ctx context.Context, request *models.HelpRequest) error
-	GetStudents(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Pair, error)
-	GetMyHelpers(ctx context.Context, userID, groupID uuid.UUID) ([]*models.HelpRequest, error)
+	GetStudents(ctx context.Context, userID, groupID uuid.UUID, page, size int) ([]*models.Pair, int64, error)
+	GetMyHelpers(ctx context.Context, userID, groupID uuid.UUID, page, size int) ([]*models.HelpRequest, int64, error)
 	CreatePair(ctx context.Context, pair *models.Pair) error
 	CheckIsMentor(ctx context.Context, userID, groupID uuid.UUID) (bool, error)
 	//CheckRequest(ctx context.Context, id, mentorID uuid.UUID) (bool, error)
@@ -44,6 +46,7 @@ type UsersRepository interface {
 	EditUser(ctx context.Context, userID uuid.UUID, user *models.User) (*models.User, error)
 	GetGroups(ctx context.Context, userID uuid.UUID, page, size int) ([]*models.GroupWithRoles, int64, error)
 	GetGroupByInviteCode(ctx context.Context, inviteCode string) (*models.Group, error)
+	GetPair(ctx context.Context, userID, userID2, groupID uuid.UUID) (*models.Pair, error)
 }
 
 type MinioRepository interface {
@@ -52,9 +55,10 @@ type MinioRepository interface {
 	DeleteImage(image string) error
 }
 type StudentRepository interface {
-	GetMyMentors(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Pair, error)
-	GetMentors(ctx context.Context, userID, groupID uuid.UUID) ([]*models.Role, error)
-	GetMyRequests(ctx context.Context, userID, groupID uuid.UUID) ([]*models.HelpRequest, error)
+	GetMyMentors(ctx context.Context, userID, groupID uuid.UUID, page, size int) ([]*models.Pair, int64, error)
+	GetMentors(ctx context.Context, userID, groupID uuid.UUID, page, size int) ([]*models.Role, int64, error)
+	GetMyRequests(ctx context.Context, userID, groupID uuid.UUID, page, size int) ([]*models.HelpRequest, int64, error)
 	CreateRequest(ctx context.Context, request *models.HelpRequest) error
 	GetRequestByID(ctx context.Context, reqID, groupID uuid.UUID) (*models.HelpRequest, error)
+	GetRequest(ctx context.Context, studentID, mentorID, groupID uuid.UUID) (*models.HelpRequest, error)
 }

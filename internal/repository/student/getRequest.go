@@ -6,12 +6,11 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 )
 
-func (r *StudentRepository) GetRequest(ctx context.Context, UserID, MentorID, GroupID uuid.UUID) (models.HelpRequest, error) {
+func (r *StudentRepository) GetRequest(ctx context.Context, studentID, mentorID, groupID uuid.UUID) (*models.HelpRequest, error) {
 	var res models.HelpRequest
 	err := r.DB.Model(models.HelpRequest{}).
 		WithContext(ctx).
-		Where("user_id = ? AND mentor_id = ? AND group_id = ? and status = 'pending'", UserID, MentorID, GroupID).
+		Where("user_id = ? AND mentor_id = ? AND group_id = ? and (status = 'pending' OR status = 'accepted')", studentID, mentorID, groupID).
 		First(&res).Error
-
-	return res, err
+	return &res, err
 }

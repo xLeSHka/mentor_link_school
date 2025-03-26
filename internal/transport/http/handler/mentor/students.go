@@ -1,6 +1,7 @@
 package mentorsRoute
 
 import (
+	"fmt"
 	"github.com/xLeSHka/mentorLinkSchool/internal/utils/avatar"
 	"log"
 	"net/http"
@@ -38,7 +39,21 @@ func (h *Route) students(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	students, err := h.mentorService.GetStudents(c.Request.Context(), personId, groupId)
+	var req OffsetRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
+		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
+		c.Abort()
+		return
+	}
+	size := 10
+	page := 0
+	if req.Page != 0 {
+		page = req.Page
+	}
+	if req.Size != 0 {
+		size = req.Size
+	}
+	students, total, err := h.mentorService.GetStudents(c.Request.Context(), personId, groupId, page, size)
 	if err != nil {
 		err.(*httpError.HTTPError).SendError(c)
 		return
@@ -52,6 +67,6 @@ func (h *Route) students(c *gin.Context) {
 		}
 		resp = append(resp, MapMyStudent(m))
 	}
-
+	c.Header("X-Total-Count", fmt.Sprintf("%d", total))
 	c.JSON(http.StatusOK, resp)
 }
