@@ -4,6 +4,8 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/base64"
+	"errors"
+	"gorm.io/gorm"
 	"net/http"
 	"strings"
 
@@ -16,6 +18,9 @@ func (s *GroupsService) UpdateInviteCode(ctx context.Context, groupID uuid.UUID)
 
 	err := s.groupRepository.UpdateInviteCode(ctx, groupID, inviteCode)
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return "", httpError.New(http.StatusNotFound, "Организация не найдена!")
+		}
 		return "", httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	return inviteCode, nil

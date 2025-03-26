@@ -155,6 +155,7 @@ func AuthedMenu(stack CallStack) CallStack {
 					Parent:  &stack,
 					Update:  nil,
 					LastMes: stack.LastMes,
+					Data:    "Created1",
 				})
 			case "Выйти 🚪":
 				userDatas[stack.ChatID].User = nil

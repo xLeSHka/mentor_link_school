@@ -188,6 +188,16 @@ func Group(stack CallStack) CallStack {
 					Update:  nil,
 					LastMes: stack.LastMes,
 				})
+			case "Редактировать организацию":
+				return EditGroup(CallStack{
+					ChatID:  stack.ChatID,
+					Bot:     stack.Bot,
+					IsPrint: true,
+					Parent:  &stack,
+					Update:  nil,
+					LastMes: stack.LastMes,
+					Data:    "Created1",
+				})
 			default:
 				return stack
 			}
