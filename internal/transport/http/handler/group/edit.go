@@ -50,6 +50,6 @@ func (h *Route) edit(c *gin.Context) {
 		err.(*httpError.HTTPError).SendError(c)
 		return
 	}
-	go ws.SendRole(personID, groupID, "owner", h.producer, h.minioRepository, h.groupService, h.usersService)
+	go ws.SendRole(personID, groupID, "owner", "", h.producer, h.minioRepository, h.groupService, h.usersService)
 	c.Writer.WriteHeader(http.StatusOK)
 }
