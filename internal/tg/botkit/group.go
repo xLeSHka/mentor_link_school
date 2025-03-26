@@ -74,13 +74,82 @@ func Group(stack CallStack) CallStack {
 	stack.Action = Group // Set self as current Action
 	data := userDatas[stack.ChatID]
 	if stack.IsPrint {
-		if stack.LastMes != -1 {
-
+		stack.IsPrint = false
+		if data.LastMes != -1 {
+			if data.Group.AvatarURL != nil {
+				avatarURL, err := stack.Bot.MinioRepository.GetImage(*data.Group.AvatarURL)
+				if err != nil {
+					data.LastMes = -1
+					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНе удалось получить ссылку на вашу аватарку!", ErrorMenuTemplate)))
+					if err != nil {
+						log.Println(err, 0)
+					}
+					return stack
+				}
+				avatarURL = strings.Split(avatarURL, "?X-Amz-Algorithm=AWS4-HMAC-SHA256")[0] + "?X-Amz-Algorithm=AWS4-HMAC-SHA256"
+				response, err := http.Get(avatarURL)
+				if err != nil {
+					data.LastMes = -1
+					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНе удалось загрузить вашу аватарку!", ErrorMenuTemplate)))
+					if err != nil {
+						log.Println(err, -1)
+					}
+					return stack
+				}
+				defer response.Body.Close()
+				photoFileReader := tgbotapi.FileReader{
+					Name:   "picture",
+					Reader: response.Body,
+				}
+				baseMedia := tgbotapi.BaseInputMedia{
+					Type:      "photo",
+					Media:     photoFileReader,
+					ParseMode: "markdown",
+				}
+				text := fmt.Sprintf("%s\n\n%s", GroupMenuTemplate, GroupTextTemplate(data.Group.ID, data.Group.Name, data.Group.InviteCode))
+				keyboard, err := GroupKeyboard(stack.Bot, data.User.ID, data.Group.ID)
+				if err != nil {
+					data.LastMes = -1
+					userDatas[stack.ChatID].Group = nil
+					if err.(*httpError.HTTPError).StatusCode == http.StatusNotFound {
+						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nТакой группы не существует или вы в ней не состоите!", ErrorMenuTemplate)))
+						if err != nil {
+							log.Println(err)
+							return ReturnOnParent(stack)
+						}
+					} else {
+						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
+						if err != nil {
+							log.Println(err)
+							return ReturnOnParent(stack)
+						}
+					}
+					return ReturnOnParent(stack)
+				}
+				baseMedia.Caption = text
+				msg := tgbotapi.EditMessageMediaConfig{
+					BaseEdit: tgbotapi.BaseEdit{
+						ChatID:    stack.ChatID,
+						MessageID: data.LastMes,
+					},
+					Media: tgbotapi.InputMediaPhoto{
+						BaseInputMedia: baseMedia,
+					},
+				}
+				msg.ReplyMarkup = &keyboard
+				_, err = stack.Bot.Api.Send(msg)
+				if err != nil {
+					log.Println(err, -21, "ChatID ", stack.ChatID, "FileReader ", photoFileReader, "Url", avatarURL)
+					return stack
+				}
+				return stack
+			}
 			stack.IsPrint = false
 			// Print UI
-			msg := tgbotapi.NewEditMessageText(stack.ChatID, stack.LastMes, fmt.Sprintf("%s\n\n%s", GroupMenuTemplate, GroupTextTemplate(data.Group.ID, data.Group.Name, data.Group.InviteCode)))
+			msg := tgbotapi.NewEditMessageText(stack.ChatID, data.LastMes, fmt.Sprintf("%s\n\n%s", GroupMenuTemplate, GroupTextTemplate(data.Group.ID, data.Group.Name, data.Group.InviteCode)))
 			keyboard, err := GroupKeyboard(stack.Bot, data.User.ID, data.Group.ID)
 			if err != nil {
+				data.LastMes = -1
 				userDatas[stack.ChatID].Group = nil
 				if err.(*httpError.HTTPError).StatusCode == http.StatusNotFound {
 					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nТакой группы не существует или вы в ней не состоите!", ErrorMenuTemplate)))
@@ -131,11 +200,36 @@ func Group(stack CallStack) CallStack {
 					Name:   "picture",
 					Reader: response.Body,
 				}
-				_, err = stack.Bot.Api.Send(tgbotapi.NewPhoto(stack.ChatID, photoFileReader))
+
+				msg := tgbotapi.NewPhoto(stack.ChatID, photoFileReader)
+				keyboard, err := GroupKeyboard(stack.Bot, data.User.ID, data.Group.ID)
+				if err != nil {
+					userDatas[stack.ChatID].Group = nil
+					if err.(*httpError.HTTPError).StatusCode == http.StatusNotFound {
+						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nТакой группы не существует или вы в ней не состоите!", ErrorMenuTemplate)))
+						if err != nil {
+							log.Println(err)
+							return ReturnOnParent(stack)
+						}
+					} else {
+						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
+						if err != nil {
+							log.Println(err)
+							return ReturnOnParent(stack)
+						}
+					}
+					return ReturnOnParent(stack)
+				}
+				msg.ReplyMarkup = &keyboard
+				text := fmt.Sprintf("%s\n\n%s", GroupMenuTemplate, GroupTextTemplate(data.Group.ID, data.Group.Name, data.Group.InviteCode))
+				msg.Caption = text
+				sended, err := stack.Bot.Api.Send(msg)
 				if err != nil {
 					log.Println(err, -2, "ChatID ", stack.ChatID, "FileReader ", photoFileReader, "Url", avatarURL)
 					return stack
 				}
+				data.LastMes = sended.MessageID
+				return stack
 			}
 			msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", GroupMenuTemplate, GroupTextTemplate(data.Group.ID, data.Group.Name, data.Group.InviteCode)))
 			keyboard, err := GroupKeyboard(stack.Bot, data.User.ID, data.Group.ID)
@@ -164,7 +258,7 @@ func Group(stack CallStack) CallStack {
 				return ReturnOnParent(stack)
 			}
 			// Remove previous Keyboard or set self
-			stack.LastMes = sended.MessageID
+			data.LastMes = sended.MessageID
 			return stack
 		}
 	}
@@ -186,8 +280,6 @@ func Group(stack CallStack) CallStack {
 					IsPrint: true,
 					Parent:  &stack,
 					Update:  nil,
-					LastMes: stack.LastMes,
-					Data:    "Created1",
 				})
 			case "Редактировать организацию":
 				return EditGroup(CallStack{
@@ -196,10 +288,9 @@ func Group(stack CallStack) CallStack {
 					IsPrint: true,
 					Parent:  &stack,
 					Update:  nil,
-					LastMes: stack.LastMes,
-					Data:    "Created1",
 				})
 			default:
+				data.LastMes = -1
 				return stack
 			}
 		}

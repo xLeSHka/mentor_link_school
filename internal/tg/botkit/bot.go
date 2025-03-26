@@ -20,7 +20,6 @@ type CallStack struct {
 	IsPrint bool
 	Parent  *CallStack
 	Data    string
-	LastMes int
 }
 type Data struct {
 	User    *models.User
@@ -28,6 +27,7 @@ type Data struct {
 	Profile *models.User
 	Size    int
 	Page    int
+	LastMes int
 }
 
 // Данные на время жизни приложения
@@ -90,7 +90,7 @@ func (b *Bot) Run() error {
 					userRuns[ID] = userRuns[ID].Action(stack)
 				} else {
 					if update.Message != nil {
-						userDatas[ID] = &Data{}
+						userDatas[ID] = &Data{LastMes: -1}
 						userRuns[ID] = MainMenu(CallStack{
 							ChatID:  ID,
 							Bot:     bot,
@@ -131,14 +131,15 @@ func GetChatID(update tgbotapi.Update) int64 {
 
 func ReturnOnParent(stack CallStack) CallStack {
 	if stack.Parent != nil {
+		if stack.Data == "Created3" {
+			stack.Parent.Parent.Parent.IsPrint = true
+			stack.Parent.Parent.Parent.Update = nil
+			return stack.Parent.Parent.Parent.Action(*stack.Parent.Parent.Parent)
+		}
 		if stack.Data == "Created" {
 			stack.Parent.Parent.IsPrint = true
 			stack.Parent.Parent.Update = nil
-			stack.Parent.Parent.LastMes = -1
 			return stack.Parent.Parent.Action(*stack.Parent.Parent)
-		}
-		if stack.Data == "Created1" {
-			stack.Parent.LastMes = -1
 		}
 		stack.Parent.IsPrint = true
 		stack.Parent.Update = nil

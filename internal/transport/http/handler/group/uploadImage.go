@@ -1,16 +1,21 @@
 package groupsRoute
 
 import (
+	"bytes"
 	"fmt"
+	"github.com/bachvtuan/mime2extension"
+	"github.com/gin-gonic/gin"
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 	"github.com/xLeSHka/mentorLinkSchool/internal/transport/http/pkg/jwt"
 	"github.com/xLeSHka/mentorLinkSchool/internal/utils/ws"
+	_ "golang.org/x/image/webp"
+	"image"
+	_ "image/jpeg"
+	_ "image/png"
+	"io"
 	"net/http"
 	"path/filepath"
-
-	"github.com/bachvtuan/mime2extension"
-	"github.com/gin-gonic/gin"
 )
 
 // @Summary Загрузка аватарки
@@ -51,6 +56,25 @@ func (h *Route) uploadAvatar(c *gin.Context) {
 	temp, err := file.Open()
 	if err != nil {
 		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
+		c.Abort()
+		return
+	}
+	buff := &bytes.Buffer{}
+	_, err = io.Copy(buff, temp)
+	if err != nil {
+		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
+		c.Abort()
+		return
+	}
+	decodeBuff := bytes.NewBuffer(buff.Bytes())
+	imgCfg, _, err := image.DecodeConfig(decodeBuff)
+	if err != nil {
+		httpError.New(http.StatusBadRequest, err.Error()).SendError(c)
+		c.Abort()
+		return
+	}
+	if file.Size > 10<<20 || imgCfg.Height+imgCfg.Width > 10000 || imgCfg.Height/imgCfg.Width > 20 || imgCfg.Width/imgCfg.Height > 20 {
+		httpError.New(http.StatusBadRequest, "Image dimensions are wrong!").SendError(c)
 		c.Abort()
 		return
 	}

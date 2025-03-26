@@ -64,12 +64,13 @@ func Groups(stack CallStack) CallStack {
 	stack.Action = Groups // Set self as current Action
 	data := userDatas[stack.ChatID]
 	if stack.IsPrint {
-		if stack.LastMes != -1 {
+		stack.IsPrint = false
+		if data.LastMes != -1 {
+			text := fmt.Sprintf("%s\n\nПожалуйста выберите организацию!", GroupsMenuTemplate)
 			stack.IsPrint = false
-			// Print UI
-			msg := tgbotapi.NewEditMessageText(stack.ChatID, stack.LastMes, fmt.Sprintf("%s\n\nПожалуйста выберите организацию!", GroupsMenuTemplate))
 			keyboard, err := GroupsKeyboard(stack.Bot, data.User.ID, data.Page, data.Size)
 			if err != nil {
+				data.LastMes = -1
 				data.Group = nil
 				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 				if err != nil {
@@ -79,15 +80,33 @@ func Groups(stack CallStack) CallStack {
 
 				return ReturnOnParent(stack)
 			}
-			msg.ReplyMarkup = &keyboard
-			_, err = stack.Bot.Api.Send(msg)
-			if err != nil {
-				log.Println(err, 1)
-				userDatas[stack.ChatID].Group = nil
-				return ReturnOnParent(stack)
+			if data.User.AvatarURL != nil {
+				msg := tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, text)
+
+				msg.ReplyMarkup = &keyboard
+				_, err = stack.Bot.Api.Send(msg)
+				if err != nil {
+					log.Println(err, 1)
+					userDatas[stack.ChatID].Group = nil
+					return ReturnOnParent(stack)
+				}
+				// Remove previous Keyboard or set self
+				return stack
+			} else {
+
+				// Print UI
+				msg := tgbotapi.NewEditMessageText(stack.ChatID, data.LastMes, text)
+
+				msg.ReplyMarkup = &keyboard
+				_, err = stack.Bot.Api.Send(msg)
+				if err != nil {
+					log.Println(err, 1)
+					userDatas[stack.ChatID].Group = nil
+					return ReturnOnParent(stack)
+				}
+				// Remove previous Keyboard or set self
+				return stack
 			}
-			// Remove previous Keyboard or set self
-			return stack
 		} else {
 			stack.IsPrint = false
 			// Print UI
@@ -110,7 +129,7 @@ func Groups(stack CallStack) CallStack {
 				userDatas[stack.ChatID].Group = nil
 				return ReturnOnParent(stack)
 			}
-			stack.LastMes = sended.MessageID
+			data.LastMes = sended.MessageID
 			// Remove previous Keyboard or set self
 			return stack
 		}
@@ -125,6 +144,7 @@ func Groups(stack CallStack) CallStack {
 					keyboard, err := GroupsKeyboard(stack.Bot, data.User.ID, data.Page, data.Size)
 					if err != nil {
 						data.Group = nil
+						data.LastMes = -1
 						_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 						if err != nil {
 							log.Println(err)
@@ -134,7 +154,7 @@ func Groups(stack CallStack) CallStack {
 
 						return ReturnOnParent(stack)
 					}
-					msg := tgbotapi.NewEditMessageReplyMarkup(stack.ChatID, stack.LastMes, keyboard)
+					msg := tgbotapi.NewEditMessageReplyMarkup(stack.ChatID, data.LastMes, keyboard)
 					_, err = stack.Bot.Api.Send(msg)
 					if err != nil {
 						log.Println(err)
@@ -148,6 +168,7 @@ func Groups(stack CallStack) CallStack {
 					data.Page += 1
 					keyboard, err := GroupsKeyboard(stack.Bot, data.User.ID, data.Page, data.Size)
 					if err != nil {
+						data.LastMes = -1
 						data.Group = nil
 						_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 						if err != nil {
@@ -157,7 +178,7 @@ func Groups(stack CallStack) CallStack {
 
 						return ReturnOnParent(stack)
 					}
-					msg := tgbotapi.NewEditMessageReplyMarkup(stack.ChatID, stack.LastMes, keyboard)
+					msg := tgbotapi.NewEditMessageReplyMarkup(stack.ChatID, data.LastMes, keyboard)
 					_, err = stack.Bot.Api.Send(msg)
 					if err != nil {
 						log.Println(err)
@@ -177,7 +198,9 @@ func Groups(stack CallStack) CallStack {
 				if err != nil {
 					log.Println(err)
 					userDatas[stack.ChatID].Group = nil
+					data.LastMes = -1
 					if err.(*httpError.HTTPError).StatusCode == http.StatusNotFound {
+
 						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nОрганизация не найдена!🤨🔎", ErrorMenuTemplate)))
 						if err != nil {
 							log.Println(err)
@@ -210,8 +233,6 @@ func Groups(stack CallStack) CallStack {
 					IsPrint: true,
 					Parent:  &stack,
 					Update:  nil,
-					LastMes: -1,
-					Data:    "Created1",
 				})
 			}
 		}

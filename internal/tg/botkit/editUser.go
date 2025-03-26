@@ -4,13 +4,18 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/bachvtuan/mime2extension"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
+	_ "golang.org/x/image/webp"
+	"image"
+	_ "image/jpeg"
+	_ "image/png"
 	"io"
 	"log"
+	"mime"
 	"net/http"
+	"path/filepath"
 	"strings"
 )
 
@@ -40,7 +45,7 @@ func EditUser(stack CallStack) CallStack {
 			bio := "Отсутствует"
 			data.User.BIO = &bio
 		}
-		if stack.LastMes == -1 {
+		if data.LastMes == -1 {
 			if data.User.AvatarURL != nil {
 				avatarURL, err := stack.Bot.MinioRepository.GetImage(*data.User.AvatarURL)
 				if err != nil {
@@ -64,11 +69,18 @@ func EditUser(stack CallStack) CallStack {
 					Name:   "picture",
 					Reader: response.Body,
 				}
-				_, err = stack.Bot.Api.Send(tgbotapi.NewPhoto(stack.ChatID, photoFileReader))
+				msg := tgbotapi.NewPhoto(stack.ChatID, photoFileReader)
+				keyboard := EditUserKeyboard()
+				text := fmt.Sprintf("%s\n\n%s\n\n%s", EditUserMenuTemplate, ProfileTextTemplate(data.User.ID, data.User.Name, *data.User.BIO), "Выберите что вы хотите отредактирвоать!")
+				msg.Caption = text
+				msg.ReplyMarkup = keyboard
+				sended, err := stack.Bot.Api.Send(msg)
 				if err != nil {
 					log.Println(err, -2, "ChatID ", stack.ChatID, "FileReader ", photoFileReader, "Url", avatarURL)
 					return stack
 				}
+				data.LastMes = sended.MessageID
+				return stack
 			}
 
 			keyboard := EditUserKeyboard()
@@ -80,11 +92,62 @@ func EditUser(stack CallStack) CallStack {
 				log.Println(err, 4)
 				return stack
 			}
-			stack.LastMes = sended.MessageID
+			data.LastMes = sended.MessageID
 		} else {
+			if data.User.AvatarURL != nil {
+				avatarURL, err := stack.Bot.MinioRepository.GetImage(*data.User.AvatarURL)
+				if err != nil {
+					data.LastMes = -1
+					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНе удалось получить ссылку на вашу аватарку!", ErrorMenuTemplate)))
+					if err != nil {
+						log.Println(err, 0)
+					}
+					return stack
+				}
+				avatarURL = strings.Split(avatarURL, "?X-Amz-Algorithm=AWS4-HMAC-SHA256")[0] + "?X-Amz-Algorithm=AWS4-HMAC-SHA256"
+				response, err := http.Get(avatarURL)
+				if err != nil {
+					data.LastMes = -1
+					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНе удалось загрузить вашу аватарку!", ErrorMenuTemplate)))
+					if err != nil {
+						log.Println(err, -1)
+					}
+					return stack
+				}
+				defer response.Body.Close()
+				photoFileReader := tgbotapi.FileReader{
+					Name:   "picture",
+					Reader: response.Body,
+				}
+				baseMedia := tgbotapi.BaseInputMedia{
+					Type:      "photo",
+					Media:     photoFileReader,
+					ParseMode: "markdown",
+				}
+				keyboard := EditUserKeyboard()
+				text := fmt.Sprintf("%s\n\n%s\n\n%s", EditUserMenuTemplate, ProfileTextTemplate(data.User.ID, data.User.Name, *data.User.BIO), "Выберите что вы хотите отредактирвоать!")
+
+				baseMedia.Caption = text
+				msg := tgbotapi.EditMessageMediaConfig{
+					BaseEdit: tgbotapi.BaseEdit{
+						ChatID:    stack.ChatID,
+						MessageID: data.LastMes,
+					},
+					Media: tgbotapi.InputMediaPhoto{
+						BaseInputMedia: baseMedia,
+					},
+				}
+				msg.ReplyMarkup = &keyboard
+				_, err = stack.Bot.Api.Send(msg)
+				if err != nil {
+					log.Println(err, -2, "ChatID ", stack.ChatID, "FileReader ", photoFileReader, "Url", avatarURL)
+					return stack
+				}
+				return stack
+			}
 			keyboard := EditUserKeyboard()
 			text := fmt.Sprintf("%s\n\n%s\n\n%s", EditUserMenuTemplate, ProfileTextTemplate(data.User.ID, data.User.Name, *data.User.BIO), "Выберите что вы хотите отредактирвоать!")
-			msg := tgbotapi.NewEditMessageText(stack.ChatID, stack.LastMes, text)
+			msg := tgbotapi.NewEditMessageText(stack.ChatID, data.LastMes, text)
 			msg.ReplyMarkup = &keyboard
 			_, err := stack.Bot.Api.Send(msg)
 			if err != nil {
@@ -95,6 +158,11 @@ func EditUser(stack CallStack) CallStack {
 		return stack
 	}
 	if stack.Update != nil {
+		if stack.Update.Message != nil {
+			data.LastMes = -1
+			stack.IsPrint = true
+			return stack
+		}
 		if stack.Update.CallbackQuery != nil {
 			msgText := stack.Update.CallbackQuery.Data
 			switch msgText {
@@ -105,8 +173,6 @@ func EditUser(stack CallStack) CallStack {
 					IsPrint: true,
 					Parent:  &stack,
 					Update:  nil,
-					LastMes: stack.LastMes,
-					Data:    "Created1",
 				})
 			case "БИО":
 				return EditBIO(CallStack{
@@ -115,8 +181,6 @@ func EditUser(stack CallStack) CallStack {
 					IsPrint: true,
 					Parent:  &stack,
 					Update:  nil,
-					LastMes: stack.LastMes,
-					Data:    "Created1",
 				})
 			case "Аватар":
 				return EditAvatar(CallStack{
@@ -125,12 +189,11 @@ func EditUser(stack CallStack) CallStack {
 					IsPrint: true,
 					Parent:  &stack,
 					Update:  nil,
-					LastMes: stack.LastMes,
-					Data:    "Created1",
 				})
 			case "⬅️ Назад":
 				return ReturnOnParent(stack)
 			default:
+				data.LastMes = -1
 				return stack
 			}
 		}
@@ -147,7 +210,7 @@ func EditName(stack CallStack) CallStack {
 			bio := "Отсутствует"
 			data.User.BIO = &bio
 		}
-		if stack.LastMes == -1 {
+		if data.LastMes == -1 {
 			if data.User.AvatarURL != nil {
 				avatarURL, err := stack.Bot.MinioRepository.GetImage(*data.User.AvatarURL)
 				if err != nil {
@@ -171,13 +234,19 @@ func EditName(stack CallStack) CallStack {
 					Name:   "picture",
 					Reader: response.Body,
 				}
-				_, err = stack.Bot.Api.Send(tgbotapi.NewPhoto(stack.ChatID, photoFileReader))
+				msg := tgbotapi.NewPhoto(stack.ChatID, photoFileReader)
+				keyboard := backInlineKeyboard()
+				text := fmt.Sprintf("%s\n\n%s", EditUserMenuTemplate, "Введите новое имя!")
+				msg.Caption = text
+				msg.ReplyMarkup = keyboard
+				sended, err := stack.Bot.Api.Send(msg)
 				if err != nil {
 					log.Println(err, -2, "ChatID ", stack.ChatID, "FileReader ", photoFileReader, "Url", avatarURL)
 					return stack
 				}
+				data.LastMes = sended.MessageID
+				return stack
 			}
-
 			keyboard := backInlineKeyboard()
 			text := fmt.Sprintf("%s\n\n%s", EditUserMenuTemplate, "Введите новое имя!")
 			msg := tgbotapi.NewMessage(stack.ChatID, text)
@@ -187,16 +256,27 @@ func EditName(stack CallStack) CallStack {
 				log.Println(err, 4)
 				return stack
 			}
-			stack.LastMes = sended.MessageID
+			data.LastMes = sended.MessageID
 		} else {
 			keyboard := backInlineKeyboard()
 			text := fmt.Sprintf("%s\n\n%s", EditUserMenuTemplate, "Введите новое имя!")
-			msg := tgbotapi.NewEditMessageText(stack.ChatID, stack.LastMes, text)
-			msg.ReplyMarkup = &keyboard
-			_, err := stack.Bot.Api.Send(msg)
-			if err != nil {
-				log.Println(err, 4)
-				return stack
+			if data.User.AvatarURL != nil {
+				msg := tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, text)
+				msg.ReplyMarkup = &keyboard
+				_, err := stack.Bot.Api.Send(msg)
+				if err != nil {
+					log.Println(err, 4)
+					return stack
+				}
+			} else {
+
+				msg := tgbotapi.NewEditMessageText(stack.ChatID, data.LastMes, text)
+				msg.ReplyMarkup = &keyboard
+				_, err := stack.Bot.Api.Send(msg)
+				if err != nil {
+					log.Println(err, 4)
+					return stack
+				}
 			}
 		}
 		return stack
@@ -210,6 +290,7 @@ func EditName(stack CallStack) CallStack {
 			}
 		}
 		if stack.Update.Message != nil {
+			data.LastMes = -1
 			msgText := stack.Update.Message.Text
 			if len(msgText) > 120 {
 				msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНевалидное имя!\nПожалуйста введите другое имя!", EditUserMenuTemplate))
@@ -222,7 +303,7 @@ func EditName(stack CallStack) CallStack {
 					return ReturnOnParent(stack)
 				}
 				stack.Update = nil
-				stack.LastMes = sended.MessageID
+				data.LastMes = sended.MessageID
 				return stack
 			}
 			user, err := stack.Bot.UsersService.Edit(context.Background(), data.User.ID, &models.User{Name: msgText})
@@ -257,7 +338,7 @@ func EditBIO(stack CallStack) CallStack {
 			bio := "Отсутствует"
 			data.User.BIO = &bio
 		}
-		if stack.LastMes == -1 {
+		if data.LastMes == -1 {
 			if data.User.AvatarURL != nil {
 				avatarURL, err := stack.Bot.MinioRepository.GetImage(*data.User.AvatarURL)
 				if err != nil {
@@ -281,13 +362,19 @@ func EditBIO(stack CallStack) CallStack {
 					Name:   "picture",
 					Reader: response.Body,
 				}
-				_, err = stack.Bot.Api.Send(tgbotapi.NewPhoto(stack.ChatID, photoFileReader))
+				msg := tgbotapi.NewPhoto(stack.ChatID, photoFileReader)
+				keyboard := backInlineKeyboard()
+				text := fmt.Sprintf("%s\n\n%s", EditUserMenuTemplate, "Введите новое БИО!")
+				msg.Caption = text
+				msg.ReplyMarkup = keyboard
+				sended, err := stack.Bot.Api.Send(msg)
 				if err != nil {
 					log.Println(err, -2, "ChatID ", stack.ChatID, "FileReader ", photoFileReader, "Url", avatarURL)
 					return stack
 				}
+				data.LastMes = sended.MessageID
+				return stack
 			}
-
 			keyboard := backInlineKeyboard()
 			text := fmt.Sprintf("%s\n\n%s", EditUserMenuTemplate, "Введите новое БИО!")
 			msg := tgbotapi.NewMessage(stack.ChatID, text)
@@ -297,16 +384,28 @@ func EditBIO(stack CallStack) CallStack {
 				log.Println(err, 4)
 				return stack
 			}
-			stack.LastMes = sended.MessageID
+			data.LastMes = sended.MessageID
 		} else {
+
 			keyboard := backInlineKeyboard()
 			text := fmt.Sprintf("%s\n\n%s", EditUserMenuTemplate, "Введите новое БИО!")
-			msg := tgbotapi.NewEditMessageText(stack.ChatID, stack.LastMes, text)
-			msg.ReplyMarkup = &keyboard
-			_, err := stack.Bot.Api.Send(msg)
-			if err != nil {
-				log.Println(err, 4)
-				return stack
+			if data.User.AvatarURL != nil {
+
+				msg := tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, text)
+				msg.ReplyMarkup = &keyboard
+				_, err := stack.Bot.Api.Send(msg)
+				if err != nil {
+					log.Println(err, 4)
+					return stack
+				}
+			} else {
+				msg := tgbotapi.NewEditMessageText(stack.ChatID, data.LastMes, text)
+				msg.ReplyMarkup = &keyboard
+				_, err := stack.Bot.Api.Send(msg)
+				if err != nil {
+					log.Println(err, 4)
+					return stack
+				}
 			}
 		}
 		return stack
@@ -320,6 +419,7 @@ func EditBIO(stack CallStack) CallStack {
 			}
 		}
 		if stack.Update.Message != nil {
+			data.LastMes = -1
 			msgText := stack.Update.Message.Text
 			if len(msgText) > 120 {
 				msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНевалидное БИО!\nПожалуйста введите другое БИО!", EditUserMenuTemplate))
@@ -332,7 +432,7 @@ func EditBIO(stack CallStack) CallStack {
 					return ReturnOnParent(stack)
 				}
 				stack.Update = nil
-				stack.LastMes = sended.MessageID
+				data.LastMes = sended.MessageID
 				return stack
 			}
 			user, err := stack.Bot.UsersService.Edit(context.Background(), data.User.ID, &models.User{BIO: &msgText})
@@ -357,6 +457,18 @@ func EditBIO(stack CallStack) CallStack {
 	}
 	return stack
 }
+func checkPhoto(buff *bytes.Buffer, imgCfg image.Config) string {
+	if len(buff.Bytes()) > 10<<20 {
+		return "Размер изображения не может превышать 10 мегабайт!"
+	}
+	if imgCfg.Height+imgCfg.Width > 10000 {
+		return "Сумма высоты и ширины изображения не может превышать 10000!"
+	}
+	if imgCfg.Height/imgCfg.Width > 20 || imgCfg.Width/imgCfg.Height > 20 {
+		return "Соотношение сторон изображения не может быть больше 20!"
+	}
+	return "Неопознанная ошибка!"
+}
 func EditAvatar(stack CallStack) CallStack {
 	stack.Action = EditAvatar
 	data := userDatas[stack.ChatID]
@@ -366,7 +478,7 @@ func EditAvatar(stack CallStack) CallStack {
 			bio := "Отсутствует"
 			data.User.BIO = &bio
 		}
-		if stack.LastMes == -1 {
+		if data.LastMes == -1 {
 			if data.User.AvatarURL != nil {
 				avatarURL, err := stack.Bot.MinioRepository.GetImage(*data.User.AvatarURL)
 				if err != nil {
@@ -390,11 +502,18 @@ func EditAvatar(stack CallStack) CallStack {
 					Name:   "picture",
 					Reader: response.Body,
 				}
-				_, err = stack.Bot.Api.Send(tgbotapi.NewPhoto(stack.ChatID, photoFileReader))
+				msg := tgbotapi.NewPhoto(stack.ChatID, photoFileReader)
+				keyboard := backInlineKeyboard()
+				text := fmt.Sprintf("%s\n\n%s", EditUserMenuTemplate, "Загрузите новую аватарку без сжатия!")
+				msg.Caption = text
+				msg.ReplyMarkup = keyboard
+				sended, err := stack.Bot.Api.Send(msg)
 				if err != nil {
 					log.Println(err, -2, "ChatID ", stack.ChatID, "FileReader ", photoFileReader, "Url", avatarURL)
 					return stack
 				}
+				data.LastMes = sended.MessageID
+				return stack
 			}
 
 			keyboard := backInlineKeyboard()
@@ -406,11 +525,61 @@ func EditAvatar(stack CallStack) CallStack {
 				log.Println(err, 4)
 				return stack
 			}
-			stack.LastMes = sended.MessageID
+			data.LastMes = sended.MessageID
 		} else {
+			if data.User.AvatarURL != nil {
+				avatarURL, err := stack.Bot.MinioRepository.GetImage(*data.User.AvatarURL)
+				if err != nil {
+					data.LastMes = -1
+					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНе удалось получить ссылку на вашу аватарку!", ErrorMenuTemplate)))
+					if err != nil {
+						log.Println(err, 0)
+					}
+					return stack
+				}
+				avatarURL = strings.Split(avatarURL, "?X-Amz-Algorithm=AWS4-HMAC-SHA256")[0] + "?X-Amz-Algorithm=AWS4-HMAC-SHA256"
+				response, err := http.Get(avatarURL)
+				if err != nil {
+					data.LastMes = -1
+					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНе удалось загрузить вашу аватарку!", ErrorMenuTemplate)))
+					if err != nil {
+						log.Println(err, -1)
+					}
+					return stack
+				}
+				defer response.Body.Close()
+				photoFileReader := tgbotapi.FileReader{
+					Name:   "picture",
+					Reader: response.Body,
+				}
+				baseMedia := tgbotapi.BaseInputMedia{
+					Type:      "photo",
+					Media:     photoFileReader,
+					ParseMode: "markdown",
+				}
+				keyboard := backInlineKeyboard()
+				text := fmt.Sprintf("%s\n\n%s", EditUserMenuTemplate, "Загрузите новую аватарку без сжатия!")
+				baseMedia.Caption = text
+				msg := tgbotapi.EditMessageMediaConfig{
+					BaseEdit: tgbotapi.BaseEdit{
+						ChatID:    stack.ChatID,
+						MessageID: data.LastMes,
+					},
+					Media: tgbotapi.InputMediaPhoto{
+						BaseInputMedia: baseMedia,
+					},
+				}
+				msg.ReplyMarkup = &keyboard
+				_, err = stack.Bot.Api.Send(msg)
+				if err != nil {
+					log.Println(err, -2, "ChatID ", stack.ChatID, "FileReader ", photoFileReader, "Url", avatarURL)
+					return stack
+				}
+				return stack
+			}
 			keyboard := backInlineKeyboard()
 			text := fmt.Sprintf("%s\n\n%s", EditUserMenuTemplate, "Загрузите новую аватарку без сжатия!")
-			msg := tgbotapi.NewEditMessageText(stack.ChatID, stack.LastMes, text)
+			msg := tgbotapi.NewEditMessageText(stack.ChatID, data.LastMes, text)
 			msg.ReplyMarkup = &keyboard
 			_, err := stack.Bot.Api.Send(msg)
 			if err != nil {
@@ -429,6 +598,7 @@ func EditAvatar(stack CallStack) CallStack {
 			}
 		}
 		if stack.Update.Message.Document != nil {
+			data.LastMes = -1
 			photo := stack.Update.Message.Document
 			toSave, err := stack.Bot.Api.GetFile(tgbotapi.FileConfig{
 				FileID: photo.FileID,
@@ -442,6 +612,7 @@ func EditAvatar(stack CallStack) CallStack {
 				}
 				return ReturnOnParent(stack)
 			}
+
 			url := fmt.Sprintf("https://api.telegram.org/file/bot%s/%s", stack.Bot.Api.Token, toSave.FilePath)
 			req, err := http.NewRequest(http.MethodGet, url, nil)
 			if err != nil {
@@ -464,6 +635,7 @@ func EditAvatar(stack CallStack) CallStack {
 				return ReturnOnParent(stack)
 			}
 			defer resp.Body.Close()
+
 			buff := &bytes.Buffer{}
 			_, err = io.Copy(buff, resp.Body)
 			if err != nil {
@@ -475,10 +647,30 @@ func EditAvatar(stack CallStack) CallStack {
 				}
 				return ReturnOnParent(stack)
 			}
-			mime := http.DetectContentType(buff.Bytes())
-			_, ext := mime2extension.Extension(mime)
+			decodeBuff := bytes.NewBuffer(buff.Bytes())
+			imgCfg, _, err := image.DecodeConfig(decodeBuff)
+			if err != nil {
+				log.Println(err)
+				_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, "Не удалось декодировать изображение!")))
+				if err != nil {
+					log.Println(err)
+					return ReturnOnParent(stack)
+				}
+				return stack
+			}
+			if len(buff.Bytes()) > 10<<20 || imgCfg.Height+imgCfg.Width > 10000 || imgCfg.Height/imgCfg.Width > 20 || imgCfg.Width/imgCfg.Height > 20 {
+				_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s\n\n%s", ErrorMenuTemplate, "Изображение не подходит по формату!", checkPhoto(buff, imgCfg))))
+				if err != nil {
+					log.Println(err)
+					return ReturnOnParent(stack)
+				}
+				return stack
+			}
+			ext := filepath.Ext(photo.FileName)
+			mime := mime.TypeByExtension(ext)
+			log.Println(ext, mime, buff.Len(), toSave.FileSize)
 			f := &models.File{
-				Filename: data.User.ID.String() + "." + ext,
+				Filename: data.User.ID.String() + ext,
 				File:     buff,
 				Size:     int64(toSave.FileSize),
 				Mimetype: mime,
