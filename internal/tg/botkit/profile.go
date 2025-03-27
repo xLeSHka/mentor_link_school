@@ -412,7 +412,7 @@ func Profile(stack CallStack) CallStack {
 						}
 						return ReturnOnParent(stack)
 					} else if err.(*httpError.HTTPError).StatusCode == http.StatusUnprocessableEntity {
-						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНельзя удалять последнюю роль пользоввателя!", ErrorMenuTemplate)))
+						_, err := stack.Bot.Api.Send(tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, fmt.Sprintf("%s\n\nНельзя удалять последнюю роль пользоввателя!", ErrorMenuTemplate)))
 						if err != nil {
 							log.Println(err)
 							return ReturnOnParent(stack)
@@ -577,7 +577,7 @@ func Profile(stack CallStack) CallStack {
 						}
 						return ReturnOnParent(stack)
 					} else if err.(*httpError.HTTPError).StatusCode == http.StatusUnprocessableEntity {
-						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНельзя удалять последнюю роль пользоввателя!", ErrorMenuTemplate)))
+						_, err := stack.Bot.Api.Send(tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, fmt.Sprintf("%s\n\nНельзя удалять последнюю роль пользоввателя!", ErrorMenuTemplate)))
 						if err != nil {
 							log.Println(err)
 							return ReturnOnParent(stack)
