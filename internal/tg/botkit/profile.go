@@ -412,7 +412,22 @@ func Profile(stack CallStack) CallStack {
 						}
 						return ReturnOnParent(stack)
 					} else if err.(*httpError.HTTPError).StatusCode == http.StatusUnprocessableEntity {
-						_, err := stack.Bot.Api.Send(tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, fmt.Sprintf("%s\n\nНельзя удалять последнюю роль пользоввателя!", ErrorMenuTemplate)))
+						keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, data.Group.ID, stack.Bot)
+						if err != nil {
+							data.Profile = nil
+							data.LastMes = -1
+							log.Println(err)
+							_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
+							if err != nil {
+								log.Println(err)
+								return ReturnOnParent(stack)
+							}
+
+							return ReturnOnParent(stack)
+						}
+						msg := tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, fmt.Sprintf("%s\n\nНельзя удалять последнюю роль пользоввателя!", ErrorMenuTemplate))
+						msg.ReplyMarkup = &keyboard
+						_, err := stack.Bot.Api.Send(msg)
 						if err != nil {
 							log.Println(err)
 							return ReturnOnParent(stack)
@@ -577,7 +592,22 @@ func Profile(stack CallStack) CallStack {
 						}
 						return ReturnOnParent(stack)
 					} else if err.(*httpError.HTTPError).StatusCode == http.StatusUnprocessableEntity {
-						_, err := stack.Bot.Api.Send(tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, fmt.Sprintf("%s\n\nНельзя удалять последнюю роль пользоввателя!", ErrorMenuTemplate)))
+						keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, data.Group.ID, stack.Bot)
+						if err != nil {
+							data.Profile = nil
+							data.LastMes = -1
+							log.Println(err)
+							_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
+							if err != nil {
+								log.Println(err)
+								return ReturnOnParent(stack)
+							}
+
+							return ReturnOnParent(stack)
+						}
+						msg := tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, fmt.Sprintf("%s\n\nНельзя удалять последнюю роль пользоввателя!", ErrorMenuTemplate))
+						msg.ReplyMarkup = &keyboard
+						_, err := stack.Bot.Api.Send(msg)
 						if err != nil {
 							log.Println(err)
 							return ReturnOnParent(stack)

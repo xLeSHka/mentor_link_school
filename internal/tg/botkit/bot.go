@@ -86,6 +86,16 @@ func (b *Bot) Run() error {
 			ID := GetChatID(update)
 			if ID != 0 {
 				stack := userRuns[ID]
+				if update.Message.Command() != "" {
+					userDatas[ID] = &Data{LastMes: -1}
+					userRuns[ID] = MainMenu(CallStack{
+						ChatID:  ID,
+						Bot:     bot,
+						Update:  &update,
+						IsPrint: true,
+						Data:    update.Message.From.UserName,
+					})
+				}
 				if stack.Action != nil {
 					stack.Update = &update
 					userRuns[ID] = userRuns[ID].Action(stack)
