@@ -400,28 +400,33 @@ func Profile(stack CallStack) CallStack {
 					Role:    "mentor",
 				})
 				if err != nil {
-					data.Profile = nil
-					data.LastMes = -1
+
 					log.Println(err)
 					if err.(*httpError.HTTPError).StatusCode == http.StatusNotFound {
+						data.Profile = nil
+						data.LastMes = -1
 						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nПользователь не найден!", ErrorMenuTemplate)))
 						if err != nil {
 							log.Println(err)
 							return ReturnOnParent(stack)
 						}
+						return ReturnOnParent(stack)
 					} else if err.(*httpError.HTTPError).StatusCode == http.StatusUnprocessableEntity {
 						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНельзя удалять последнюю роль пользоввателя!", ErrorMenuTemplate)))
 						if err != nil {
 							log.Println(err)
-							stack.IsPrint = true
-							return stack
+							return ReturnOnParent(stack)
 						}
+						return stack
 					} else {
+						data.Profile = nil
+						data.LastMes = -1
 						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 						if err != nil {
 							log.Println(err)
 							return ReturnOnParent(stack)
 						}
+						return ReturnOnParent(stack)
 					}
 				}
 				roles, _ = stack.Bot.GroupService.GetRoles(context.Background(), data.Profile.ID, data.Group.ID)
@@ -560,28 +565,33 @@ func Profile(stack CallStack) CallStack {
 					Role:    "student",
 				})
 				if err != nil {
-					data.Profile = nil
 					log.Println(err)
-					data.LastMes = -1
+
 					if err.(*httpError.HTTPError).StatusCode == http.StatusNotFound {
+						data.Profile = nil
+						data.LastMes = -1
 						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nПользователь не найден!", ErrorMenuTemplate)))
 						if err != nil {
 							log.Println(err)
 							return ReturnOnParent(stack)
 						}
+						return ReturnOnParent(stack)
 					} else if err.(*httpError.HTTPError).StatusCode == http.StatusUnprocessableEntity {
 						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНельзя удалять последнюю роль пользоввателя!", ErrorMenuTemplate)))
 						if err != nil {
 							log.Println(err)
-							stack.IsPrint = true
-							return stack
+							return ReturnOnParent(stack)
 						}
+						return stack
 					} else {
+						data.Profile = nil
+						data.LastMes = -1
 						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 						if err != nil {
 							log.Println(err)
 							return ReturnOnParent(stack)
 						}
+						return ReturnOnParent(stack)
 					}
 				}
 				roles, err = stack.Bot.GroupService.GetRoles(context.Background(), data.Profile.ID, data.Group.ID)
