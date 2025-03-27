@@ -8,7 +8,6 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
 	"log"
 	"net/http"
-	"strings"
 )
 
 func GroupKeyboard(bot *Bot, userID, groupID uuid.UUID) (tgbotapi.InlineKeyboardMarkup, error) {
