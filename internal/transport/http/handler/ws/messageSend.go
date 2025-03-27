@@ -96,7 +96,7 @@ func (p *WebSocket) Echo() {
 					log.Println(err)
 				}
 			case "accepted":
-				id, err := p.UsersService.GetTelegramID(context.Background(), val.Request.MentorID)
+				id, err := p.UsersService.GetTelegramID(context.Background(), val.Request.StudentID)
 				if err != nil {
 					log.Println(err)
 					continue
@@ -106,7 +106,7 @@ func (p *WebSocket) Echo() {
 					log.Println(err)
 				}
 			case "rejected":
-				id, err := p.UsersService.GetTelegramID(context.Background(), val.Request.MentorID)
+				id, err := p.UsersService.GetTelegramID(context.Background(), val.Request.StudentID)
 				if err != nil {
 					log.Println(err)
 					continue
