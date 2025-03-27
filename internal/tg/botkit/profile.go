@@ -355,16 +355,19 @@ func Profile(stack CallStack) CallStack {
 					return ReturnOnParent(stack)
 				}
 				id, err := stack.Bot.UsersService.GetTelegramID(context.Background(), data.Profile.ID)
+				if err == nil {
+					_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам добавили роль ментора в организации %s", data.Group.Name)))
+					if err != nil {
+						log.Println(err)
+					}
+				}
 				if err != nil {
 					log.Println(err)
 					if err.(*httpError.HTTPError).StatusCode != http.StatusUnprocessableEntity {
 						return ReturnOnParent(stack)
 					}
 				}
-				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам добавили роль ментора в организации %s", data.Group.Name)))
-				if err != nil {
-					log.Println(err)
-				}
+
 				text := fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.Telegram, stack.Data, isPair, profile.BIO, roles))
 				if data.Profile.AvatarURL != nil {
 					msg := tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, text)
@@ -438,15 +441,18 @@ func Profile(stack CallStack) CallStack {
 					return ReturnOnParent(stack)
 				}
 				id, err := stack.Bot.UsersService.GetTelegramID(context.Background(), data.Profile.ID)
+
 				if err != nil {
 					log.Println(err)
 					if err.(*httpError.HTTPError).StatusCode != http.StatusUnprocessableEntity {
 						return ReturnOnParent(stack)
 					}
 				}
-				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам удалили роль ментора в организации %s", data.Group.Name)))
-				if err != nil {
-					log.Println(err)
+				if err == nil {
+					_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам удалили роль ментора в организации %s", data.Group.Name)))
+					if err != nil {
+						log.Println(err)
+					}
 				}
 				if data.Profile.AvatarURL != nil {
 					msg := tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, text)
@@ -511,16 +517,19 @@ func Profile(stack CallStack) CallStack {
 					return ReturnOnParent(stack)
 				}
 				id, err := stack.Bot.UsersService.GetTelegramID(context.Background(), data.Profile.ID)
+				if err == nil {
+					_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам добавили роль студента в организации %s", data.Group.Name)))
+					if err != nil {
+						log.Println(err)
+					}
+				}
 				if err != nil {
 					log.Println(err)
 					if err.(*httpError.HTTPError).StatusCode != http.StatusUnprocessableEntity {
 						return ReturnOnParent(stack)
 					}
 				}
-				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам добавили роль студента в организации %s", data.Group.Name)))
-				if err != nil {
-					log.Println(err)
-				}
+
 				text := fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.Telegram, stack.Data, isPair, profile.BIO, roles))
 				if data.Profile.AvatarURL != nil {
 					msg := tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, text)
@@ -591,17 +600,19 @@ func Profile(stack CallStack) CallStack {
 					return ReturnOnParent(stack)
 				}
 				id, err := stack.Bot.UsersService.GetTelegramID(context.Background(), data.Profile.ID)
+				if err == nil {
+					_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам удалили роль студента в организации %s", data.Group.Name)))
+					if err != nil {
+						log.Println(err)
+					}
+				}
 				if err != nil {
 					log.Println(err)
 					if err.(*httpError.HTTPError).StatusCode != http.StatusUnprocessableEntity {
 						return ReturnOnParent(stack)
 					}
+				}
 
-				}
-				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам удалили роль студента в организации %s", data.Group.Name)))
-				if err != nil {
-					log.Println(err)
-				}
 				text := fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.Telegram, stack.Data, isPair, profile.BIO, roles))
 				if data.Profile.AvatarURL != nil {
 					msg := tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, text)
