@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 	"gorm.io/gorm"
+	"log"
 	"net/http"
 
 	"github.com/xLeSHka/mentorLinkSchool/internal/app/httpError"
@@ -17,9 +18,10 @@ func (r *GroupRepository) RemoveRole(ctx context.Context, role *models.Role) err
 		tx.Rollback()
 		return err
 	}
+	log.Println(c)
 	if c == 1 {
-		var role models.Role
-		err := tx.Model(&models.Role{}).Where("user_id = ? AND group_id = ? AND role = ?", role.UserID, role.GroupID, role.Role).First(&role).Error
+		var r models.Role
+		err := tx.Model(&models.Role{}).Where("user_id = ? AND group_id = ? AND role = ?", role.UserID, role.GroupID, role.Role).First(&r).Error
 		if err == nil {
 			return gorm.ErrInvalidTransaction
 		}

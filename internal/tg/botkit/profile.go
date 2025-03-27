@@ -576,7 +576,7 @@ func Profile(stack CallStack) CallStack {
 						}
 					}
 				}
-				roles, _ = stack.Bot.GroupService.GetRoles(context.Background(), data.Profile.ID, data.Group.ID)
+				roles, err = stack.Bot.GroupService.GetRoles(context.Background(), data.Profile.ID, data.Group.ID)
 
 				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, data.Group.ID, stack.Bot)
 				if err != nil {
