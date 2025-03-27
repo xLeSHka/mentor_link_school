@@ -6,7 +6,6 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 	"log"
 	"net/http"
-	"strings"
 )
 
 func AuthedMenuKeyboard(bot *Bot, telegram string) (tgbotapi.InlineKeyboardMarkup, error) {
@@ -47,9 +46,9 @@ func AuthedMenu(stack CallStack) CallStack {
 					}
 					return stack
 				}
-				avatarURL = strings.Split(avatarURL, "?X-Amz-Algorithm=AWS4-HMAC-SHA256")[0] + "?X-Amz-Algorithm=AWS4-HMAC-SHA256"
 				response, err := http.Get(avatarURL)
 				if err != nil {
+					log.Println(err, 0)
 					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНе удалось загрузить вашу аватарку!", ErrorMenuTemplate)))
 					if err != nil {
 						log.Println(err, -1)
@@ -116,10 +115,10 @@ func AuthedMenu(stack CallStack) CallStack {
 					}
 					return stack
 				}
-				avatarURL = strings.Split(avatarURL, "?X-Amz-Algorithm=AWS4-HMAC-SHA256")[0] + "?X-Amz-Algorithm=AWS4-HMAC-SHA256"
 				response, err := http.Get(avatarURL)
 				if err != nil {
 					data.LastMes = -1
+					log.Println(err)
 					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНе удалось загрузить вашу аватарку!", ErrorMenuTemplate)))
 					if err != nil {
 						log.Println(err, -1)

@@ -73,7 +73,7 @@ func Mentors(stack CallStack) CallStack {
 					}
 					return stack
 				}
-				avatarURL = strings.Split(avatarURL, "?X-Amz-Algorithm=AWS4-HMAC-SHA256")[0] + "?X-Amz-Algorithm=AWS4-HMAC-SHA256"
+
 				response, err := http.Get(avatarURL)
 				if err != nil {
 					data.LastMes = -1
@@ -149,7 +149,7 @@ func Mentors(stack CallStack) CallStack {
 					}
 					return stack
 				}
-				avatarURL = strings.Split(avatarURL, "?X-Amz-Algorithm=AWS4-HMAC-SHA256")[0] + "?X-Amz-Algorithm=AWS4-HMAC-SHA256"
+
 				response, err := http.Get(avatarURL)
 				if err != nil {
 					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНе удалось загрузить вашу аватарку!", ErrorMenuTemplate)))

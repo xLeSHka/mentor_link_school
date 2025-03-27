@@ -6,7 +6,6 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"log"
 	"net/http"
-	"strings"
 )
 
 func Stat(stack CallStack) CallStack {
@@ -36,7 +35,7 @@ func Stat(stack CallStack) CallStack {
 					}
 					return stack
 				}
-				avatarURL = strings.Split(avatarURL, "?X-Amz-Algorithm=AWS4-HMAC-SHA256")[0] + "?X-Amz-Algorithm=AWS4-HMAC-SHA256"
+
 				response, err := http.Get(avatarURL)
 				if err != nil {
 					data.LastMes = -1
@@ -100,7 +99,7 @@ func Stat(stack CallStack) CallStack {
 					}
 					return stack
 				}
-				avatarURL = strings.Split(avatarURL, "?X-Amz-Algorithm=AWS4-HMAC-SHA256")[0] + "?X-Amz-Algorithm=AWS4-HMAC-SHA256"
+
 				response, err := http.Get(avatarURL)
 				if err != nil {
 					_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНе удалось загрузить вашу аватарку!", ErrorMenuTemplate)))
