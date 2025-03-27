@@ -427,7 +427,7 @@ func Profile(stack CallStack) CallStack {
 						}
 						msg := tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, fmt.Sprintf("%s\n\nНельзя удалять последнюю роль пользоввателя!", ErrorMenuTemplate))
 						msg.ReplyMarkup = &keyboard
-						_, err := stack.Bot.Api.Send(msg)
+						_, err = stack.Bot.Api.Send(msg)
 						if err != nil {
 							log.Println(err)
 							return ReturnOnParent(stack)
@@ -607,7 +607,7 @@ func Profile(stack CallStack) CallStack {
 						}
 						msg := tgbotapi.NewEditMessageCaption(stack.ChatID, data.LastMes, fmt.Sprintf("%s\n\nНельзя удалять последнюю роль пользоввателя!", ErrorMenuTemplate))
 						msg.ReplyMarkup = &keyboard
-						_, err := stack.Bot.Api.Send(msg)
+						_, err = stack.Bot.Api.Send(msg)
 						if err != nil {
 							log.Println(err)
 							return ReturnOnParent(stack)
