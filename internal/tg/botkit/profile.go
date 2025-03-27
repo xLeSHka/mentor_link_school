@@ -11,9 +11,9 @@ import (
 	"net/http"
 )
 
-func ProfileKeyboard(roles []*models.Role, curRole string, isReq bool, userID uuid.UUID, bot *Bot) (tgbotapi.InlineKeyboardMarkup, error) {
+func ProfileKeyboard(roles []*models.Role, curRole string, isReq bool, userID, groupID uuid.UUID, bot *Bot) (tgbotapi.InlineKeyboardMarkup, error) {
 	rows := make([][]tgbotapi.InlineKeyboardButton, 0, 3)
-	userRoles, err := bot.GroupService.GetRoles(context.Background(), userID, roles[0].GroupID)
+	userRoles, err := bot.GroupService.GetRoles(context.Background(), userID, groupID)
 	if err != nil {
 		return tgbotapi.InlineKeyboardMarkup{}, err
 	}
@@ -170,7 +170,7 @@ func Profile(stack CallStack) CallStack {
 					Media:     photoFileReader,
 					ParseMode: "markdown",
 				}
-				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, stack.Bot)
+				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, data.Group.ID, stack.Bot)
 				if err != nil {
 					data.LastMes = -1
 					data.Profile = nil
@@ -205,7 +205,7 @@ func Profile(stack CallStack) CallStack {
 			stack.IsPrint = false
 			// Print UI
 			msg := tgbotapi.NewEditMessageText(stack.ChatID, data.LastMes, fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.Telegram, stack.Data, isPair, profile.BIO, roles)))
-			keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, stack.Bot)
+			keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, data.Group.ID, stack.Bot)
 			if err != nil {
 				data.LastMes = -1
 				data.Profile = nil
@@ -253,7 +253,7 @@ func Profile(stack CallStack) CallStack {
 					Reader: response.Body,
 				}
 				msg := tgbotapi.NewPhoto(stack.ChatID, photoFileReader)
-				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, stack.Bot)
+				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, data.Group.ID, stack.Bot)
 				if err != nil {
 					data.Profile = nil
 					_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
@@ -276,7 +276,7 @@ func Profile(stack CallStack) CallStack {
 				return stack
 			}
 			msg := tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.Telegram, stack.Data, isPair, profile.BIO, roles)))
-			keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, stack.Bot)
+			keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, data.Group.ID, stack.Bot)
 			if err != nil {
 				data.Profile = nil
 				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
@@ -338,7 +338,7 @@ func Profile(stack CallStack) CallStack {
 
 				}
 				roles, _ = stack.Bot.GroupService.GetRoles(context.Background(), data.Profile.ID, data.Group.ID)
-				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, stack.Bot)
+				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, data.Group.ID, stack.Bot)
 				if err != nil {
 					data.LastMes = -1
 					data.Profile = nil
@@ -393,8 +393,15 @@ func Profile(stack CallStack) CallStack {
 				if err != nil {
 					data.Profile = nil
 					data.LastMes = -1
+					log.Println(err)
 					if err.(*httpError.HTTPError).StatusCode == http.StatusNotFound {
 						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nПользователь не найден!", ErrorMenuTemplate)))
+						if err != nil {
+							log.Println(err)
+							return ReturnOnParent(stack)
+						}
+					} else if err.(*httpError.HTTPError).StatusCode == http.StatusUnprocessableEntity {
+						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНельзя удалять последнюю роль пользоввателя!", ErrorMenuTemplate)))
 						if err != nil {
 							log.Println(err)
 							return ReturnOnParent(stack)
@@ -410,7 +417,7 @@ func Profile(stack CallStack) CallStack {
 				roles, _ = stack.Bot.GroupService.GetRoles(context.Background(), data.Profile.ID, data.Group.ID)
 				text := fmt.Sprintf("%s\n\n%s", MemberMenuTemplate, MemberMenuTextTemplate(profile.ID, profile.Name, profile.Telegram, stack.Data, isPair, profile.BIO, roles))
 
-				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, stack.Bot)
+				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, data.Group.ID, stack.Bot)
 				if err != nil {
 					data.Profile = nil
 					data.LastMes = -1
@@ -479,7 +486,7 @@ func Profile(stack CallStack) CallStack {
 				}
 				roles, _ = stack.Bot.GroupService.GetRoles(context.Background(), data.Profile.ID, data.Group.ID)
 
-				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, stack.Bot)
+				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, data.Group.ID, stack.Bot)
 				if err != nil {
 					data.Profile = nil
 					data.LastMes = -1
@@ -531,9 +538,16 @@ func Profile(stack CallStack) CallStack {
 				})
 				if err != nil {
 					data.Profile = nil
+					log.Println(err)
 					data.LastMes = -1
 					if err.(*httpError.HTTPError).StatusCode == http.StatusNotFound {
 						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nПользователь не найден!", ErrorMenuTemplate)))
+						if err != nil {
+							log.Println(err)
+							return ReturnOnParent(stack)
+						}
+					} else if err.(*httpError.HTTPError).StatusCode == http.StatusUnprocessableEntity {
+						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНельзя удалять последнюю роль пользоввателя!", ErrorMenuTemplate)))
 						if err != nil {
 							log.Println(err)
 							return ReturnOnParent(stack)
@@ -548,7 +562,7 @@ func Profile(stack CallStack) CallStack {
 				}
 				roles, _ = stack.Bot.GroupService.GetRoles(context.Background(), data.Profile.ID, data.Group.ID)
 
-				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, stack.Bot)
+				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, data.Group.ID, stack.Bot)
 				if err != nil {
 					data.Profile = nil
 					data.LastMes = -1

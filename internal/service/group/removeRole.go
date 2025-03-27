@@ -23,6 +23,9 @@ func (s *GroupsService) RemoveRole(ctx context.Context, role *models.Role) error
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return httpError.New(http.StatusNotFound, "User Not Found")
 		}
+		if errors.Is(err, gorm.ErrInvalidTransaction) {
+			return httpError.New(http.StatusUnprocessableEntity, "Can not delete last users role")
+		}
 		return httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	err = s.cacheRepository.RemoveRoles(ctx, []*models.Role{role})

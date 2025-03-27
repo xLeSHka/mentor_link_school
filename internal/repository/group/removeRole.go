@@ -10,6 +10,19 @@ import (
 
 func (r *GroupRepository) RemoveRole(ctx context.Context, role *models.Role) error {
 	tx := r.DB.Begin()
+	var c int64
+	err := tx.Model(&models.Role{}).Where("user_id = ? AND group_id = ?", role.UserID, role.GroupID).Count(&c).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	if c == 1 {
+		var role models.Role
+		err := tx.Model(&models.Role{}).Where("user_id = ? AND group_id = ? AND role = ?", role.UserID, role.GroupID, role.Role).First(&role).Error
+		if err == nil {
+			return
+		}
+	}
 	if role.Role == "mentor" {
 		err := tx.Where("mentor_id = ? AND group_id = ?", role.UserID, role.GroupID).Delete(&models.HelpRequest{}).Error
 
