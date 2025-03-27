@@ -16,7 +16,6 @@ import (
 	"mime"
 	"net/http"
 	"path/filepath"
-	"strings"
 )
 
 func EditUserKeyboard() tgbotapi.InlineKeyboardMarkup {

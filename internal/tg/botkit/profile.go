@@ -9,7 +9,6 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 	"log"
 	"net/http"
-	"strings"
 )
 
 func ProfileKeyboard(roles []*models.Role, curRole string, isReq bool, userID uuid.UUID, bot *Bot) (tgbotapi.InlineKeyboardMarkup, error) {

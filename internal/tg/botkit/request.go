@@ -8,7 +8,6 @@ import (
 	"github.com/xLeSHka/mentorLinkSchool/internal/models"
 	"log"
 	"net/http"
-	"strings"
 )
 
 func RequestKeyboard(role string) (tgbotapi.InlineKeyboardMarkup, error) {

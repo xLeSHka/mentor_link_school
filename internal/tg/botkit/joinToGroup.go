@@ -9,7 +9,6 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"net/http"
-	"strings"
 )
 
 func JoinToGroup(stack CallStack) CallStack {
