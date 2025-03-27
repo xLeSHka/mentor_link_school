@@ -23,29 +23,32 @@ func ProfileKeyboard(roles []*models.Role, curRole string, isReq bool, userID, g
 		switch userRole.Role {
 
 		case "owner":
-			mentor, student := "Добавить роль 🧑‍🏫", "Добавить роль 👨‍🎓"
-			for _, role := range roles {
-				switch role.Role {
-				case "student":
-					student = "Удалить роль 👨‍🎓"
-				case "mentor":
-					mentor = "Удалить роль 🧑‍🏫"
+			if curRole == "owner" {
+
+				mentor, student := "Добавить роль 🧑‍🏫", "Добавить роль 👨‍🎓"
+				for _, role := range roles {
+					switch role.Role {
+					case "student":
+						student = "Удалить роль 👨‍🎓"
+					case "mentor":
+						mentor = "Удалить роль 🧑‍🏫"
+					}
 				}
+				rows = append(rows,
+					tgbotapi.NewInlineKeyboardRow(
+						tgbotapi.NewInlineKeyboardButtonData(student, student),
+					),
+					tgbotapi.NewInlineKeyboardRow(
+						tgbotapi.NewInlineKeyboardButtonData(mentor, mentor),
+					),
+				)
 			}
-			rows = append(rows,
-				tgbotapi.NewInlineKeyboardRow(
-					tgbotapi.NewInlineKeyboardButtonData(student, student),
-				),
-				tgbotapi.NewInlineKeyboardRow(
-					tgbotapi.NewInlineKeyboardButtonData(mentor, mentor),
-				),
-			)
 		case "mentor":
 
 		case "student":
 			for _, role := range roles {
 
-				if role.Role == "mentor" && !isReq {
+				if role.Role == "mentor" && !isReq && curRole == "student" {
 					rows = append(rows, tgbotapi.NewInlineKeyboardRow(
 						tgbotapi.NewInlineKeyboardButtonData("Отправить запрос", "Отправить запрос"),
 					))
@@ -121,22 +124,21 @@ func Profile(stack CallStack) CallStack {
 		isPair = true
 	}
 	isReq := false
-	if stack.Data == "student" {
-		req, err := stack.Bot.StudentService.GetRequest(context.Background(), data.User.ID, data.Profile.ID, data.Group.ID)
+	req, err := stack.Bot.StudentService.GetRequest(context.Background(), data.User.ID, data.Profile.ID, data.Group.ID)
+	if err != nil {
+		data.LastMes = -1
+		data.Profile = nil
+		_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 		if err != nil {
-			data.LastMes = -1
-			data.Profile = nil
-			_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
-			if err != nil {
-				log.Println(err)
-				return ReturnOnParent(stack)
-			}
+			log.Println(err)
 			return ReturnOnParent(stack)
 		}
-		if req != nil {
-			isReq = true
-		}
+		return ReturnOnParent(stack)
 	}
+	if req != nil {
+		isReq = true
+	}
+
 	if stack.IsPrint {
 		stack.IsPrint = false
 		if data.LastMes != -1 {
@@ -355,6 +357,9 @@ func Profile(stack CallStack) CallStack {
 				id, err := stack.Bot.UsersService.GetTelegramID(context.Background(), data.Profile.ID)
 				if err != nil {
 					log.Println(err)
+					if err.(*httpError.HTTPError).StatusCode == http.StatusUnprocessableEntity {
+						return stack
+					}
 					return ReturnOnParent(stack)
 				}
 				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам добавили роль ментора в организации %s", data.Group.Name)))
@@ -435,6 +440,9 @@ func Profile(stack CallStack) CallStack {
 				id, err := stack.Bot.UsersService.GetTelegramID(context.Background(), data.Profile.ID)
 				if err != nil {
 					log.Println(err)
+					if err.(*httpError.HTTPError).StatusCode == http.StatusUnprocessableEntity {
+						return stack
+					}
 					return ReturnOnParent(stack)
 				}
 				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам удалили роль ментора в организации %s", data.Group.Name)))
@@ -506,6 +514,9 @@ func Profile(stack CallStack) CallStack {
 				id, err := stack.Bot.UsersService.GetTelegramID(context.Background(), data.Profile.ID)
 				if err != nil {
 					log.Println(err)
+					if err.(*httpError.HTTPError).StatusCode == http.StatusUnprocessableEntity {
+						return stack
+					}
 					return ReturnOnParent(stack)
 				}
 				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам добавили роль студента в организации %s", data.Group.Name)))
@@ -583,6 +594,9 @@ func Profile(stack CallStack) CallStack {
 				id, err := stack.Bot.UsersService.GetTelegramID(context.Background(), data.Profile.ID)
 				if err != nil {
 					log.Println(err)
+					if err.(*httpError.HTTPError).StatusCode == http.StatusUnprocessableEntity {
+						return stack
+					}
 					return ReturnOnParent(stack)
 				}
 				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам удалили роль студента в организации %s", data.Group.Name)))

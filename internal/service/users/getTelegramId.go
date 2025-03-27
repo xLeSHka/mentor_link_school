@@ -22,7 +22,7 @@ func (s *UserService) GetTelegramID(ctx context.Context, userID uuid.UUID) (int6
 		return 0, httpError.New(http.StatusInternalServerError, err.Error())
 	}
 	if user.TelegramID == nil {
-		return 0, httpError.New(http.StatusBadRequest, "user fave not telegram id")
+		return 0, httpError.New(http.StatusUnprocessableEntity, "user fave not telegram id")
 	}
 	err = s.cache.SaveID(ctx, userID, *user.TelegramID)
 	if err != nil {
