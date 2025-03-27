@@ -10,7 +10,7 @@ import (
 
 func (r *GroupRepository) RemoveRole(ctx context.Context, role *models.Role) error {
 	tx := r.DB.Begin()
-	if role.Role == "student" {
+	if role.Role == "mentor" {
 		err := tx.Where("mentor_id = ? AND group_id = ?", role.UserID, role.GroupID).Delete(&models.HelpRequest{}).Error
 
 		if err != nil {
