@@ -357,10 +357,9 @@ func Profile(stack CallStack) CallStack {
 				id, err := stack.Bot.UsersService.GetTelegramID(context.Background(), data.Profile.ID)
 				if err != nil {
 					log.Println(err)
-					if err.(*httpError.HTTPError).StatusCode == http.StatusUnprocessableEntity {
-						return stack
+					if err.(*httpError.HTTPError).StatusCode != http.StatusUnprocessableEntity {
+						return ReturnOnParent(stack)
 					}
-					return ReturnOnParent(stack)
 				}
 				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам добавили роль ментора в организации %s", data.Group.Name)))
 				if err != nil {
@@ -441,10 +440,9 @@ func Profile(stack CallStack) CallStack {
 				id, err := stack.Bot.UsersService.GetTelegramID(context.Background(), data.Profile.ID)
 				if err != nil {
 					log.Println(err)
-					if err.(*httpError.HTTPError).StatusCode == http.StatusUnprocessableEntity {
-						return stack
+					if err.(*httpError.HTTPError).StatusCode != http.StatusUnprocessableEntity {
+						return ReturnOnParent(stack)
 					}
-					return ReturnOnParent(stack)
 				}
 				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам удалили роль ментора в организации %s", data.Group.Name)))
 				if err != nil {
@@ -515,10 +513,9 @@ func Profile(stack CallStack) CallStack {
 				id, err := stack.Bot.UsersService.GetTelegramID(context.Background(), data.Profile.ID)
 				if err != nil {
 					log.Println(err)
-					if err.(*httpError.HTTPError).StatusCode == http.StatusUnprocessableEntity {
-						return stack
+					if err.(*httpError.HTTPError).StatusCode != http.StatusUnprocessableEntity {
+						return ReturnOnParent(stack)
 					}
-					return ReturnOnParent(stack)
 				}
 				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам добавили роль студента в организации %s", data.Group.Name)))
 				if err != nil {
@@ -596,10 +593,10 @@ func Profile(stack CallStack) CallStack {
 				id, err := stack.Bot.UsersService.GetTelegramID(context.Background(), data.Profile.ID)
 				if err != nil {
 					log.Println(err)
-					if err.(*httpError.HTTPError).StatusCode == http.StatusUnprocessableEntity {
-						return stack
+					if err.(*httpError.HTTPError).StatusCode != http.StatusUnprocessableEntity {
+						return ReturnOnParent(stack)
 					}
-					return ReturnOnParent(stack)
+
 				}
 				_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(id, fmt.Sprintf("Вам удалили роль студента в организации %s", data.Group.Name)))
 				if err != nil {
