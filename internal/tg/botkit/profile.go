@@ -411,7 +411,8 @@ func Profile(stack CallStack) CallStack {
 						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНельзя удалять последнюю роль пользоввателя!", ErrorMenuTemplate)))
 						if err != nil {
 							log.Println(err)
-							return ReturnOnParent(stack)
+							stack.IsPrint = true
+							return stack
 						}
 					} else {
 						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
@@ -566,7 +567,8 @@ func Profile(stack CallStack) CallStack {
 						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nНельзя удалять последнюю роль пользоввателя!", ErrorMenuTemplate)))
 						if err != nil {
 							log.Println(err)
-							return ReturnOnParent(stack)
+							stack.IsPrint = true
+							return stack
 						}
 					} else {
 						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
