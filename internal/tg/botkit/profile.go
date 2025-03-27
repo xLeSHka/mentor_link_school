@@ -322,6 +322,7 @@ func Profile(stack CallStack) CallStack {
 				if err != nil {
 					data.LastMes = -1
 					data.Profile = nil
+					log.Println(err)
 					if err.(*httpError.HTTPError).StatusCode == http.StatusNotFound {
 						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nПользователь не найден!", ErrorMenuTemplate)))
 						if err != nil {
@@ -341,6 +342,7 @@ func Profile(stack CallStack) CallStack {
 				keyboard, err := ProfileKeyboard(roles, stack.Data, isReq, data.User.ID, data.Group.ID, stack.Bot)
 				if err != nil {
 					data.LastMes = -1
+					log.Println(err)
 					data.Profile = nil
 					_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 					if err != nil {
@@ -421,6 +423,7 @@ func Profile(stack CallStack) CallStack {
 				if err != nil {
 					data.Profile = nil
 					data.LastMes = -1
+					log.Println(err)
 					_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 					if err != nil {
 						log.Println(err)
@@ -469,6 +472,7 @@ func Profile(stack CallStack) CallStack {
 				if err != nil {
 					data.Profile = nil
 					data.LastMes = -1
+					log.Println(err)
 					if err.(*httpError.HTTPError).StatusCode == http.StatusNotFound {
 						_, err := stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\nПользователь не найден!", ErrorMenuTemplate)))
 						if err != nil {
@@ -490,6 +494,7 @@ func Profile(stack CallStack) CallStack {
 				if err != nil {
 					data.Profile = nil
 					data.LastMes = -1
+					log.Println(err)
 					_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 					if err != nil {
 						log.Println(err)
@@ -566,6 +571,7 @@ func Profile(stack CallStack) CallStack {
 				if err != nil {
 					data.Profile = nil
 					data.LastMes = -1
+					log.Println(err)
 					_, err = stack.Bot.Api.Send(tgbotapi.NewMessage(stack.ChatID, fmt.Sprintf("%s\n\n%s", ErrorMenuTemplate, InternalErrorTextTemplate)))
 					if err != nil {
 						log.Println(err)
